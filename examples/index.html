@@ -20,7 +20,7 @@
 </head>
 
 <body>
-<!--    <h1 style="width: 900px; margin: 10px auto;">OpenLayers Editor</h1>-->
+    <h1 style="width: 900px; margin: 10px auto;">OpenLayers Editor</h1>
     <div id="map" style="width: 900px; height: 600px; margin: 0 auto;"></div>
     <script type="text/javascript">
         
@@ -46,17 +46,7 @@
                 CleanFeature: {url: CONST.GEO_PS+'clean'},
                 SplitFeature: {url: CONST.GEO_PS+'split'},
                 MergeFeature: {url: CONST.GEO_PS+'merge'},
-                LoadFeature: {url: CONST.ROOT_DIR+'obje/geometry'},
-                SaveFeature: {
-                    url: CONST.ROOT_DIR+'vflz/savegeom',
-                    eventListeners: {
-                        featuresaved: function() {/* reload Standorte WMS */}
-                    },
-                    fields: [
-                        {name: 'comment', type: 'text', label: 'Kommentar'},
-                        {name: 'geom', type: 'geometry'},
-                    ]
-                }
+                LoadFeature: {url: CONST.ROOT_DIR+'obje/geometry'}
             },
             activeControls: ['LayerSettings', 'Navigation', 'SnappingSettings', 'Separator',
                 'DragFeature', 'DrawHole', 'ModifyFeature', 'DrawPolygon', 'Separator',
