@@ -23,9 +23,6 @@
     <h1 style="width: 900px; margin: 10px auto;">OpenLayers Editor</h1>
     <div id="map" style="width: 900px; height: 600px; margin: 0 auto;"></div>
     <script type="text/javascript">
-        
-        CONST = new Object();
-        CONST.GEO_PS = 'http://altlastdev2.lan/~friedi/altlast4web/public/geo_ps/public/index/';
 
         var map = new OpenLayers.Map('map');
         map.addLayer(
@@ -42,15 +39,9 @@
             ), 6
         );
         new OpenLayers.Editor(map, {
-            options: {
-                CleanFeature: {url: CONST.GEO_PS+'clean'},
-                SplitFeature: {url: CONST.GEO_PS+'split'},
-                MergeFeature: {url: CONST.GEO_PS+'merge'},
-                LoadFeature: {url: CONST.ROOT_DIR+'obje/geometry'}
-            },
             activeControls: ['LayerSettings', 'Navigation', 'SnappingSettings', 'Separator',
                 'DragFeature', 'DrawHole', 'ModifyFeature', 'DrawPolygon', 'Separator',
-                'CleanFeature', 'MergeFeature', 'SplitFeature', 'DeleteFeature', 'ImportFeature', 'SelectFeature', 'UndoRedo']
+                'DeleteFeature', 'SelectFeature', 'UndoRedo']
         }).startEditMode();
     </script>
 </body>
