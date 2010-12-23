@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/altlast/!svn/ver/782/trunk/apps/altlast4web/public/js/Geops/ole/tests/Control
+END
+testDrawHole.js
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/altlast/!svn/ver/779/trunk/apps/altlast4web/public/js/Geops/ole/tests/Control/testDrawHole.js
+END
+testDrawPolygon.js
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/altlast/!svn/ver/779/trunk/apps/altlast4web/public/js/Geops/ole/tests/Control/testDrawPolygon.js
+END
+testEditorPanel.js
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/altlast/!svn/ver/779/trunk/apps/altlast4web/public/js/Geops/ole/tests/Control/testEditorPanel.js
+END
+testImportFeature.js
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/altlast/!svn/ver/779/trunk/apps/altlast4web/public/js/Geops/ole/tests/Control/testImportFeature.js
+END
+testCleanFeature.js
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/altlast/!svn/ver/782/trunk/apps/altlast4web/public/js/Geops/ole/tests/Control/testCleanFeature.js
+END
+testDeleteFeature.js
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/altlast/!svn/ver/779/trunk/apps/altlast4web/public/js/Geops/ole/tests/Control/testDeleteFeature.js
+END

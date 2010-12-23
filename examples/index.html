@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>OpenLayers Editor</title>
+<link rel="stylesheet" href="../theme/geosilk/geosilk.css" type="text/css" />
+<style>
+
+</style>
+
+<!--developement-->
+<script type="text/javascript" src="../externals/openlayers/lib/OpenLayers.js"></script>
+<script type="text/javascript" src="../lib/loader.js"></script>
+
+<!--translation-->
+<script type="text/javascript" src="../externals/openlayers/lib/OpenLayers/Lang/de.js"></script>
+<script type="text/javascript" src="../lib/Editor/Lang/de.js"></script>
+
+</head>
+
+<body>
+<!--    <h1 style="width: 900px; margin: 10px auto;">OpenLayers Editor</h1>-->
+    <div id="map" style="width: 900px; height: 600px; margin: 0 auto;"></div>
+    <script type="text/javascript">
+        
+        CONST = new Object();
+        CONST.GEO_PS = 'http://altlastdev2.lan/~friedi/altlast4web/public/geo_ps/public/index/';
+
+        var map = new OpenLayers.Map('map');
+        map.addLayer(
+            new OpenLayers.Layer.WMS(
+                "OpenLayers WMS",
+                "http://vmap0.tiles.osgeo.org/wms/vmap0",
+                {layers: "basic"}
+            )
+        );
+        map.setCenter(
+            new OpenLayers.LonLat(8, 48).transform(
+                new OpenLayers.Projection("EPSG:4326"),
+                map.getProjectionObject()
+            ), 6
+        );
+        new OpenLayers.Editor(map, {
+            options: {
+                CleanFeature: {url: CONST.GEO_PS+'clean'},
+                SplitFeature: {url: CONST.GEO_PS+'split'},
+                MergeFeature: {url: CONST.GEO_PS+'merge'},
+                LoadFeature: {url: CONST.ROOT_DIR+'obje/geometry'},
+                SaveFeature: {
+                    url: CONST.ROOT_DIR+'vflz/savegeom',
+                    eventListeners: {
+                        featuresaved: function() {/* reload Standorte WMS */}
+                    },
+                    fields: [
+                        {name: 'comment', type: 'text', label: 'Kommentar'},
+                        {name: 'geom', type: 'geometry'},
+                    ]
+                }
+            },
+            activeControls: ['LayerSettings', 'Navigation', 'SnappingSettings', 'Separator',
+                'DragFeature', 'DrawHole', 'ModifyFeature', 'DrawPolygon', 'Separator',
+                'CleanFeature', 'MergeFeature', 'SplitFeature', 'DeleteFeature', 'ImportFeature', 'SelectFeature', 'UndoRedo']
+        }).startEditMode();
+    </script>
+</body>
+</html>
