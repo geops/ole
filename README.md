@@ -7,13 +7,13 @@ OpenLayers Editor (ole) provides a set of controls for extended editing of spati
 Features
 -----
 
-Work in Progress.
+See [features](blob/master/features.md) for details.
 
 
 Usage
 -----
 
-See `examples/` for some inspiration.
+See [documentation](blob/master/documentation.md) for details and `client/examples/` for some inspiration.
 
 
 Requirements
