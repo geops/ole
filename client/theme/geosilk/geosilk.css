@@ -57,11 +57,36 @@ div.dialog {
 }
 
 /**
- * Navigation
+ * Active control
  */
-.olEditorControlEditorPanel .olControlNavigationItemActive {
+.olEditorControlEditorPanel .olControlNavigationItemActive,
+.olEditorControlEditorPanel .olControlModifyFeatureItemActive,
+.olEditorControlEditorPanel .olEditorControlSplitFeatureItemActive,
+.olEditorControlEditorPanel .olEditorControlDrawPolygonItemActive,
+.olEditorControlEditorPanel .olEditorControlDrawPathItemActive,
+.olEditorControlEditorPanel .olEditorControlDrawPointItemActive,
+.olEditorControlEditorPanel .olEditorControlSaveFeatureItemActive,
+.olEditorControlEditorPanel .olControlDragFeatureItemActive,
+.olEditorControlEditorPanel .olEditorControlDeleteFeatureItemActive,
+.olEditorControlEditorPanel .olControlSelectFeatureItemActive,
+.olEditorControlEditorPanel .olEditorControlSnappingSettingsItemActive,
+.olEditorControlEditorPanel .olEditorControlImportFeatureItemActive,
+.olEditorControlEditorPanel .olEditorControlDrawHoleItemActive,
+.olEditorControlEditorPanel .olEditorControlMergeFeatureItemActive,
+.olEditorControlEditorPanel .olEditorControlCleanFeatureItemActive {
      background-color: #fff;
 }
+
+/**
+ * Disabled control
+ */
+div.oleControlDisabled {
+    opacity: 0.5;
+}
+
+/**
+ * Navigation
+ */
 .olEditorControlEditorPanel .olControlNavigationItemActive,
 .olEditorControlEditorPanel .olControlNavigationItemInactive {
     background-image: url("img/navigation.png");
@@ -70,9 +95,6 @@ div.dialog {
 /**
  * Modify Feature
  */
-.olEditorControlEditorPanel .olControlModifyFeatureItemActive {
-     background-color: #fff;
-}
 .olEditorControlEditorPanel .olControlModifyFeatureItemActive,
 .olEditorControlEditorPanel .olControlModifyFeatureItemInactive {
     background-image: url("img/modifyFeature.png");
@@ -81,9 +103,6 @@ div.dialog {
 /**
  * Split Features
  */
-.olEditorControlEditorPanel .olEditorControlSplitFeatureItemActive {
-     background-color: #fff;
-}
 .olEditorControlEditorPanel .olEditorControlSplitFeatureItemActive,
 .olEditorControlEditorPanel .olEditorControlSplitFeatureItemInactive {
     background-image: url("img/splitFeature.png");
@@ -92,20 +111,30 @@ div.dialog {
 /**
  * Draw Polygon
  */
-.olEditorControlEditorPanel .olEditorControlDrawPolygonItemActive {
-     background-color: #fff;
-}
 .olEditorControlEditorPanel .olEditorControlDrawPolygonItemActive,
 .olEditorControlEditorPanel .olEditorControlDrawPolygonItemInactive {
     background-image: url("img/drawPolygon.png");
 }
 
 /**
+ * Draw Path
+ */
+.olEditorControlEditorPanel .olEditorControlDrawPathItemActive,
+.olEditorControlEditorPanel .olEditorControlDrawPathItemInactive {
+    background-image: url("img/drawPath.png");
+}
+
+/**
+ * Draw Point
+ */
+.olEditorControlEditorPanel .olEditorControlDrawPointItemActive,
+.olEditorControlEditorPanel .olEditorControlDrawPointItemInactive {
+    background-image: url("img/drawPoint.png");
+}
+
+/**
  * Save Features
  */
-.olEditorControlEditorPanel .olEditorControlSaveFeatureItemActive {
-     background-color: #fff;
-}
 .olEditorControlEditorPanel .olEditorControlSaveFeatureItemActive,
 .olEditorControlEditorPanel .olEditorControlSaveFeatureItemInactive {
     background-image: url("img/saveFeature.png");
@@ -114,9 +143,6 @@ div.dialog {
 /**
  * Drag Feature
  */
-.olEditorControlEditorPanel .olControlDragFeatureItemActive {
-     background-color: #fff;
-}
 .olEditorControlEditorPanel .olControlDragFeatureItemActive,
 .olEditorControlEditorPanel .olControlDragFeatureItemInactive {
     background-image: url("img/dragFeature.png");
@@ -125,9 +151,6 @@ div.dialog {
 /**
  * Delete Feature
  */
-.olEditorControlEditorPanel .olEditorControlDeleteFeatureItemActive {
-     background-color: #fff;
-}
 .olEditorControlEditorPanel .olEditorControlDeleteFeatureItemActive,
 .olEditorControlEditorPanel .olEditorControlDeleteFeatureItemInactive {
     background-image: url("img/deleteFeature.png");
@@ -136,20 +159,17 @@ div.dialog {
 /**
  * Select Feature
  */
- .olEditorControlEditorPanel .olControlSelectFeatureItemActive {
-     background-color: #fff;
-}
 .olEditorControlEditorPanel .olControlSelectFeatureItemActive,
 .olEditorControlEditorPanel .olControlSelectFeatureItemInactive {
     background-image: url("img/selectFeature.png");
 }
+
 
 /**
  *  Snapping Settings
  */
 .olEditorControlEditorPanel .olEditorControlSnappingSettingsItemActive {
     background-image: url("img/snappingActive.png");
-    background-color: #fff;
 }
 .olEditorControlEditorPanel .olEditorControlSnappingSettingsItemInactive {
     background-image: url("img/snappingInactive.png");
@@ -158,9 +178,6 @@ div.dialog {
 /**
  *  Import Feature
  */
- .olEditorControlEditorPanel .olEditorControlImportFeatureItemActive {
-     background-color: #fff;
-}
 .olEditorControlEditorPanel .olEditorControlImportFeatureItemActive,
 .olEditorControlEditorPanel .olEditorControlImportFeatureItemInactive {
     background-image: url("img/importFeature.png");
@@ -169,9 +186,6 @@ div.dialog {
 /**
  *  Draw Hole
  */
-.olEditorControlEditorPanel .olEditorControlDrawHoleItemActive {
-     background-color: #fff;
-}
 .olEditorControlEditorPanel .olEditorControlDrawHoleItemActive,
 .olEditorControlEditorPanel .olEditorControlDrawHoleItemInactive {
     background-image: url("img/drawHole.png");
@@ -180,9 +194,6 @@ div.dialog {
 /**
  *  Merge Feature
  */
-.olEditorControlEditorPanel .olEditorControlMergeFeatureItemActive {
-    background-color: #fff;
-}
 .olEditorControlEditorPanel .olEditorControlMergeFeatureItemActive,
 .olEditorControlEditorPanel .olEditorControlMergeFeatureItemInactive {
     background-image: url("img/mergeFeature.png");
@@ -191,9 +202,6 @@ div.dialog {
 /**
  *  Clean Feature
  */
-.olEditorControlEditorPanel .olEditorControlCleanFeatureItemActive {
-     background-color: #fff;
-}
 .olEditorControlEditorPanel .olEditorControlCleanFeatureItemActive,
 .olEditorControlEditorPanel .olEditorControlCleanFeatureItemInactive {
     background-image: url("img/cleanFeature.png");

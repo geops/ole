@@ -1,7 +1,7 @@
 
 OpenLayers.Editor.Control.SplitFeature = OpenLayers.Class(OpenLayers.Control.DrawFeature, {
 
-    url: '',
+    proxy: null,
 
     title: OpenLayers.i18n('oleSplitFeature'),
 
@@ -12,11 +12,14 @@ OpenLayers.Editor.Control.SplitFeature = OpenLayers.Class(OpenLayers.Control.Dra
 
         this.events.register('activate', this, this.test);
 
+        this.title = OpenLayers.i18n('oleSplitFeature');
+
+        this.displayClass = "oleControlDisabled " + this.displayClass;
+
     },
 
     test: function() {
         if (this.layer.selectedFeatures.length < 1) {
-            alert ('Bitte mindestens 1 Flächen auswählen.');
             this.deactivate();
         }
     },
@@ -26,23 +29,25 @@ OpenLayers.Editor.Control.SplitFeature = OpenLayers.Class(OpenLayers.Control.Dra
      */
     drawFeature: function(geometry) {
         var feature = new OpenLayers.Feature.Vector(geometry);
+        var wktFormat = new OpenLayers.Format.WKT();
         var proceed = this.layer.events.triggerEvent(
             'sketchcomplete', {feature: feature}
         );
         if(proceed !== false) {
             if (this.layer.selectedFeatures.length > 0) {
-                var multiPolygon = this.map.editor.toMultiPolygon(this.layer.selectedFeatures);
-                var polyGeoJSON = new OpenLayers.Format.GeoJSON().write(multiPolygon);
-                var lineGeoJSON = new OpenLayers.Format.GeoJSON().write(geometry);
+                var geo = wktFormat.write(this.layer.selectedFeatures);
+                var cut = wktFormat.write(feature);
                 OpenLayers.Request.POST({
-                    url: this.url,
-                    data: OpenLayers.Util.getParameterString({cut: lineGeoJSON, geo: polyGeoJSON}),
+                    url: this.map.editor.oleUrl+'process/split',
+                    data: OpenLayers.Util.getParameterString({cut: cut, geo: geo}),
                     headers: {"Content-Type": "application/x-www-form-urlencoded"},
                     callback: this.map.editor.requestComplete,
+                    proxy: this.proxy,
                     scope: this.map.editor
                 });
             }
         }
+        this.deactivate();
     },
 
     CLASS_NAME: 'OpenLayers.Editor.Control.SplitFeature'

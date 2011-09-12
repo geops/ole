@@ -6,47 +6,38 @@
  */
 
 /**
- * Class: OpenLayers.Editor.Control.DrawPolygon
- * The DeleteFeature provides a button to delete all selected features
- *     from a given layer.
+ * Class: OpenLayers.Editor.Control.DrawPoint
  *
  * Inherits from:
  *  - <OpenLayers.Control.DrawFeature>
  */
-OpenLayers.Editor.Control.DrawPolygon = OpenLayers.Class(OpenLayers.Control.DrawFeature, {
+OpenLayers.Editor.Control.DrawPoint = OpenLayers.Class(OpenLayers.Control.DrawFeature, {
+
+    title: OpenLayers.i18n('oleDrawPoint'),
 
     /**
-     * Property: minArea
-     * {Number} Minimum area of new polygons.
-     */
-    minArea: 0,
-
-    title: OpenLayers.i18n('oleDrawPolygon'),
-
-    /**
-     * Constructor: OpenLayers.Editor.Control.DrawPolygon
-     * Create a new control for drawing polygons.
+     * Constructor: OpenLayers.Editor.Control.DrawPath
+     * Create a new control for drawing points.
      *
      * Parameters:
-     * layer - {<OpenLayers.Layer.Vector>} Polygons will be added to this layer.
+     * layer - {<OpenLayers.Layer.Vector>} Points will be added to this layer.
      * options - {Object} An optional object whose properties will be used
      *     to extend the control.
      */
     initialize: function (layer, options) {
         
         OpenLayers.Control.DrawFeature.prototype.initialize.apply(this,
-            [layer, OpenLayers.Handler.Polygon, options]);
-
-        this.title = OpenLayers.i18n('oleDrawPolygon');
+            [layer, OpenLayers.Handler.Point, options]);
+        
     },
 
     /**
-     * Method: draw polygon only if area greater than or equal to minArea
+     * Method: draw point
      */
     drawFeature: function (geometry) {
         var feature = new OpenLayers.Feature.Vector(geometry),
             proceed = this.layer.events.triggerEvent('sketchcomplete', {feature: feature});
-        if (proceed !== false && geometry.getArea() >= this.minArea) {
+        if (proceed !== false) {
             feature.state = OpenLayers.State.INSERT;
             this.layer.addFeatures([feature]);
             this.featureAdded(feature);
@@ -54,5 +45,5 @@ OpenLayers.Editor.Control.DrawPolygon = OpenLayers.Class(OpenLayers.Control.Draw
         }
     },
 
-    CLASS_NAME: 'OpenLayers.Editor.Control.DrawPolygon'
+    CLASS_NAME: 'OpenLayers.Editor.Control.DrawPoint'
 });

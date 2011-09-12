@@ -6,47 +6,44 @@
  */
 
 /**
- * Class: OpenLayers.Editor.Control.DrawPolygon
- * The DeleteFeature provides a button to delete all selected features
- *     from a given layer.
+ * Class: OpenLayers.Editor.Control.DrawPath
  *
  * Inherits from:
  *  - <OpenLayers.Control.DrawFeature>
  */
-OpenLayers.Editor.Control.DrawPolygon = OpenLayers.Class(OpenLayers.Control.DrawFeature, {
+OpenLayers.Editor.Control.DrawPath = OpenLayers.Class(OpenLayers.Control.DrawFeature, {
 
     /**
-     * Property: minArea
-     * {Number} Minimum area of new polygons.
+     * Property: minLength
+     * {Number} Minimum length of new paths.
      */
-    minArea: 0,
+    minLength: 0,
 
-    title: OpenLayers.i18n('oleDrawPolygon'),
+    title: OpenLayers.i18n('oleDrawPath'),
 
     /**
-     * Constructor: OpenLayers.Editor.Control.DrawPolygon
-     * Create a new control for drawing polygons.
+     * Constructor: OpenLayers.Editor.Control.DrawPath
+     * Create a new control for drawing paths.
      *
      * Parameters:
-     * layer - {<OpenLayers.Layer.Vector>} Polygons will be added to this layer.
+     * layer - {<OpenLayers.Layer.Vector>} Paths will be added to this layer.
      * options - {Object} An optional object whose properties will be used
      *     to extend the control.
      */
     initialize: function (layer, options) {
         
         OpenLayers.Control.DrawFeature.prototype.initialize.apply(this,
-            [layer, OpenLayers.Handler.Polygon, options]);
-
-        this.title = OpenLayers.i18n('oleDrawPolygon');
+            [layer, OpenLayers.Handler.Path, options]);
+        
     },
 
     /**
-     * Method: draw polygon only if area greater than or equal to minArea
+     * Method: draw path only if area greater than or equal to minLength
      */
     drawFeature: function (geometry) {
         var feature = new OpenLayers.Feature.Vector(geometry),
             proceed = this.layer.events.triggerEvent('sketchcomplete', {feature: feature});
-        if (proceed !== false && geometry.getArea() >= this.minArea) {
+        if (proceed !== false && geometry.getLength() >= this.minLength) {
             feature.state = OpenLayers.State.INSERT;
             this.layer.addFeatures([feature]);
             this.featureAdded(feature);
@@ -54,5 +51,5 @@ OpenLayers.Editor.Control.DrawPolygon = OpenLayers.Class(OpenLayers.Control.Draw
         }
     },
 
-    CLASS_NAME: 'OpenLayers.Editor.Control.DrawPolygon'
+    CLASS_NAME: 'OpenLayers.Editor.Control.DrawPath'
 });

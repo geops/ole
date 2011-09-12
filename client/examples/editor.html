@@ -1,0 +1,31 @@
+<html>
+<head>
+    <title>OpenLayers.Editor</title>
+
+    <script src="http://openlayers.org/api/2.11/OpenLayers.js"></script>
+    <script type="text/javascript" src="../lib/loader.js"></script>
+    <script type="text/javascript" src="../lib/Editor/Lang/de.js"></script>
+    <script type="text/javascript">
+
+        function init() {
+
+            var map, editor;
+            OpenLayers.Lang.setCode('de');
+
+            map = new OpenLayers.Map('map', {maxExtent: new OpenLayers.Bounds(-500,-500, 500, 500)});
+            map.addLayer(new OpenLayers.Layer.WMS("OpenLayers WMS", "http://vmap0.tiles.osgeo.org/wms/vmap0", {layers: 'basic'}));
+            map.setCenter(new OpenLayers.LonLat(10, 50), 5);
+
+            editor = new OpenLayers.Editor(map, {
+                activeControls: ['Navigation', 'SnappingSettings', 'Separator', 'DeleteFeature', 'SelectFeature', 'Separator', 'DrawHole'],
+                featureTypes: ['polygon', 'path', 'point']
+            });
+            editor.startEditMode();
+        }
+    </script>
+    <link rel="stylesheet" href="../theme/geosilk/geosilk.css" type="text/css" />
+</head>
+<body onload="init()">
+    <div id="map"></div>
+</body>
+</html>

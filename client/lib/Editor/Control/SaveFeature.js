@@ -20,6 +20,8 @@ OpenLayers.Editor.Control.SaveFeature = OpenLayers.Class(OpenLayers.Control.Butt
 
     url: '',
 
+    proxy: null,
+
     fields: [],
 
     textFields: {},
@@ -109,6 +111,7 @@ OpenLayers.Editor.Control.SaveFeature = OpenLayers.Class(OpenLayers.Control.Butt
             url: this.url,
             params: params,
             callback: this.saveFeatureComplete,
+            proxy: this.proxy,
             scope: this
         });
     },

@@ -6,14 +6,15 @@
         <link rel="stylesheet" href="qunit.css" type="text/css" media="screen">
         <script src="qunit.js"></script>
         <!-- OLE dependencies -->
-        <script type="text/javascript" src="../externals/openlayers/lib/OpenLayers.js"></script>
+        <script src="http://openlayers.org/api/OpenLayers.js"></script>
         <!-- OLE files -->
-        <script type="text/javascript" src="../lib/loader.js"></script>
         <script>
             var wkt = new OpenLayers.Format.WKT();
-            var url = '/geo_ps/public/index/';
         </script>
+        <script src="../lib/loader.js"></script>
+        <!-- Tests -->
         <script src="testEditor.js"></script>
+<!--        <script src="Control/testCleanFeature.js"></script>-->
         <script src="Control/testDeleteFeature.js"></script>
         <script src="Control/testDrawHole.js"></script>
         <script src="Control/testDrawPolygon.js"></script>
@@ -22,7 +23,7 @@
         <script src="Control/testLayerSettings.js"></script>
     </head>
     <body>
-        <h1 id="qunit-header">OpenLayers Editor Test Suite</h1>
+        <h1 id="qunit-header">OpenLayers.Editor Test Suite</h1>
         <h2 id="qunit-banner"></h2>
         <div id="qunit-testrunner-toolbar"></div>
         <h2 id="qunit-userAgent"></h2>

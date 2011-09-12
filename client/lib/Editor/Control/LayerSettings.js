@@ -16,13 +16,13 @@ OpenLayers.Editor.Control.LayerSettings =  OpenLayers.Class(OpenLayers.Control, 
 
     currentLayer: null,
 
-    opacityValueDiv: document.createElement('div'),
-
     layerSwitcher: null,
 
-    initialize: function(options) {
+    initialize: function(editor, options) {
 
-        OpenLayers.Control.prototype.initialize.apply(this, arguments);
+        OpenLayers.Control.prototype.initialize.apply(this, [options]);
+
+        this.layerSwitcher = editor.map.getControlsByClass('OpenLayers.Control.LayerSwitcher')[0];
 
         if(this.layerSwitcher instanceof OpenLayers.Control.LayerSwitcher) {
             OpenLayers.Event.observe(this.layerSwitcher.maximizeDiv, 'click',
@@ -79,46 +79,20 @@ OpenLayers.Editor.Control.LayerSettings =  OpenLayers.Class(OpenLayers.Control, 
 
         var opacity = (this.currentLayer.opacity) ? this.currentLayer.opacity : 1;
 
-        // display slider only if scriptaculous control is available
-        if(typeof Control != 'undefined' && typeof Control.Slider != 'undefined') {
-
-            opacityHandle = new Element('div', {
-                'class': 'sliderHandle',
-                'style': 'width: 17px; height: 21px;'
-            });
-            opacityTrack = new Element('div', {
-                'class': 'sliderTrack',
-                'style': 'width: 209px; height: 28px;'
-            });
-            opacityTrack.appendChild(opacityHandle);
-            content.appendChild(opacityTrack);
-
-            new Control.Slider(opacityHandle,opacityTrack, {
-                axis:'horizontal',
-                range: $R(0.0, 1.0),
-                sliderValue: opacity,
-                onSlide: this.changeLayerOpacity.bind(this)
-            });
-        }
-
-        this.opacityValueDiv.innerHTML = (opacity*100).toFixed(0)+' %';
-        OpenLayers.Element.addClass(this.opacityValueDiv, 'sliderValue');
-        content.appendChild(this.opacityValueDiv);
-
-        /* TODO:
         opacityInput = document.createElement('input');
         opacityInput.type = 'text';
         opacityInput.size = '2';
-        OpenLayers.Event.observe(opacityInput,'change',
-            OpenLayers.Function.bind(this.changeLayerOpacity, this, opacityInput.value));
+        opacityInput.value = (opacity*100).toFixed(0);
+        OpenLayers.Event.observe(opacityInput, 'change',
+            OpenLayers.Function.bind(this.changeLayerOpacity, this, opacityInput));
         content.appendChild(opacityInput);
-        */
 
         // display import checkbox for vector layer
         if (this.currentLayer instanceof OpenLayers.Layer.Vector) {
 
             importHeader = document.createElement('h4');
             importHeader.innerHTML = OpenLayers.i18n('oleLayerSettingsImportHeader');
+            importHeader.style.marginTop = '10px';
             content.appendChild(importHeader);
 
             importInput = document.createElement('input');
@@ -149,6 +123,7 @@ OpenLayers.Editor.Control.LayerSettings =  OpenLayers.Class(OpenLayers.Control, 
 
             legendHeader = document.createElement('h4');
             legendHeader.innerHTML = OpenLayers.i18n('oleLayerSettingsLegendHeader');
+            legendHeader.style.marginTop = '10px';
             content.appendChild(legendHeader);
 
             for(var i = 0; i < legendGraphics.length; i++) {
@@ -158,7 +133,7 @@ OpenLayers.Editor.Control.LayerSettings =  OpenLayers.Class(OpenLayers.Control, 
             }
         }
 
-        this.map.editor.showDialog({
+        this.map.editor.dialog.show({
             content: content,
             title: layerName
         });
@@ -188,9 +163,8 @@ OpenLayers.Editor.Control.LayerSettings =  OpenLayers.Class(OpenLayers.Control, 
         this.redraw();
     },
 
-    changeLayerOpacity: function (value) {
-        this.opacityValueDiv.update((value*100).toFixed(0)+' %');
-        this.currentLayer.setOpacity(value );
+    changeLayerOpacity: function (opacityInput) {
+        this.currentLayer.setOpacity(opacityInput.value/100);
     },
 
     getLegendGraphics: function(layer) {

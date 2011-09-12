@@ -14,7 +14,7 @@
  */
 OpenLayers.Editor.Control.MergeFeature = OpenLayers.Class(OpenLayers.Control.Button, {
 
-    url: '',
+    proxy: null,
 
     title: OpenLayers.i18n('oleMergeFeature'),
 
@@ -35,6 +35,10 @@ OpenLayers.Editor.Control.MergeFeature = OpenLayers.Class(OpenLayers.Control.But
 
         this.trigger = this.mergeFeature;
 
+        this.title = OpenLayers.i18n('oleMergeFeature');
+
+        this.displayClass = "oleControlDisabled " + this.displayClass;
+
     },
 
     /**
@@ -44,13 +48,14 @@ OpenLayers.Editor.Control.MergeFeature = OpenLayers.Class(OpenLayers.Control.But
         if (this.layer.selectedFeatures.length < 2) {
             this.map.editor.showStatus('error', OpenLayers.i18n('oleMergeFeatureSelectFeature'));
         } else {
-            var multiPolygon = this.map.editor.toMultiPolygon(this.layer.selectedFeatures),
-                multiPolygonJSON = new OpenLayers.Format.GeoJSON().write(multiPolygon);
+            var wktFormat = new OpenLayers.Format.WKT();
+            var geo = wktFormat.write(this.layer.selectedFeatures);
             OpenLayers.Request.POST({
-                url: this.url,
-                data: OpenLayers.Util.getParameterString({geo: multiPolygonJSON}),
+                url: this.map.editor.oleUrl+'process/merge',
+                data: OpenLayers.Util.getParameterString({geo: geo}),
                 headers: {"Content-Type": "application/x-www-form-urlencoded"},
                 callback: this.map.editor.requestComplete,
+                proxy: this.proxy,
                 scope: this.map.editor
             });
         }

@@ -6,11 +6,15 @@
 
     var files = [
         'Editor.js',
+        'Editor/Lang/de.js',
+        'Editor/Lang/en.js',
         'Editor/Control/CleanFeature.js',
         'Editor/Control/DeleteFeature.js',
         'Editor/Control/Dialog.js',
         'Editor/Control/DrawHole.js', 
         'Editor/Control/DrawPolygon.js',
+        'Editor/Control/DrawPath.js',
+        'Editor/Control/DrawPoint.js',
         'Editor/Control/EditorPanel.js',
         'Editor/Control/ImportFeature.js',
         'Editor/Control/LayerSettings.js',
@@ -22,7 +26,6 @@
     ];
     
     var tags = new Array(files.length);
-
 
     var el = document.getElementsByTagName("head").length ? 
 	document.getElementsByTagName("head")[0] : 

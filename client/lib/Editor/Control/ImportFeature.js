@@ -42,6 +42,10 @@ OpenLayers.Editor.Control.ImportFeature = OpenLayers.Class(OpenLayers.Control.Bu
 
         this.trigger = this.importFeature;
 
+        this.title = OpenLayers.i18n('oleImportFeature');
+
+        this.displayClass = "oleControlDisabled " + this.displayClass;
+
     },
 
     /**
@@ -55,8 +59,11 @@ OpenLayers.Editor.Control.ImportFeature = OpenLayers.Class(OpenLayers.Control.Bu
             
             for (var i = 0, li = this.map.editor.sourceLayers.length; i < li; i++) {
                 for (var j = 0, lj = this.map.editor.sourceLayers[i].selectedFeatures.length; j < lj; j++) {
-                    importFeatures.push(this.map.editor.sourceLayers[i].selectedFeatures[j])
+                    this.map.editor.sourceLayers[i].selectedFeatures[j].renderIntent = 'default';
+                    importFeatures.push(this.map.editor.sourceLayers[i].selectedFeatures[j]);
                 }
+                this.map.editor.sourceLayers[i].removeFeatures(this.map.editor.sourceLayers[i].selectedFeatures);
+                this.map.editor.sourceLayers[i].events.triggerEvent('featureunselected');
             }
 
             if (importFeatures.length > 0) {
@@ -64,17 +71,11 @@ OpenLayers.Editor.Control.ImportFeature = OpenLayers.Class(OpenLayers.Control.Bu
                 this.layer.addFeatures(importFeatures);
 
             } else {
-                return this.map.editor.status({
-                    type: 'error',
-                    content: OpenLayers.i18n('oleImportFeatureSourceFeature')
-                });
+                return this.map.editor.showStatus('error', OpenLayers.i18n('oleImportFeatureSourceFeature'));
             }
 
         } else {
-            return this.map.editor.status({
-                type: 'error',
-                content: OpenLayers.i18n('oleImportFeatureSourceLayer')
-            });
+            return this.map.editor.showStatus('error', OpenLayers.i18n('oleImportFeatureSourceLayer'));
         }
     },
 

@@ -58,8 +58,14 @@ OpenLayers.Editor.Control.EditorPanel = OpenLayers.Class(OpenLayers.Control.Pane
 
                 case 'DragFeature':
                     controls.push(new OpenLayers.Control.DragFeature(editor.editLayer,
-                        OpenLayers.Util.extend(
-                            {title: OpenLayers.i18n('oleDragFeature')},
+                        OpenLayers.Util.extend({
+                                title: OpenLayers.i18n('oleDragFeature'),
+                                onComplete: function(feature, pixel) {
+                                    editor.editLayer.events.triggerEvent('afterfeaturemodified', {
+                                        feature: feature
+                                    });
+                                }
+                            },
                             editor.options.DragFeature)
                     ));
                     break;
@@ -76,8 +82,16 @@ OpenLayers.Editor.Control.EditorPanel = OpenLayers.Class(OpenLayers.Control.Pane
                     controls.push(new OpenLayers.Control.SelectFeature(
                         editor.sourceLayers.concat([editor.editLayer]),
                         OpenLayers.Util.extend(
-                            {title: OpenLayers.i18n('oleSelectFeature'),
-                                multiple: true, toggle: true},
+                            {
+                                title: OpenLayers.i18n('oleSelectFeature'),
+                                clickout: true,
+                                toggle: false,
+                                multiple: false,
+                                hover: false,
+                                toggleKey: "ctrlKey",
+                                multipleKey: "ctrlKey",
+                                box: true
+                            },
                             editor.options.SelectFeature)
                     ));
                     break;

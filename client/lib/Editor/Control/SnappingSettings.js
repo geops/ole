@@ -38,6 +38,8 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
 
         this.events.register("deactivate", this, this.onDeactivate);
 
+        this.title = OpenLayers.i18n('oleSnappingSettings');
+
     },
 
     onDeactivate: function() {
@@ -57,7 +59,7 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
         var content = document.createElement('div');
 
         var toleranceHeader = document.createElement('h4');
-        toleranceHeader.innerHTML = 'Snapping Toleranz';
+        toleranceHeader.innerHTML = OpenLayers.i18n('oleSnappingSettingsTolerance');
         content.appendChild(toleranceHeader);
 
         this.toleranceInput = document.createElement('input');
@@ -66,14 +68,14 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
         content.appendChild(this.toleranceInput);
 
         var layerHeader = document.createElement('h4');
-        layerHeader.innerHTML = 'Snapping Layer';
+        layerHeader.innerHTML = OpenLayers.i18n('oleSnappingSettingsLayer');
         content.appendChild(layerHeader);
 
         content.appendChild(this.layerListDiv);
 
         this.map.editor.dialog.show({
             content: content,
-            title: 'Snapping Einstellungen',
+            title: OpenLayers.i18n('oleSnappingSettings'),
             close: OpenLayers.Function.bind(this.changeSnapping, this)
         });
 
@@ -87,10 +89,12 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
         this.layerListDiv.innerHTML = '';
 
         for (var i = 0; i <  this.map.layers.length; i++) {
-
+            
             layer = this.map.layers[i];
 
-            if(layer.CLASS_NAME == "OpenLayers.Layer.Vector" && layer.name.search(/OpenLayers.Handler.+/) == -1) {
+            if(!(layer instanceof OpenLayers.Layer.Vector.RootContainer) &&
+                 layer instanceof OpenLayers.Layer.Vector &&
+                 layer.name.search(/OpenLayers.Handler.+/) == -1) {
 
                 element = document.createElement('input');
                 element.type = 'checkbox';
@@ -130,9 +134,7 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
 
         if(this.snappingLayers.length > 0) {
 
-            this.tolerance = this.tolerance.value
-
-            this.snapping.deactivate()
+            this.snapping.deactivate();
             var targets = [];
             for (var i = 0; i <  this.snappingLayers.length; i++) {
                 targets.push({

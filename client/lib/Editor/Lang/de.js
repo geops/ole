@@ -3,6 +3,8 @@ OpenLayers.Util.extend(OpenLayers.Lang.de, {
     
     'oleCleanFeature': 'Selektierte Geometrien bereinigen',
 
+    'oleCleanFeatureSelectFeature': 'Bitte eine Geometrie zum bereinigen auswählen.',
+
     'oleDeleteFeature': 'Selektierte Geometrien löschen',
 
     'oleDeleteFeatureSelectFeature': 'Bitte eine Geometrie zum löschen auswählen.',
@@ -24,10 +26,14 @@ OpenLayers.Util.extend(OpenLayers.Lang.de, {
     'oleImportFeatureSourceLayer': 'Keine Ebenen für den Import gefunden',
 
     'oleImportFeatureSourceFeature': 'Keine selektierten Geometrien für den Import gefunden.',
-    
+
     'oleLayerSettingsImportHeader': 'Import',
 
     'oleLayerSettingsImportLabel': 'Layer als Quelle für Import verwenden',
+
+    'oleLayerSettingsLegendHeader' : 'Legende',
+
+    'oleLayerSettingsOpacityHeader': 'Opazität in %',
 
     'oleMergeFeature': 'Selektierte Geometrien verschmelzen',
 
@@ -43,6 +49,12 @@ OpenLayers.Util.extend(OpenLayers.Lang.de, {
 
     'oleSnappingSettings': 'Snapping Einstellungen',
 
-    'oleSplitFeature': 'Selektierte Geometrien teilen'
+    'oleSnappingSettingsLayer': 'Snapping Layer',
+
+    'oleSnappingSettingsTolerance': 'Snapping Toleranz',
+
+    'oleSplitFeature': 'Selektierte Geometrien teilen',
+
+    'oleSplitFeatureSelectFeature': 'Bitte mindestens 1 Flächen auswählen.'
     
 });

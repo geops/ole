@@ -72,8 +72,10 @@ OpenLayers.Editor = OpenLayers.Class({
      *   this information is needed by this EditorPanel.
      */
     editorControls: ['CleanFeature', 'DeleteFeature', 'Dialog', 'DrawHole', 
-        'DrawPolygon', 'EditorPanel', 'ImportFeature',
+        'DrawPolygon', 'DrawPath', 'DrawPoint', 'EditorPanel', 'ImportFeature',
         'MergeFeature', 'SaveFeature', 'SnappingSettings', 'SplitFeature'],
+
+    featureTypes: ['point', 'path', 'polygon'],
 
     /**
      * Property: sourceLayers
@@ -94,6 +96,12 @@ OpenLayers.Editor = OpenLayers.Class({
      * {Object} ...
      */
     options: {},
+
+    /**
+     * Property: URL of processing service.
+     * {String}
+     */
+    oleUrl: '',
 
     initialize: function (map, options) {
 
@@ -147,13 +155,94 @@ OpenLayers.Editor = OpenLayers.Class({
         this.editLayer.events.register('afterfeaturemodified', this.undoRedo, this.undoRedo.register);
 
 
+        var selectionContext = {
+            editor: this,
+            layer: this.editLayer,
+            controls: [
+                'OpenLayers.Editor.Control.DeleteFeature',
+                'OpenLayers.Editor.Control.CleanFeature',
+                'OpenLayers.Editor.Control.MergeFeature',
+                'OpenLayers.Editor.Control.SplitFeature'
+        ]};
+        this.editLayer.events.register('featureselected', selectionContext, this.selectionChanged);
+        this.editLayer.events.register('featureunselected', selectionContext, this.selectionChanged);
+
+        for (var i = 0, il = this.featureTypes.length; i < il; i++) {
+            if (this.featureTypes[i] == 'polygon') {
+                this.activeControls.push('DrawPolygon');
+            }
+            else if (this.featureTypes[i] == 'path') {
+                this.activeControls.push('DrawPath');
+            }
+            else if (this.featureTypes[i] == 'point') {
+                this.activeControls.push('DrawPoint');
+            }
+        }
+
+        for (var i = 0, il = this.sourceLayers.length; i < il; i++) {
+            var selectionContext = {
+                editor: this,
+                layer: this.sourceLayers[i],
+                controls: ['OpenLayers.Editor.Control.ImportFeature']
+            };
+            this.sourceLayers[i].events.register('featureselected', selectionContext, this.selectionChanged);
+            this.sourceLayers[i].events.register('featureunselected', selectionContext, this.selectionChanged);
+            this.sourceLayers[i].styleMap = new OpenLayers.StyleMap({
+                'default': new OpenLayers.Style({
+                    fillColor: '#0c0',
+                    fillOpacity: 0.8,
+                    strokeColor: '#070',
+                    strokeWidth: 2,
+                    graphicZIndex: 1,
+                    pointRadius: 5
+                }),
+                'select': new OpenLayers.Style({
+                    fillColor: '#fc0',
+                    strokeColor: '#f70',
+                    graphicZIndex: 2
+                }),
+                'temporary': new OpenLayers.Style({
+                    fillColor: '#fc0',
+                    fillOpacity: 0.8,
+                    strokeColor: '#f70',
+                    strokeWidth: 2,
+                    graphicZIndex: 2,
+                    pointRadius: 5
+                })
+            });
+            this.map.addLayer(this.sourceLayers[i]);
+        }
+
+
         this.map.editor = this;
         this.map.addLayer(this.editLayer);
-        this.map.addLayers(this.sourceLayers);
-        this.map.addControl(new OpenLayers.Editor.Control.LayerSettings());
+        this.map.addControl(new OpenLayers.Editor.Control.LayerSettings(this));
         this.map.addControl(this.undoRedo);
 
         return this;
+    },
+    
+    selectionChanged: function() {
+
+        if (this.layer.selectedFeatures.length > 0) {
+            // enable controls
+            for (var ic = 0, lic = this.controls.length; ic < lic; ic++) {
+                var control = this.editor.editorPanel.getControlsByClass(this.controls[ic])[0];
+                if (control) {
+                    OpenLayers.Element.removeClass(control.panel_div, 'oleControlDisabled');
+                }
+            }
+        } else {
+            // disable controls
+            for (var ic = 0, lic = this.controls.length; ic < lic; ic++) {
+                var control = this.editor.editorPanel.getControlsByClass(this.controls[ic])[0];
+                if (control) {
+                    OpenLayers.Element.addClass(control.panel_div, 'oleControlDisabled');
+                }
+            }
+        }
+
+        this.editor.editorPanel.redraw();
     },
     
     startEditMode: function () {
@@ -176,18 +265,18 @@ OpenLayers.Editor = OpenLayers.Class({
         }
     },
 
-    loadFeatures: function (options) {
+    loadFeatures: function (features) {
         this.editLayer.destroyFeatures();
-        this.params = options.params;
-        if(options.features) {
-            var geo =  new OpenLayers.Format.GeoJSON().read(options.features);
-            this.editLayer.addFeatures(this.toFeatures(geo));
+        if (features) {
+            this.editLayer.addFeatures(features);
             this.map.zoomToExtent(this.editLayer.getDataExtent());
-        } else {
+        } 
+        else if (this.options.LoadFeature.url) {
             OpenLayers.Request.GET({
                 url: this.options.LoadFeature.url,
                 params: options.params,
                 callback: this.loadFeaturesComplete,
+                proxy: null,
                 scope: this
             });
         }
@@ -212,8 +301,7 @@ OpenLayers.Editor = OpenLayers.Class({
     },
 
     requestComplete: function (response) {
-        var responseJSON = new OpenLayers.Format.JSON().read(response.responseText),
-            multiPolygon;
+        var responseJSON = new OpenLayers.Format.JSON().read(response.responseText);
         if (!responseJSON) {
             this.showStatus('error', OpenLayers.i18n('oleNoJSON'))
         } else if (responseJSON.error) {
@@ -223,14 +311,25 @@ OpenLayers.Editor = OpenLayers.Class({
                 OpenLayers.Util.extend(this.params, responseJSON.params);
             }
             if (responseJSON.geo) {
-                multiPolygon = this.geoJSON.read(responseJSON.geo);
+                var geo = this.geoJSON.read(responseJSON.geo);
                 this.editLayer.removeFeatures(this.editLayer.selectedFeatures);
-                this.editLayer.addFeatures(this.toFeatures(multiPolygon));
+                this.editLayer.addFeatures(this.toFeatures(geo));
+                this.editLayer.events.triggerEvent('featureselected');
             }
         }
     },
 
+    /**
+     * Flattens multipolygons and returns a list of their features
+     * @param {Object|Array} Geometry or list of geometries to flatten. Geometries can be of types
+     *     OpenLayers.Geometry.MultiPolygon, OpenLayers.Geometry.Collection,
+     *     OpenLayers.Geometry.Polygon.
+     * @return {Array} List for features of type OpenLayers.Feature.Vector.
+     */
     toFeatures: function (multiPolygon) {
+        if(multiPolygon===null || typeof(multiPolygon)!=='object'){
+            throw new Error('Parameter does not match expected type.');
+        }
         var features = [];
         if (!(multiPolygon instanceof Array)) {
             multiPolygon = [multiPolygon];

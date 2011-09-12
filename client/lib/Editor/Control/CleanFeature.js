@@ -17,7 +17,7 @@
  */
 OpenLayers.Editor.Control.CleanFeature = OpenLayers.Class(OpenLayers.Control.Button, {
 
-    url: '',
+    proxy: null,
 
     title: OpenLayers.i18n('oleCleanFeature'),
 
@@ -34,23 +34,23 @@ OpenLayers.Editor.Control.CleanFeature = OpenLayers.Class(OpenLayers.Control.But
         this.layer = layer;
         OpenLayers.Control.Button.prototype.initialize.apply(this, [options]);
         this.trigger = this.cleanFeature;
+        this.title = OpenLayers.i18n('oleCleanFeature');
+        this.displayClass = "oleControlDisabled " + this.displayClass;
     },
 
     /**
      * Method: cleanFeature
      */
     cleanFeature: function () {
-        if (this.layer.selectedFeatures.length < 1) {
-            this.map.editor.showStatus('error', OpenLayers.i18n('oleCleanFeatureSelectFeature'));
-        }
-        else {
-            var multiPolygon = this.map.editor.toMultiPolygon(this.layer.selectedFeatures),
-                multiPolygonJSON = new OpenLayers.Format.GeoJSON().write(multiPolygon);
+        if (this.layer.selectedFeatures.length > 0) {
+            var wktFormat = new OpenLayers.Format.WKT(),
+                geo = wktFormat.write(this.layer.selectedFeatures);
             OpenLayers.Request.POST({
-                url: this.url,
-                data: OpenLayers.Util.getParameterString({geo: multiPolygonJSON}),
+                url: this.map.editor.oleUrl+'process/clean',
+                data: OpenLayers.Util.getParameterString({geo: geo}),
                 headers: {"Content-Type": "application/x-www-form-urlencoded"},
                 callback: this.map.editor.requestComplete,
+                proxy: this.proxy,
                 scope: this.map.editor
             });
         }

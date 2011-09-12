@@ -4,9 +4,6 @@
 
 
 /**
- * @requires OpenLayers/Control/DragFeature.js
- * @requires OpenLayers/Control/SelectFeature.js
- * @requires OpenLayers/Handler/Keyboard.js
  *
  * Class: OpenLayers.Control.ModifyFeature
  * Control to modify features.  When activated, a click renders the vertices

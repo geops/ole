@@ -39,6 +39,8 @@ OpenLayers.Editor.Control.DrawHole = OpenLayers.Class(OpenLayers.Control.DrawFea
         OpenLayers.Control.DrawFeature.prototype.initialize.apply(this,
             [layer, OpenLayers.Handler.Polygon, options]);
 
+        this.title = OpenLayers.i18n('oleDrawHole');
+
     },
 
     /**

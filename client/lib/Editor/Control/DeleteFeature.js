@@ -37,9 +37,13 @@ OpenLayers.Editor.Control.DeleteFeature = OpenLayers.Class(OpenLayers.Control.Bu
 
         this.layer = layer;
 
+        this.title = OpenLayers.i18n('oleDeleteFeature');
+
         OpenLayers.Control.Button.prototype.initialize.apply(this, [options]);
 
         this.trigger = this.deleteFeature;
+
+        this.displayClass = "oleControlDisabled " + this.displayClass;
 
     },
 
@@ -47,13 +51,9 @@ OpenLayers.Editor.Control.DeleteFeature = OpenLayers.Class(OpenLayers.Control.Bu
      * Method: deleteFeature
      */
     deleteFeature: function () {
-        if (this.layer.selectedFeatures.length < 1) {
-            return this.map.editor.status({
-                type: 'error',
-                content: OpenLayers.i18n('oleDeleteFeatureSelectFeature')
-            });
-        } else {
+        if (this.layer.selectedFeatures.length > 0) {
             this.layer.destroyFeatures(this.layer.selectedFeatures);
+            this.layer.events.triggerEvent('featureunselected');
         }
     },
 
