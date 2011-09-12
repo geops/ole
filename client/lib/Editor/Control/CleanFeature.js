@@ -45,6 +45,7 @@ OpenLayers.Editor.Control.CleanFeature = OpenLayers.Class(OpenLayers.Control.But
         if (this.layer.selectedFeatures.length > 0) {
             var wktFormat = new OpenLayers.Format.WKT(),
                 geo = wktFormat.write(this.layer.selectedFeatures);
+            this.map.editor.startWaiting(this.panel_div);
             OpenLayers.Request.POST({
                 url: this.map.editor.oleUrl+'process/clean',
                 data: OpenLayers.Util.getParameterString({geo: geo}),

@@ -84,6 +84,14 @@ div.oleControlDisabled {
     opacity: 0.5;
 }
 
+.olEditorControlEditorPanel {
+    cursor: default;
+}
+
+.olEditorControlEditorPanel > div:not(.olControlSeparatorItemInactive):not(.oleControlDisabled) {
+    cursor: pointer;
+}
+
 /**
  * Navigation
  */
@@ -114,6 +122,12 @@ div.oleControlDisabled {
 .olEditorControlEditorPanel .olEditorControlDrawPolygonItemActive,
 .olEditorControlEditorPanel .olEditorControlDrawPolygonItemInactive {
     background-image: url("img/drawPolygon.png");
+}
+
+.olEditorControlDrawPointActive,
+.olEditorControlDrawPathActive,
+.olEditorControlDrawPolygonActive {
+    cursor: crosshair;
 }
 
 /**
@@ -205,4 +219,8 @@ div.oleControlDisabled {
 .olEditorControlEditorPanel .olEditorControlCleanFeatureItemActive,
 .olEditorControlEditorPanel .olEditorControlCleanFeatureItemInactive {
     background-image: url("img/cleanFeature.png");
+}
+
+.olEditorWaiting {
+    cursor: wait !important;
 }

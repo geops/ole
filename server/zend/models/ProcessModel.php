@@ -3,24 +3,34 @@
 /**
  * Model class for geoprocessing requests
  *
- * @copyright  2010 geOps GeoInformatics
- * @license    http://www.geops.de/license.txt
- * @version    $Id$
- * @link       http://www.geops.de
- * @since      File available since Release initial
- * @package    Geo_Ps
+ * @copyright  2011 geOps
+ * @license    https://github.com/geops/ole/blob/master/license.txt
+ * @link       https://github.com/geops/ole
+ * @package    Ole
  */
 
 class Ole_ProcessModel {
-    
+
+    /**
+     * Provides SQL queries for geoprocessing. Will be set by the constructor.
+     */
     protected $sql;
 
-
+    /**
+     * Reads and sets SQL queries from JSON file.
+     */
     public function __construct() {
         $filename = dirname(dirname(__FILE__)) . '/sql.json';
         $this->sql = json_decode(file_get_contents($filename));
     }
 
+    /**
+     * Split path or polygon by a given path.
+     *
+     * @param  String $geo Geometry as WKT
+     * @param  String $cut Path as WKT
+     * @return String      Splitted geometry as WKT
+     */
     public function split($geo, $cut) {
 
         $registry = Zend_Registry::getInstance();
@@ -38,7 +48,13 @@ class Ole_ProcessModel {
             return $result['geo'];
         }
     }
- 
+
+    /**
+     * Merge polygons.
+     *
+     * @param  String $geo Geometry as WKT
+     * @return String      Merged geometry as WKT
+     */
     public function merge($geo) {
 
         $registry = Zend_Registry::getInstance();
@@ -56,6 +72,12 @@ class Ole_ProcessModel {
         }
     }
 
+    /**
+     * Clean geometries.
+     *
+     * @param  String $geo Geometry as WKT
+     * @return String      Cleaned geometry as WKT
+     */
     public function clean($geo) {
 
         $registry = Zend_Registry::getInstance();

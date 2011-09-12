@@ -48,8 +48,9 @@ OpenLayers.Editor.Control.MergeFeature = OpenLayers.Class(OpenLayers.Control.But
         if (this.layer.selectedFeatures.length < 2) {
             this.map.editor.showStatus('error', OpenLayers.i18n('oleMergeFeatureSelectFeature'));
         } else {
-            var wktFormat = new OpenLayers.Format.WKT();
-            var geo = wktFormat.write(this.layer.selectedFeatures);
+            var wktFormat = new OpenLayers.Format.WKT(),
+                geo = wktFormat.write(this.layer.selectedFeatures);
+            this.map.editor.startWaiting(this.panel_div);
             OpenLayers.Request.POST({
                 url: this.map.editor.oleUrl+'process/merge',
                 data: OpenLayers.Util.getParameterString({geo: geo}),

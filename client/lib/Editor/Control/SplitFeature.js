@@ -33,10 +33,12 @@ OpenLayers.Editor.Control.SplitFeature = OpenLayers.Class(OpenLayers.Control.Dra
         var proceed = this.layer.events.triggerEvent(
             'sketchcomplete', {feature: feature}
         );
-        if(proceed !== false) {
+        this.deactivate();
+        if (proceed !== false) {
             if (this.layer.selectedFeatures.length > 0) {
-                var geo = wktFormat.write(this.layer.selectedFeatures);
-                var cut = wktFormat.write(feature);
+                var geo = wktFormat.write(this.layer.selectedFeatures),
+                    cut = wktFormat.write(feature);
+                this.map.editor.startWaiting(this.panel_div);
                 OpenLayers.Request.POST({
                     url: this.map.editor.oleUrl+'process/split',
                     data: OpenLayers.Util.getParameterString({cut: cut, geo: geo}),
@@ -47,7 +49,6 @@ OpenLayers.Editor.Control.SplitFeature = OpenLayers.Class(OpenLayers.Control.Dra
                 });
             }
         }
-        this.deactivate();
     },
 
     CLASS_NAME: 'OpenLayers.Editor.Control.SplitFeature'

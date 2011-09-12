@@ -1,28 +1,22 @@
 <?php
 /**
-* Error controller - returning restful http status codes instead of phps
-* default stacktraces.
-*
-* LICENSE: Some license information
-*
-* @copyright  2010 geOps
-* @license    http://www.geops.de/license.txt http://www.zend.com/license/3_0.txt   PHP License 3.0
-* @version    $Id$
-* @link       http://www.geops.de
-* @since      File available since Release x.x.x
-* @package    Geo_Ps
-**/ 
-
+ * Error controller - returning restful http status codes instead of phps
+ * default stacktraces.
+ *
+ * @copyright  2010 geOps
+ * @license    https://github.com/geops/ole/blob/master/license.txt
+ * @link       https://github.com/geops/ole
+ * @package    Ole
+ */
 
 /**
-* Restful error controller
-*
-* @copyright  2010 geOps
-* @license    http://www.geops.de/license.txt http://www.zend.com/license/3_0.txt   PHP License 3.0
-* @version    Release: @package_version@
-* @link       http://www.geops.de
-* @since      Class available since Release x.x.x
-*/ 
+ * Restful error controller
+ *
+ * @copyright  2010 geOps
+ * @license    https://github.com/geops/ole/blob/master/license.txt
+ * @link       https://github.com/geops/ole
+ * @package    Ole
+ */
 class Ole_ErrorController extends Zend_Controller_Action {
  
 

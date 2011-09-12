@@ -302,6 +302,7 @@ OpenLayers.Editor = OpenLayers.Class({
 
     requestComplete: function (response) {
         var responseJSON = new OpenLayers.Format.JSON().read(response.responseText);
+        this.map.editor.stopWaiting();
         if (!responseJSON) {
             this.showStatus('error', OpenLayers.i18n('oleNoJSON'))
         } else if (responseJSON.error) {
@@ -357,6 +358,17 @@ OpenLayers.Editor = OpenLayers.Class({
             }
         }
         return new OpenLayers.Geometry.MultiPolygon(components);
+    },
+
+    startWaiting: function (panel_div) {
+        OpenLayers.Element.addClass(panel_div, 'olEditorWaiting');
+        OpenLayers.Element.addClass(this.map.div, 'olEditorWaiting');
+        this.waitingDiv = panel_div;
+    },
+
+    stopWaiting: function() {
+        OpenLayers.Element.removeClass(this.waitingDiv, 'olEditorWaiting');
+        OpenLayers.Element.removeClass(this.map.div, 'olEditorWaiting');
     },
 
     CLASS_NAME: 'OpenLayers.Editor'

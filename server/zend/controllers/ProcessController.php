@@ -1,14 +1,10 @@
 <?php
 /**
- * index controller
- *
- * LICENSE: Some license information
+ * Controller provides spatial processing functions.
  *
  * @copyright  2010 geOps
- * @license    http://www.geops.de/license.txt http://www.zend.com/license/3_0.txt   PHP License 3.0
- * @version    $Id$
- * @link       http://www.geops.de
- * @since      File available since Release x.x.x
+ * @license    https://github.com/geops/ole/blob/master/license.txt
+ * @link       https://github.com/geops/ole
  * @package    Ole
  */
 
@@ -44,10 +40,6 @@ class Ole_ProcessController_ZipException extends Ole_ProcessController_Exception
 class Ole_ProcessController_ShapeToGeojsonException extends Ole_ProcessController_Exception {}
 
 
-/**
- * index controller
- *
- */
 class Ole_ProcessController extends Zend_Controller_Action {
 
     public function preDispatch() {
@@ -55,39 +47,68 @@ class Ole_ProcessController extends Zend_Controller_Action {
     }
 
 
+    /**
+     * Split a path or polygon named "geo" by a given path named "cut".
+     * Both geometries need to be encoded as WKT.
+     *
+     * Returns a JSON string containing an error, a geo and a messsage property.
+     */
     public function splitAction() {
 
         $geo = $this->_request->getParam('geo');
         $cut = $this->_request->getParam('cut');
-        
-        $processModel = new Ole_ProcessModel();
-        $processed = $processModel->split($geo, $cut);
 
-        $response = array('error' => false, 'geo' => $processed, 'message' => 'merge successful');
+        try {
+            $processModel = new Ole_ProcessModel();
+            $processed = $processModel->split($geo, $cut);
+            $response = array('error' => false, 'geo' => $processed, 'message' => 'split successful');
+        }
+        catch(Exception $e) {
+            $response = array('error' => true, 'message' => 'Could not process geometry.');
+        }
 
         $this->getHelper('Json')->sendJson($response);
     }
 
+    /**
+     * Merge multiple overlapping geometries of the same type into one geometry.
+     * The source geometries need to be encoded as WKT and named "geo".
+     *
+     * Returns a JSON string containing an error, a geo and a messsage property.
+     */
     public function mergeAction() {
 
         $geo = $this->_request->getParam('geo');
 
-        $processModel = new Ole_ProcessModel();
-        $processed = $processModel->merge($geo);
-
-        $response = array('error' => false, 'geo' => $processed, 'message' => 'split successful');
+        try {
+            $processModel = new Ole_ProcessModel();
+            $processed = $processModel->merge($geo);
+            $response = array('error' => false, 'geo' => $processed, 'message' => 'merge successful');
+        }
+        catch(Exception $e) {
+            $response = array('error' => true, 'message' => 'Could not process geometry.');
+        }
 
         $this->getHelper('Json')->sendJson($response);
     }
 
+    /**
+     * Clean up multiple geometries encoded as WKT and named "geo".
+     *
+     * Returns a JSON string containing an error, a geo and a messsage property.
+     */
     public function cleanAction() {
 
         $geo = $this->_request->getParam('geo');
 
-        $processModel = new Ole_ProcessModel();
-        $processed = $processModel->clean($geo);
-
-        $response = array('error' => false, 'geo' => $processed, 'message' => 'split successful');
+        try {
+            $processModel = new Ole_ProcessModel();
+            $processed = $processModel->clean($geo);
+            $response = array('error' => false, 'geo' => $processed, 'message' => 'clean successful');
+        }
+        catch(Exception $e) {
+            $response = array('error' => true, 'message' => 'Could not process geometry.');
+        }
 
         $this->getHelper('Json')->sendJson($response);
     }
