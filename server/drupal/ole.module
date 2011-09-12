@@ -1,0 +1,143 @@
+<?php
+
+/**
+ * Implements hook_openlayers_behaviors().
+ */
+function ole_openlayers_behaviors() {
+  return array(
+    'openlayers_behavior_ole' => array(
+      'title' => t('OpenLayers Editor'),
+      'description' => t('Provides advanced geo editing capabilities.'),
+      'type' => 'map',
+      'path' => drupal_get_path('module', 'ole') .'/includes/behaviors',
+      'file' => 'openlayers_behavior_ole.inc',
+      'behavior' => array(
+        'class' => 'openlayers_behavior_ole',
+        'parent' => 'openlayers_behavior',
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function ole_menu() {
+
+  $items['ole/process/split'] = array(
+    'title' => t('OLE split'),
+    'page callback' => 'ole_process_split',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['ole/process/merge'] = array(
+    'title' => t('OLE merge'),
+    'page callback' => 'ole_process_merge',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['ole/process/clean'] = array(
+    'title' => t('OLE clean'),
+    'page callback' => 'ole_process_clean',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  // Editor settings
+  $items['admin/structure/openlayers/editor'] = array(
+    'title' => t('Editor'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ole_admin_settings'),
+    'access arguments' => array('administer openlayers'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => -15,
+  );
+
+  return $items;
+}
+
+function ole_get_sql($method, $type = '') {
+  $filename = dirname(__FILE__) . '/sql.json';
+  $sql = json_decode(file_get_contents($filename));
+  if (empty($type) && is_string($sql->$method)) {
+    return $sql->$method;
+  } elseif (is_string($sql->$method->$type)) {
+    return $sql->$method->$type;
+  }
+}
+
+function ole_process_split() {
+
+  $params = drupal_get_query_parameters($_POST);
+  $result = array();
+
+  if (strpos($params['geo'], 'POLYGON') != false) {
+    $sql = ole_get_sql('split', 'polygon');
+  }
+  elseif (strpos($params['geo'], 'LINE') != false) {
+    $sql = ole_get_sql('split', 'line');
+  }
+
+  if (!empty($sql)) {
+    $result['geo'] = db_query($sql, array(':geo' => $params['geo'], ':cut' => $params['cut']))->fetchField();
+  }
+
+  header("Content-type: application/json");
+  echo json_encode($result);
+}
+
+function ole_process_merge() {
+
+  $params = drupal_get_query_parameters($_POST);
+  $result = array();
+
+  if (strpos($params['geo'], 'POLYGON') != false) {
+    $sql = ole_get_sql('merge', 'polygon');
+  }
+  elseif (strpos($params['geo'], 'LINE') != false) {
+    $sql = ole_get_sql('merge', 'line');
+  }
+
+  if (!empty($sql)) {
+    $result['geo'] = db_query($sql, array(':geo' => $params['geo']))->fetchField();
+  }
+
+  header("Content-type: application/json");
+  echo json_encode($result);
+}
+
+function ole_process_clean() {
+
+  $params = drupal_get_query_parameters($_POST);
+  $result = array();
+
+  $sql = ole_get_sql('clean');
+
+  if (!empty($sql)) {
+    $result['geo'] = db_query($sql, array(':geo' => $params['geo']))->fetchField();
+  }
+
+  header("Content-type: application/json");
+  echo json_encode($result);
+}
+
+
+function ole_admin_settings() {
+  // Define Form
+  $form['openlayers_editor_source'] = array(
+    '#type' => 'textfield',
+    '#title' => t('OpenLayers Editor Source'),
+    '#description' => '...',
+    '#default_value' => variable_get('openlayers_editor_source', ''),
+  );
+
+  $form['openlayers_editor_css'] = array(
+    '#type' => 'textfield',
+    '#title' => t('OpenLayers Editor CSS Path'),
+    '#description' => t('Default style'),
+    '#default_value' => variable_get('openlayers_editor_css', ''),
+  );
+
+  // Make a system setting form and return
+  return system_settings_form($form);
+}
+

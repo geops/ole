@@ -1,0 +1,8 @@
+name = OpenLayers Editor
+description = Provides advanced geo editing capabilities. Some functions require a PostGIS database.
+core = 7.x
+package = OpenLayers
+
+dependencies[] = openlayers
+
+files[] = ole.module
