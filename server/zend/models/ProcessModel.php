@@ -9,6 +9,8 @@
  * @package    Ole
  */
 
+class Ole_ProcessModel_Exception extends Exception {}
+
 class Ole_ProcessModel {
 
     /**
@@ -66,8 +68,16 @@ class Ole_ProcessModel {
             $type = 'line';
         }
 
-        if (!empty($type)) {
-            $result = $db->fetchrow($this->sql->merge->$type, array(':geo' => $geo));
+        if (empty($type)) {
+            throw new Ole_ProcessModel_Exception('Incompatible geometry type');
+        }
+        
+        $result = $db->fetchrow($this->sql->merge->$type, array(':geo' => $geo));
+
+        if (empty($result['geo'])) {
+            // PostGIS >= 1.5 doesn't return an exception, just an empty result
+            throw new Ole_ProcessModel_Exception('Could not process geometry.');
+        } else {
             return $result['geo'];
         }
     }
