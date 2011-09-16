@@ -2,7 +2,7 @@
 /**
  * Controller provides spatial processing functions.
  *
- * @copyright  2010 geOps
+ * @copyright  2011 geOps
  * @license    https://github.com/geops/ole/blob/master/license.txt
  * @link       https://github.com/geops/ole
  * @package    Ole

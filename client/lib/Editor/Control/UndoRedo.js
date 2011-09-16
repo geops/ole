@@ -1,16 +1,12 @@
-/* Copyright (c) 2006 MetaCarta, Inc., published under a modified BSD license.
- * See http://svn.openlayers.org/trunk/openlayers/repository-license.txt
- * for the full text of the license. */
-
+/**
+ * @copyright  2011 geOps
+ * @license    https://github.com/geops/ole/blob/master/license.txt
+ * @link       https://github.com/geops/ole
+ */
 
 /**
  *
- * Class: OpenLayers.Control.ModifyFeature
- * Control to modify features.  When activated, a click renders the vertices
- *     of a feature - these vertices can then be dragged.  By default, the
- *     delete key will delete the vertex under the mouse.  New features are
- *     added by dragging "virtual vertices" between vertices.  Create a new
- *     control with the <OpenLayers.Control.ModifyFeature> constructor.
+ * Class: OpenLayers.Editor.Control.UndoRedo
  *
  * Inherits From:
  *  - <OpenLayers.Control>

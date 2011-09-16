@@ -1,8 +1,7 @@
- /**
- * @copyright  2010 geOps
- * @license    http://www.geops.de/license.txt
- * @version    $Id$
- * @link       http://www.geops.de
+/**
+ * @copyright  2011 geOps
+ * @license    https://github.com/geops/ole/blob/master/license.txt
+ * @link       https://github.com/geops/ole
  */
 
 /**

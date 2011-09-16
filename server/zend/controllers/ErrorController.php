@@ -3,7 +3,7 @@
  * Error controller - returning restful http status codes instead of phps
  * default stacktraces.
  *
- * @copyright  2010 geOps
+ * @copyright  2011 geOps
  * @license    https://github.com/geops/ole/blob/master/license.txt
  * @link       https://github.com/geops/ole
  * @package    Ole
@@ -12,7 +12,7 @@
 /**
  * Restful error controller
  *
- * @copyright  2010 geOps
+ * @copyright  2011 geOps
  * @license    https://github.com/geops/ole/blob/master/license.txt
  * @link       https://github.com/geops/ole
  * @package    Ole
