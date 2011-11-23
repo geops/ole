@@ -46,19 +46,21 @@ OpenLayers.Editor.Control.DrawHole = OpenLayers.Class(OpenLayers.Control.DrawFea
      * Method: drawFeature
      * Cut hole only if area greater than or equal to minArea and all
      *     vertices intersect the targeted feature.
+     * @param {OpenLayers.Geometry} geometry The hole to be drawn
      */
     drawFeature: function (geometry) {
 
-        var feature = new OpenLayers.Feature.Vector(geometry),
-            proceed = this.layer.events.triggerEvent('sketchcomplete', {feature: feature}),
-            vertices = geometry.getVertices(), intersects;
-
+        var feature = new OpenLayers.Feature.Vector(geometry);
+        feature.state = OpenLayers.State.INSERT;
+        // Trigger sketchcomplete and allow listeners to prevent modifications
+        var proceed = this.layer.events.triggerEvent('sketchcomplete', {feature: feature});
+        
         if (proceed !== false && geometry.getArea() >= this.minArea) {
+            var vertices = geometry.getVertices(), intersects;
             
-            feature.state = OpenLayers.State.INSERT;
-
             features: for (var i = 0, li = this.layer.features.length; i < li; i++) {
                 var layerFeature = this.layer.features[i];
+                
                 intersects = true;
                 for (var j = 0, lj = vertices.length; j < lj; j++) {
                     if (!layerFeature.geometry.intersects(vertices[j])) {
@@ -66,9 +68,21 @@ OpenLayers.Editor.Control.DrawHole = OpenLayers.Class(OpenLayers.Control.DrawFea
                     }
                 }
                 if (intersects) {
-                    this.layer.removeFeatures([layerFeature]);
+                    // Notify listeners that a feature is about to be modified
+                    this.layer.events.triggerEvent("beforefeaturemodified", {
+                        feature: layerFeature
+                    });
                     layerFeature.geometry.components.push(geometry.components[0]);
-                    this.layer.addFeatures([layerFeature]);
+                    this.layer.drawFeature(layerFeature);
+                    // More event triggering but documentation is not clear how the following 2 are distinguished
+                    // Notify listeners that a feature is modified
+                    this.layer.events.triggerEvent("featuremodified", {
+                        feature: layerFeature
+                    });
+                    // Notify listeners that a feature was modified
+                    this.layer.events.triggerEvent("afterfeaturemodified", {
+                        feature: layerFeature
+                    });
                     break features;
                 }
             }
