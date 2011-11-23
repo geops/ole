@@ -1,0 +1,191 @@
+<!doctype html>
+<html>
+
+    <head>
+        <title>MapFish OpenLayers Editor Tutorial</title>
+        <meta http-equiv="Content-Type"
+            content="text/html; charset=utf-8">
+        <link rel="shortcut icon" href="favicon.ico"
+            type="image/vnd.microsoft.icon">
+        
+        <!-- jQuery will be used for AJAX communication but you
+            could use something else -->
+        <script type="text/javascript"
+            src="http://code.jquery.com/jquery-1.7.min.js">
+        </script>
+        
+        <!-- Use a OpenLayers version later that 2.10 for supporting
+            parallel script loading as in Firefox 4 and higher -->
+        <script type="text/javascript"
+            src="http://openlayers.org/api/2.11/OpenLayers.js">
+        </script>
+        
+        <!-- Load OLE, the OpenLayers Editor, into your page -->
+        <link rel="stylesheet" href="geosilk.css" type="text/css">
+        <script type="text/javascript" src="lib/loader.js">
+        </script>
+        
+        <!-- Code follows to instantiate the map with OLE and
+            binding the client to MapFish via GeoJSON -->
+        <script type="text/javascript">
+        function init() {
+            var map, editor;
+            // Create an OpenLayers map
+            map = new OpenLayers.Map('map', {
+                maxExtent: new OpenLayers.Bounds(-500,-500, 500, 500)
+            });
+            // Add OpenStreetMap to have a base layer
+            map.addLayer(new OpenLayers.Layer.OSM());
+            // Set some default location and zoom level
+            map.setCenter(new OpenLayers.LonLat(10, 50), 5);
+
+            // Create an OLE instance
+            editor = new OpenLayers.Editor(map, {
+                // Choose which tools shall be available
+                activeControls: [
+                    'Navigation', 'SnappingSettings', 'Separator',
+                    'SplitFeature', 'MergeFeature', 'CleanFeature',
+                    'DeleteFeature', 'SelectFeature', 'Separator',
+                    'DragFeature', 'DrawHole', 'ModifyFeature', 'Separator'
+                ],
+                // Choose which feature types shall be available
+                featureTypes: ['polygon', 'path', 'point']
+            });
+
+            // Make a toolbar appear so that the user can start to edit
+            editor.startEditMode();
+
+            // A flag so that initial adding of features is not mistaken as
+            // addition of new features
+            var ignoreFeatureAdditions = false;
+            // Conversions between GeoJSON and OpenLayers objects
+            var geoJSON = new OpenLayers.Format.GeoJSON();
+
+            /**
+            * Maps feature classes to controllers. In a real application you
+            * would create own feature classes for OpenLayers corresponding
+            * to your controllers.
+            * Will will just the mapping of a feature class to a controller
+            * for the sake of providing a simple tutorial.
+            * @param {OpenLayers.Feature.Vector} feature The feature for
+            *     which the controller should be returned
+            * @return {string} Name of controller
+            */
+            function getControllerForFeature(feature){
+                if(feature.geometry instanceof OpenLayers.Geometry.Polygon){
+                    return 'areas';
+                } else if(feature.geometry instanceof
+                    OpenLayers.Geometry.LineString){
+                    
+                    return 'lines';
+                } else {
+                    return 'points';
+                }
+            }
+
+            /**
+            * Adds or updates a feature. Chosen action depends on the
+            * presence of a feature identifier.
+            * @param {OpenLayers.Feature.Vector} feature The feature for
+            *     which the controller should be returned
+            */
+            function saveFeature(feature){
+                $.ajax({
+                    // Send to controller responsible for feature
+                    url: getControllerForFeature(feature),
+                    type: 'post',
+                    // Provide server with correct content type
+                    contentType: 'application/json',
+                    // Serialize OpenLayers feature to the format as expected
+                    // by MapFish's generated controllers
+                    data: JSON.stringify({
+                        type: 'FeatureCollection',
+                        features: [
+                            $.parseJSON(geoJSON.write(feature))
+                        ]
+                    })
+                }).done(function(featureCollection){
+                    // Update the OpenLayers feature in the map with the
+                    // feature identifier that is newly created on the server
+                    // on feature addition. Just take the first element since
+                    // we know there is only one.
+                    feature.fid = featureCollection.features[0].id;
+                    console.log('Saved object');
+                });
+            }
+
+            // Register event handler so that our code gets notified about new
+            // elements on the map
+            editor.editLayer.events.register('featureadded', this,
+                function(object, element) {
+                    if(ignoreFeatureAdditions){
+                        // Do nothing during initial population of the map
+                        // with features
+                        return;
+                    }
+                    // Persist the added feature
+                    saveFeature(object.feature);
+                }
+            );
+            // Register event handler so that our code gets notified about
+            // elements deleted from the map
+            editor.editLayer.events.register('featureremoved', this,
+                function(object, element) {
+                    // Convert OpenLayers feature to GeoJSON
+                    var feature = $.parseJSON(geoJSON.write(object.feature));
+                    $.ajax({
+                        // Send to controller responsible for feature deletion
+                        // and pass feature identifier
+                        url: getControllerForFeature(object.feature)+'/'
+                            +feature.id,
+                        // Use correct HTTP method
+                        type: 'delete'
+                    }).done(function(){
+                        console.log('Deleted feature', object)
+                    });
+                }
+            );
+            // Register event handler so that our code gets notified about
+            // altered elements on the map
+            editor.editLayer.events.register('afterfeaturemodified', this,
+                function(object, element) {
+                    // Persist new geometry
+                    saveFeature(object.feature);
+                }
+            );
+
+            /**
+            * Adds features to map
+            * @param {object} data Server's response after parsing as JSON
+            */
+            function addFeaturesToMap(data){
+                var features = JSON.stringify(data);
+                ignoreFeatureAdditions = true;
+                // Add features for editing
+                editor.editLayer.addFeatures(geoJSON.read(features));
+                ignoreFeatureAdditions = false;
+            }
+            // Send AJAX requests for reading the persistent storage,
+            // that's retrieving features from database
+            $.ajax({
+                url: 'areas'
+            }).done(addFeaturesToMap);
+            $.ajax({
+                url: 'lines'
+            }).done(addFeaturesToMap);
+            $.ajax({
+                url: 'points'
+            }).done(addFeaturesToMap);
+        }
+
+        $(document).ready(function(){
+            init();
+        });
+        </script>
+    </head>
+    <body>
+        <!-- Only a container for the map is needed but additional
+            HTML could be placed here -->
+        <div id="map" style="position:absolute; top:0; left:0; right:0; bottom:0"></div>
+    </body>
+</html>
