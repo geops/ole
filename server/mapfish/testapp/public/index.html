@@ -1,9 +1,11 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
     <title>OpenLayers Editor with MapFish</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon">
+    <meta http-equiv="Content-Type"
+        content="text/html; charset=utf-8">
+    <link rel="shortcut icon" href="favicon.ico"
+        type="image/vnd.microsoft.icon">
     
     <!-- jQuery will be used for AJAX communication but you
         could use something else -->
@@ -18,13 +20,23 @@
     </script>
     
     <!-- Load OLE, the OpenLayers Editor, into your page -->
-    <link rel="stylesheet" href="lib/geosilk/geosilk.css" type="text/css">
+    <link rel="stylesheet" href="lib/geosilk/geosilk.css"
+        type="text/css">
     <script type="text/javascript" src="lib/loader.js">
     </script>
     
     <!-- Code follows to instantiate the map with OLE and
         binding the client to MapFish via GeoJSON -->
     <script type="text/javascript">
+    if(!window.console){
+        window.console = {
+            log: function(){
+                // Fake console.log for browsers that don't
+                // support it natively
+            }
+        };
+    }
+    
     function init() {
         var map, editor;
         // Create an OpenLayers map
@@ -180,7 +192,8 @@
         init();
     });
     </script>
-    <link rel="stylesheet" href="app/css/style.css" type="text/css">
+    <link rel="stylesheet" href="app/css/style.css"
+        type="text/css">
     <script type="text/javascript">
     // Initialize menu on DOMContentLoaded
     $(document).ready(function(){
@@ -193,7 +206,8 @@
             clickedLink.addClass('active');
             
             // Show desired content and nothing else
-            var desiredContentId = clickedLink.attr('href').substring(1);
+            var desiredContentId = clickedLink.attr('href')
+                .substring(1);
             $('#'+desiredContentId).show();
             $('.content').not('#'+desiredContentId).hide();
         });

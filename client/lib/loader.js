@@ -6,8 +6,6 @@
 
     var files = [
         'Editor.js',
-        'Editor/Lang/de.js',
-        'Editor/Lang/en.js',
         'Editor/Control/CleanFeature.js',
         'Editor/Control/DeleteFeature.js',
         'Editor/Control/Dialog.js',
@@ -24,6 +22,15 @@
         'Editor/Control/SplitFeature.js',
         'Editor/Control/UndoRedo.js'
     ];
+    
+    // Load translations if HTML page defines a language
+    var language = document.documentElement.getAttribute('lang');
+    if(language){
+        files.unshift('Editor/Lang/'+language+'.js');
+        if(OpenLayers.Lang[language]===undefined){
+            OpenLayers.Lang[language] = {};
+        }
+    }
     
     var tags = new Array(files.length);
 
