@@ -221,9 +221,19 @@ OpenLayers.Editor = OpenLayers.Class({
         return this;
     },
     
+    /**
+     * Enable or disable controls that depend on selected features.
+     * 
+     * Requires an active SelectFeature control and the following context variables:
+     * - editor: this
+     * - layer: The layer with selected features.
+     * - controls: An array of class names.
+     */
     selectionChanged: function() {
 
-        if (this.layer.selectedFeatures.length > 0) {
+        var selectFeature = this.editor.editorPanel.getControlsByClass('OpenLayers.Control.SelectFeature')[0];
+        
+        if (this.layer.selectedFeatures.length > 0 && selectFeature.active) {
             // enable controls
             for (var ic = 0, lic = this.controls.length; ic < lic; ic++) {
                 var control = this.editor.editorPanel.getControlsByClass(this.controls[ic])[0];
