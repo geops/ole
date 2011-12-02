@@ -50,6 +50,9 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
     openSnappingDialog: function() {
 
         this.activate();
+        
+        // reset snapping layers
+        this.snappingLayers = [];
 
         this.layerListDiv = document.createElement('div');
         this.layerListDiv.id = 'layerList';
