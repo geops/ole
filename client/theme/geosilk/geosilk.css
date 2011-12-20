@@ -157,6 +157,8 @@ div.oleControlDisabled {
 /**
  * Drag Feature
  */
+.olEditorControlEditorPanel .olEditorControlDragFeatureItemActive,
+.olEditorControlEditorPanel .olEditorControlDragFeatureItemInactive,
 .olEditorControlEditorPanel .olControlDragFeatureItemActive,
 .olEditorControlEditorPanel .olControlDragFeatureItemInactive {
     background-image: url("img/dragFeature.png");

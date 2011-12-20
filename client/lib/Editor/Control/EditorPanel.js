@@ -7,13 +7,17 @@
 /**
  * Class: OpenLayers.Editor.Control.EditorPanel
  * The EditorPanel is a panel of all controls from a given editor. 
- *     By default it appears in the upper right corner of the map.
+ *     By default it appears as toolbar in the upper right corner of the map.
  *
  * Inherits from:
  *  - <OpenLayers.Control.Panel>
  */
 OpenLayers.Editor.Control.EditorPanel = OpenLayers.Class(OpenLayers.Control.Panel, {
-
+    /*
+     * {boolean} Whether to show by default. Leave value FALSE and show by starting editor's edit mode.
+     */
+    autoActivate: false,
+    
     /**
      * Constructor: OpenLayers.Editor.Control.EditorPanel
      * Create an editing toolbar for a given editor.
@@ -23,84 +27,27 @@ OpenLayers.Editor.Control.EditorPanel = OpenLayers.Class(OpenLayers.Control.Pane
      * options - {Object}
      */
     initialize: function (editor, options) {
-
         OpenLayers.Control.Panel.prototype.initialize.apply(this, [options]);
-
-        var control = null, controls = [];
-
-        for (var i=0, len=editor.activeControls.length; i<len; i++) {
-            
-            control = editor.activeControls[i];
-            
-            if (OpenLayers.Util.indexOf(editor.editorControls, control) > -1) {
-                controls.push(new OpenLayers.Editor.Control[control](
-                    editor.editLayer, editor.options[control]
-                ));
-            }
-
-
-            switch (control) {
-
-                case 'Separator':
-                    controls.push(new OpenLayers.Control.Button({
-                        displayClass: 'olControlSeparator'
-                    }));
-                    break;
-
-                case 'Navigation':
-                    controls.push(new OpenLayers.Control.Navigation(
-                        OpenLayers.Util.extend(
-                            {title: OpenLayers.i18n('oleNavigation')},
-                            editor.options.Navigation)
-                    ));
-                    break;
-
-                case 'DragFeature':
-                    controls.push(new OpenLayers.Control.DragFeature(editor.editLayer,
-                        OpenLayers.Util.extend({
-                                title: OpenLayers.i18n('oleDragFeature'),
-                                onComplete: function(feature, pixel) {
-                                    editor.editLayer.events.triggerEvent('afterfeaturemodified', {
-                                        feature: feature
-                                    });
-                                }
-                            },
-                            editor.options.DragFeature)
-                    ));
-                    break;
-
-                case 'ModifyFeature':
-                    controls.push(new OpenLayers.Control.ModifyFeature(editor.editLayer,
-                        OpenLayers.Util.extend(
-                            {title: OpenLayers.i18n('oleModifyFeature')},
-                            editor.options.ModifyFeature)
-                    ));
-                    break;
-
-                case 'SelectFeature':
-                    controls.push(new OpenLayers.Control.SelectFeature(
-                        editor.sourceLayers.concat([editor.editLayer]),
-                        OpenLayers.Util.extend(
-                            {
-                                title: OpenLayers.i18n('oleSelectFeature'),
-                                clickout: true,
-                                toggle: false,
-                                multiple: false,
-                                hover: false,
-                                toggleKey: "ctrlKey",
-                                multipleKey: "ctrlKey",
-                                box: true
-                            },
-                            editor.options.SelectFeature)
-                    ));
-                    break;
-
-                default:
-                    break;
-            }
+    },
+    
+    draw: function() {
+        OpenLayers.Control.Panel.prototype.draw.apply(this, arguments);
+        if (!this.active) {
+            this.div.style.display = 'none';
         }
-        this.addControls(controls);
-        editor.map.addControl(this);
+        return this.div;
+    },
+    
+    redraw: function(){
+        if (!this.active) {
+            this.div.style.display = 'none';
+        }
+        
+        OpenLayers.Control.Panel.prototype.redraw.apply(this, arguments);
+        
+        if (this.active) {
+            this.div.style.display = '';
+        }
     },
 
     CLASS_NAME: 'OpenLayers.Editor.Control.EditorPanel'

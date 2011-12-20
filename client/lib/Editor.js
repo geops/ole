@@ -74,6 +74,10 @@ OpenLayers.Editor = OpenLayers.Class({
         'DrawPolygon', 'DrawPath', 'DrawPoint', 'EditorPanel', 'ImportFeature',
         'MergeFeature', 'SaveFeature', 'SnappingSettings', 'SplitFeature'],
 
+    /**
+     * Geometry types available for editing
+     * {Array}
+     */
     featureTypes: ['point', 'path', 'polygon'],
 
     /**
@@ -101,7 +105,17 @@ OpenLayers.Editor = OpenLayers.Class({
      * {String}
      */
     oleUrl: '',
+    
+    /**
+     * Instantiated controls
+     * {Objects}
+     */
+    controls: {},
 
+    /**
+     * @param {OpenLayers.Map} map A map that shall be equipped with an editor; can be left undefined in which case a map is created.
+     * @param {Object} options
+     */
     initialize: function (map, options) {
 
         OpenLayers.Util.extend(this, options);
@@ -217,6 +231,8 @@ OpenLayers.Editor = OpenLayers.Class({
         this.map.addLayer(this.editLayer);
         this.map.addControl(new OpenLayers.Editor.Control.LayerSettings(this));
         this.map.addControl(this.undoRedo);
+        
+        this.addEditorControls();
 
         return this;
     },
@@ -254,18 +270,95 @@ OpenLayers.Editor = OpenLayers.Class({
         this.editor.editorPanel.redraw();
     },
     
+    /**
+     * Makes the toolbar appear and allows editing
+     */
     startEditMode: function () {
-        if (!this.editorPanel) {
-            this.editorPanel = new OpenLayers.Editor.Control.EditorPanel(this);
-            this.editMode = true;
-        }
+        this.editMode = true;
+        this.editorPanel.activate();
     },
 
+    /**
+     * Hides the toolbar and prevents editing
+     */
     stopEditMode: function () {
-        this.map.removeControl(this.editorPanel);
-        this.editorPanel = null;
-        this.map.addControl(new OpenLayers.Control.DragPan({'autoActivate': true}));
         this.editMode = false;
+        this.editorPanel.deactivate();
+    },
+    
+    /**
+     * Initializes configured controls and creates toolbar
+     */
+    addEditorControls: function(){
+        var control = null, controls = [];
+        var editor = this;
+
+        for (var i=0, len=editor.activeControls.length; i<len; i++) {
+            control = editor.activeControls[i];
+            
+            if (OpenLayers.Util.indexOf(editor.editorControls, control) > -1) {
+                controls.push(new OpenLayers.Editor.Control[control](
+                    editor.editLayer, editor.options[control]
+                ));
+            }
+
+            switch (control) {
+
+                case 'Separator':
+                    controls.push(new OpenLayers.Control.Button({
+                        displayClass: 'olControlSeparator'
+                    }));
+                    break;
+
+                case 'Navigation':
+                    controls.push(new OpenLayers.Control.Navigation(
+                        OpenLayers.Util.extend(
+                            {title: OpenLayers.i18n('oleNavigation')},
+                            editor.options.Navigation)
+                    ));
+                    break;
+
+                case 'DragFeature':
+                    controls.push(new OpenLayers.Editor.Control.DragFeature(editor.editLayer,
+                        OpenLayers.Util.extend({}, editor.options.DragFeature)
+                    ));
+                    break;
+
+                case 'ModifyFeature':
+                    controls.push(new OpenLayers.Control.ModifyFeature(editor.editLayer,
+                        OpenLayers.Util.extend(
+                            {title: OpenLayers.i18n('oleModifyFeature')},
+                            editor.options.ModifyFeature)
+                    ));
+                    break;
+
+                case 'SelectFeature':
+                    controls.push(new OpenLayers.Control.SelectFeature(
+                        editor.sourceLayers.concat([editor.editLayer]),
+                        OpenLayers.Util.extend(
+                            {
+                                title: OpenLayers.i18n('oleSelectFeature'),
+                                clickout: true,
+                                toggle: false,
+                                multiple: false,
+                                hover: false,
+                                toggleKey: "ctrlKey",
+                                multipleKey: "ctrlKey",
+                                box: true
+                            },
+                            editor.options.SelectFeature)
+                    ));
+                    break;
+            }
+            
+            // Save instance in editor's controls mapping
+            this.controls[control] = controls[controls.length-1];
+        }
+        
+        // Add toolbar to map
+        this.editorPanel = new OpenLayers.Editor.Control.EditorPanel(this);
+        this.editorPanel.addControls(controls);
+        editor.map.addControl(this.editorPanel);
     },
 
     status: function(options) {

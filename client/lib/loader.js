@@ -7,6 +7,7 @@
     var files = [
         'Editor.js',
         'Editor/Control/CleanFeature.js',
+        'Editor/Control/DragFeature.js',
         'Editor/Control/DeleteFeature.js',
         'Editor/Control/Dialog.js',
         'Editor/Control/DrawHole.js', 
