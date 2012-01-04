@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+    <title>OpenLayers Editor</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon">
+    <link rel="stylesheet" href="<?php echo ROOT_DIR ?>js/ole/theme/geosilk/geosilk.css" type="text/css" />
+    <link rel="stylesheet" href="<?php echo ROOT_DIR ?>js/openlayers/theme/default/style.css" type="text/css" />
+    <link rel="stylesheet" href="<?php echo ROOT_DIR ?>css/style.css" type="text/css" />
+</head>
+<body>
+    <a href="http://github.com/geops/ole">
+        <img id="github" src="https://a248.e.akamai.net/assets.github.com/img/7afbc8b248c68eb468279e8c17986ad46549fb71/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub">
+    </a>
+    <div id="page">
+        <ul id="navigation">
+            <li><a href="#map">Map</a></li>
+            <li><a href="#video">Video</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#documentation">Documentation</a></li>
+        </ul>
+        <h1>OpenLayers Editor</h1>
+        <div id="map" class="content"></div>
+        <div id="features" class="content">
+            <?php echo $this->action('features', 'index'); ?>
+        </div>
+        <div id="documentation" class="content">
+            <?php echo $this->action('documentation', 'index'); ?>
+        </div>
+        <div id="video" class="content">
+            <iframe style="margin-left: 80px;" width="640" height="480" src="http://www.youtube-nocookie.com/embed/eJQIN7j2r9o?hd=1" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+    <div id="credit">developed by <a href="http://www.geops.de"><img src="<?php echo ROOT_DIR ?>img/geops.png" alt="geOps"></a></div>
+</body>
+
+<?php if (ini_get("display_errors")) : ?>
+    <script src="<?php echo ROOT_DIR ?>js/openlayers/lib/OpenLayers.js"></script>
+    <script src="<?php echo ROOT_DIR ?>js/openlayers/lib/OpenLayers/Lang/en.js"></script>
+    <script src="<?php echo ROOT_DIR ?>js/ole/lib/loader.js"></script>
+    <script src="<?php echo ROOT_DIR ?>js/jquery.js"></script>
+    <script src="<?php echo ROOT_DIR ?>js/demo.js"></script>
+<?php else : ?>
+    <script src="<?php echo ROOT_DIR ?>js/min/openlayers.js"></script>
+    <script src="<?php echo ROOT_DIR ?>js/min/ole.js"></script>
+    <script src="<?php echo ROOT_DIR ?>js/min/jquery.js"></script>
+<?php endif; ?>
+    <script>
+        OpenLayers.ImgPath = '<?php echo ROOT_DIR ?>img/openlayers/';
+        $(function() {
+            $('#map').data('editor').oleUrl = '<?php echo ROOT_DIR ?>ole/';
+        });
+    </script>
+</html>

@@ -1,0 +1,11 @@
+{
+  "split": {
+    "polygon": "SELECT ST_AsGeoJSON(ST_Polygonize(ST_Union(ST_Boundary(geo.geo), :cut::geometry))) AS geo FROM (SELECT ST_Multi(ST_Collect(multi.geo)) AS geo FROM (SELECT (ST_Dump(:geo::geometry)).geom as geo) as multi) AS geo",
+    "line": "SELECT ST_AsGeoJSON(ST_Force_Collection(ST_Difference(:geo::geometry, :cut::geometry))) AS geo"
+  },
+  "merge": {
+    "polygon": "SELECT ST_AsGeoJSON(ST_Union(geo)) AS geo FROM (SELECT (ST_Dump(:geo::geometry)).geom as geo) AS geo",
+    "line": "SELECT ST_AsGeoJSON(ST_Force_Collection(ST_LineMerge(ST_Collect(geo)))) AS geo FROM (SELECT (ST_Dump(:geo::geometry)).geom as geo) AS geo"
+  },
+  "clean": "SELECT ST_AsGeoJSON(ST_BuildArea(ST_Union(ST_Boundary(geo),ST_Startpoint(ST_Boundary(geo))))) AS geo FROM (SELECT ST_Multi(ST_Collect(multi.geo)) AS geo FROM (SELECT (ST_Dump(:geo::geometry)).geom as geo) as multi) AS geo"
+}
