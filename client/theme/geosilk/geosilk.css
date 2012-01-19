@@ -66,13 +66,13 @@ div.dialog {
 .olEditorControlEditorPanel .olEditorControlDrawPathItemActive,
 .olEditorControlEditorPanel .olEditorControlDrawPointItemActive,
 .olEditorControlEditorPanel .olEditorControlSaveFeatureItemActive,
-.olEditorControlEditorPanel .olControlDragFeatureItemActive,
 .olEditorControlEditorPanel .olEditorControlDeleteFeatureItemActive,
 .olEditorControlEditorPanel .olControlSelectFeatureItemActive,
 .olEditorControlEditorPanel .olEditorControlSnappingSettingsItemActive,
 .olEditorControlEditorPanel .olEditorControlImportFeatureItemActive,
 .olEditorControlEditorPanel .olEditorControlDrawHoleItemActive,
 .olEditorControlEditorPanel .olEditorControlMergeFeatureItemActive,
+.olEditorControlEditorPanel .olEditorControlDragFeatureItemActive,
 .olEditorControlEditorPanel .olEditorControlCleanFeatureItemActive {
      background-color: #fff;
 }
@@ -158,10 +158,12 @@ div.oleControlDisabled {
  * Drag Feature
  */
 .olEditorControlEditorPanel .olEditorControlDragFeatureItemActive,
-.olEditorControlEditorPanel .olEditorControlDragFeatureItemInactive,
-.olEditorControlEditorPanel .olControlDragFeatureItemActive,
-.olEditorControlEditorPanel .olControlDragFeatureItemInactive {
+.olEditorControlEditorPanel .olEditorControlDragFeatureItemInactive {
     background-image: url("img/dragFeature.png");
+}
+
+.olEditorControlDragFeatureActive {
+    cursor: move;
 }
 
 /**
