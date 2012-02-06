@@ -16,6 +16,7 @@ OpenLayers.Editor.Control.DragFeature = OpenLayers.Class(OpenLayers.Control.Drag
     
     initialize: function(layer, options) {
         OpenLayers.Control.DragFeature.prototype.initialize.apply(this, [layer, options]);
+        this.title = OpenLayers.i18n('oleDragFeature');
     },
     
     // Add events corresponding to callbacks of OpenLayers.Control.DragFeature
