@@ -75,6 +75,9 @@ OpenLayers.Editor.Control.UndoRedo = OpenLayers.Class(OpenLayers.Control, {
      */
     redoStack: null,
 
+    /**
+     * Property: currentState
+     */
     currentState: null,
 
     /**
@@ -166,6 +169,9 @@ OpenLayers.Editor.Control.UndoRedo = OpenLayers.Class(OpenLayers.Control, {
         }
     },
 
+    /**
+     * 
+     */
     register: function() {
 
         var features = this.map.editor.editLayer.features;
