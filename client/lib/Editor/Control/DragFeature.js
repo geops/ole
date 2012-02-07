@@ -16,6 +16,7 @@ OpenLayers.Editor.Control.DragFeature = OpenLayers.Class(OpenLayers.Control.Drag
     
     initialize: function(layer, options) {
         OpenLayers.Control.DragFeature.prototype.initialize.apply(this, [layer, options]);
+        // allow changing the layer title by using translations
         this.title = OpenLayers.i18n('oleDragFeature');
     },
     
