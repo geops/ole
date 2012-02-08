@@ -30,21 +30,21 @@ if len(sys.argv) > 1:
 if len(sys.argv) > 2:
     outputFilename = sys.argv[2]
 
-print "Merging libraries."
+print("Merging libraries.")
 merged = mergejs.run(sourceDirectory, None, configFilename)
 if have_compressor == "jsmin":
-    print "Compressing using jsmin."
+    print("Compressing using jsmin.")
     minimized = jsmin.jsmin(merged)
 elif have_compressor == "minimize":
-    print "Compressing using minimize."
+    print("Compressing using minimize.")
     minimized = minimize.minimize(merged)
 else: # fallback
-    print "Not compressing."
+    print("Not compressing.")
     minimized = merged 
-print "Adding license file."
+print("Adding license file.")
 minimized = file("license.txt").read() + minimized
 
-print "Writing to %s." % outputFilename
+print("Writing to %s." % outputFilename)
 file(outputFilename, "w").write(minimized)
 
-print "Done."
+print("Done.")
