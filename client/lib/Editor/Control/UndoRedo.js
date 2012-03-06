@@ -13,6 +13,12 @@
  */
 OpenLayers.Editor.Control.UndoRedo = OpenLayers.Class(OpenLayers.Control, {
 
+    /**
+     * Property: layer
+     * {<OpenLayers.Layer.Vector>}
+     */
+    layer: null,
+
      /**
      * Property: handler
      * {<OpenLayers.Handler.Keyboard>}
@@ -82,11 +88,22 @@ OpenLayers.Editor.Control.UndoRedo = OpenLayers.Class(OpenLayers.Control, {
 
     /**
      * Constructor: OpenLayers.Control.UndoRedo
-     * Create a new Undo/Redo control. Does not take any parameters.
+     * Create a new Undo/Redo control.
+     *
+     * Parameters:
+     * layer - {<OpenLayers.Layer.Vector>} The layer from which selected
+     *     features will be deleted.
+     * options - {Object} An optional object whose properties will be used
+     *     to extend the control.
      */
-    initialize: function() {
+    initialize: function(layer, options) {
 
-        OpenLayers.Control.prototype.initialize.apply(this, arguments);
+        this.layer = layer;
+
+        OpenLayers.Control.prototype.initialize.apply(this, [options]);
+
+        this.layer.events.register('featureadded', this, this.register);
+        this.layer.events.register('afterfeaturemodified', this, this.register);
 
         this.undoStack = new Array();
         this.redoStack = new Array();
