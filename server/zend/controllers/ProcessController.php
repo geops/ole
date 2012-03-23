@@ -203,8 +203,9 @@ class Ole_ProcessController extends Zend_Controller_Action {
 
         // send html to enable ajax upload
         if ($dataType == 'html') {
+            // View contains an empty HTML page as layout
             $this->getHelper('Layout')->disableLayout();
-            $this->view->assign('json', json_encode($response));
+            $this->view->assign('response', $response);
         } else {
             $this->getHelper('Json')->sendJson($response);
         }

@@ -1,1 +1,13 @@
-<?php echo $this->json; ?>
+<?php
+/*
+ * Renders response into a textarea. This is a workaround and required until the DOM File API is available in all supported browsers.
+ */
+?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head><title></title></head>
+<body><div>
+<textarea rows="20" cols="40"><?php
+echo $this->escape(Zend_Json::encode($this->response));
+?></textarea>
+</div></body>
+</html>
