@@ -1,4 +1,3 @@
-
 ## Documentation
 
 ### About
@@ -22,6 +21,7 @@ See [`client/example`](https://github.com/geops/ole/tree/master/client/example) 
 
 ### Server-side processing
 
-Some controls like merge, split and clean depend on server-side processing based on PostGIS.
-A Drupal module and a Zend Framework modul is provided  (see [`server`](https://github.com/geops/ole/tree/master/server)).
+Some controls like merge, split and clean depend on server-side processing.
+A Drupal module and a Zend Framework module is provided  (see [`server`](https://github.com/geops/ole/tree/master/server)). 
+Also [SharpMap](http://sharpmap.codeplex.com/) supports server-side processing.
 Set `editor.oleUrl` according to your server configuration.
