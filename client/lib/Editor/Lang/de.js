@@ -1,6 +1,6 @@
 
 OpenLayers.Util.extend(OpenLayers.Lang.de, {
-    
+
     'oleCleanFeature': 'Selektierte Geometrien bereinigen',
 
     'oleCleanFeatureSelectFeature': 'Bitte eine Geometrie zum bereinigen auswählen.',
@@ -9,7 +9,7 @@ OpenLayers.Util.extend(OpenLayers.Lang.de, {
 
     'oleDeleteFeatureSelectFeature': 'Bitte eine Geometrie zum löschen auswählen.',
 
-    'oleDialogCancelButton': 'Abbrechen', 
+    'oleDialogCancelButton': 'Abbrechen',
 
     'oleDialogSaveButton': 'Speichern',
 
@@ -20,6 +20,10 @@ OpenLayers.Util.extend(OpenLayers.Lang.de, {
     'oleDrawHole': 'Loch schneiden',
 
     'oleDrawPolygon': 'Fläche erstellen',
+
+    'oleDrawPath': 'Linie erstellen',
+
+    'oleDrawPoint': 'Punkt erstellen',
 
     'oleImportFeature': 'Selektierte Geometrien importieren',
 
@@ -56,5 +60,5 @@ OpenLayers.Util.extend(OpenLayers.Lang.de, {
     'oleSplitFeature': 'Selektierte Geometrien teilen',
 
     'oleSplitFeatureSelectFeature': 'Bitte mindestens 1 Flächen auswählen.'
-    
+
 });
