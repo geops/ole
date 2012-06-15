@@ -15,6 +15,10 @@ OpenLayers.Editor.Control.Dialog =  OpenLayers.Class(OpenLayers.Control, {
 
     dialogDiv: null,
 
+    buttonClass: null,
+
+    inputTextClass: null,
+
     initialize: function (options) {
 
         OpenLayers.Control.prototype.initialize.apply(this, [options]);
@@ -34,8 +38,8 @@ OpenLayers.Editor.Control.Dialog =  OpenLayers.Class(OpenLayers.Control, {
         }
 
         this.dialogDiv = document.createElement('div');
-        OpenLayers.Element.addClass(this.dialogDiv, 'dialog');
-        OpenLayers.Element.addClass(this.div, 'fadeMap');
+        OpenLayers.Element.addClass(this.dialogDiv, 'oleDialog');
+        OpenLayers.Element.addClass(this.div, 'oleFadeMap');
 
         if (options.title) {
             element = document.createElement('h3');
@@ -52,17 +56,9 @@ OpenLayers.Editor.Control.Dialog =  OpenLayers.Class(OpenLayers.Control, {
         }
 
         if (options.save) {
-            cancelButton = document.createElement('input');
-            cancelButton.name = 'cancel';
-            cancelButton.id = 'cancelButton';
-            cancelButton.value = OpenLayers.i18n('oleDialogCancelButton');
-            cancelButton.type = 'button';
+            cancelButton = this.getButton('cancelButton', 'cancel', 'oleDialogCancelButton');
             this.dialogDiv.appendChild(cancelButton);
-            saveButton = document.createElement('input');
-            saveButton.name = 'save';
-            saveButton.id = 'saveButton';
-            saveButton.value = OpenLayers.i18n('oleDialogSaveButton');
-            saveButton.type = 'button';
+            saveButton = this.getButton('saveButton', 'save', 'oleDialogSaveButton');
             this.dialogDiv.appendChild(saveButton);
             OpenLayers.Event.observe(cancelButton, 'click', this.hide.bind(this));
             OpenLayers.Event.observe(saveButton, 'click', this.hide.bind(this));
@@ -71,11 +67,7 @@ OpenLayers.Editor.Control.Dialog =  OpenLayers.Class(OpenLayers.Control, {
                 OpenLayers.Event.observe(cancelButton, 'click', options.cancel.bind(this));
             }
         } else {
-            okButton = document.createElement('input');
-            okButton.name = 'save';
-            okButton.id = 'okButton';
-            okButton.value = OpenLayers.i18n('oleDialogOkButton');
-            okButton.type = 'button';
+            okButton = this.getButton('okButton', 'save', 'oleDialogOkButton');
             this.dialogDiv.appendChild(okButton);
 
             if (options.close) {
@@ -83,6 +75,14 @@ OpenLayers.Editor.Control.Dialog =  OpenLayers.Class(OpenLayers.Control, {
             }
 
             OpenLayers.Event.observe(okButton, 'click', OpenLayers.Function.bind(this.hide, this));
+        }
+
+        // Add class to text input elements.
+        var inputElements = this.dialogDiv.getElementsByTagName('input');
+        for (var i = 0; i < inputElements.length; i++) {
+            if (inputElements[i].getAttribute('type') == 'text') {
+                OpenLayers.Element.addClass(inputElements[i], this.inputTextClass);
+            }
         }
 
         this.map.viewPortDiv.appendChild(this.dialogDiv);
@@ -96,11 +96,21 @@ OpenLayers.Editor.Control.Dialog =  OpenLayers.Class(OpenLayers.Control, {
 
     hide: function () {
         this.map.viewPortDiv.removeChild(this.dialogDiv);
-        OpenLayers.Element.removeClass(this.div, 'fadeMap');
+        OpenLayers.Element.removeClass(this.div, 'oleFadeMap');
     },
 
     ignoreEvent: function (event) {
         OpenLayers.Event.stop(event, true);
+    },
+
+    getButton: function(id, name, value) {
+        var button = document.createElement('input');
+        button.id = id;
+        button.name = name;
+        button.value = OpenLayers.i18n(value);
+        button.type = 'button';
+        OpenLayers.Element.addClass(button, this.buttonClass);
+        return button;
     },
 
     CLASS_NAME: 'OpenLayers.Editor.Control.Dialog'
