@@ -55,7 +55,7 @@ OpenLayers.Util.extend(OpenLayers.Lang.de, {
 
     'oleSnappingSettingsLayer': 'Snapping Layer',
 
-    'oleSnappingSettingsTolerance': 'Snapping Toleranz',
+    'oleSnappingSettingsTolerance': 'Snapping Toleranz in px',
 
     'oleSplitFeature': 'Selektierte Geometrien teilen',
 

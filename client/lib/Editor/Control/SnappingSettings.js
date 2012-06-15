@@ -49,27 +49,25 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
 
     openSnappingDialog: function() {
 
+        var content, toleranceHeader, layerHeader;
+
         this.activate();
-        
-        // reset snapping layers
-        this.snappingLayers = [];
 
         this.layerListDiv = document.createElement('div');
-        this.layerListDiv.id = 'layerList';
-        this.layerListDiv.style.marginBottom = '10px';
         
-        var content = document.createElement('div');
+        content = document.createElement('div');
 
-        var toleranceHeader = document.createElement('h4');
+        toleranceHeader = document.createElement('h4');
         toleranceHeader.innerHTML = OpenLayers.i18n('oleSnappingSettingsTolerance');
         content.appendChild(toleranceHeader);
 
         this.toleranceInput = document.createElement('input');
         this.toleranceInput.type = 'text';
+        this.toleranceInput.size = 4;
         this.toleranceInput.value = this.tolerance;
         content.appendChild(this.toleranceInput);
 
-        var layerHeader = document.createElement('h4');
+        layerHeader = document.createElement('h4');
         layerHeader.innerHTML = OpenLayers.i18n('oleSnappingSettingsLayer');
         content.appendChild(layerHeader);
 
@@ -86,7 +84,7 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
 
     redraw: function() {
 
-        var layer, element;
+        var layer, element, content;
 
         this.layerListDiv.innerHTML = '';
 
@@ -98,6 +96,8 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
                  layer instanceof OpenLayers.Layer.Vector &&
                  layer.name.search(/OpenLayers.Handler.+/) == -1) {
 
+                content = document.createElement('div');
+
                 element = document.createElement('input');
                 element.type = 'checkbox';
                 element.name = 'snappingLayer';
@@ -107,16 +107,16 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
                     element.checked = 'checked';
                     element.defaultChecked = 'selected'; // IE7 hack
                 }
-                this.layerListDiv.appendChild(element);
+                content.appendChild(element);
                 OpenLayers.Event.observe(element, 'click',
                     OpenLayers.Function.bind(this.addSnappingLayer, this));
 
                 element = document.createElement('label');
                 element.setAttribute('for', 'Snapping.'+layer.id);
                 element.innerHTML = layer.name;
-                this.layerListDiv.appendChild(element);
+                content.appendChild(element);
 
-                this.layerListDiv.appendChild(document.createElement('br'));
+                this.layerListDiv.appendChild(content);
             }
         }
     },
