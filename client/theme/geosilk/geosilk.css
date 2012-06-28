@@ -34,7 +34,7 @@
     background-image: url(../img/bg-control.png);
 }
 
-div.fadeMap {
+.oleFadeMap {
     width: 100%;
     height: 100%;
     background-image: url(img/bg-map.png);
@@ -43,7 +43,7 @@ div.fadeMap {
     left:0;
     position: absolute;
 }
-div.dialog {
+.oleDialog {
     background-color: white;
     margin: auto;
     position: relative;
@@ -80,7 +80,7 @@ div.dialog {
 /**
  * Disabled control
  */
-div.oleControlDisabled {
+.oleControlDisabled {
     opacity: 0.5;
 }
 
