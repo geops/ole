@@ -23,6 +23,12 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
 
     snappingLayers: [],
 
+    /**
+     * Layer that displays guide lines and snapping points
+     * @var OpenLayers.Editor.Layer.Snapping
+     */
+    snappingGuideLayer: null,
+
     layerListDiv: null,
 
     toleranceInput: null,
@@ -38,7 +44,6 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
         this.events.register("deactivate", this, this.onDeactivate);
 
         this.title = OpenLayers.i18n('oleSnappingSettings');
-
     },
 
     onDeactivate: function() {
@@ -148,7 +153,7 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
                 layer: this.layer,
                 targets: targets
             });
-            for (var i = 0; i <  targets; i++) {
+            for (var i = 0; i <  targets.length; i++) {
                 targets[i].layer.redraw();
                 targets[i].layer.setVisibility(true);
             }
@@ -160,6 +165,27 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
             }
         }
         if (!this.snapping.active) this.deactivate();
+    },
+
+    setMap: function(map){
+        OpenLayers.Control.Button.prototype.setMap.apply(this, arguments);
+
+        if(this.snappingGuideLayer===null){
+            this.snappingGuideLayer = this.createSnappingGuideLayer();
+        }
+    },
+
+    /**
+     * Adds a layer for guidelines to the map
+     * @return {OpenLayers.Editor.Layer.Snapping}
+     */
+    createSnappingGuideLayer: function(){
+        var snappingGuideLayer = new OpenLayers.Editor.Layer.Snapping(OpenLayers.i18n('Snapping Layer'), {
+            visibility: false
+        });
+        this.map.addLayer(snappingGuideLayer);
+        
+        return snappingGuideLayer;
     },
 
     CLASS_NAME: "OpenLayers.Editor.Control.SnappingSettings"

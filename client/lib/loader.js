@@ -19,6 +19,8 @@
         'Editor/Control/LayerSettings.js',
         'Editor/Control/MergeFeature.js',
         'Editor/Control/SaveFeature.js',
+        'Editor/Layer.js',
+        'Editor/Layer/Snapping.js',
         'Editor/Control/SnappingSettings.js',
         'Editor/Control/SplitFeature.js',
         'Editor/Control/UndoRedo.js'
