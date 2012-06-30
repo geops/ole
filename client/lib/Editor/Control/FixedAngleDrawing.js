@@ -3,19 +3,6 @@
  */
 OpenLayers.Editor.Control.FixedAngleDrawing = OpenLayers.Class(OpenLayers.Control, {
     CLASS_NAME: 'OpenLayers.Editor.Control.FixedAngleDrawing',
-
-    /**
-     * @var {OpenLayers.Vector.Feature} Feature that is currently be worked on
-     */
-    sketch: null,
-    /**
-     * @var {Number} Number of vertices in geometry
-     */
-    sketchLength: null,
-    /**
-     * @var {Boolean} Whether guidelines shall be shown
-     */
-    showGuideLines: false,
     
     initialize: function(editLayer) {
         OpenLayers.Control.prototype.initialize.call(this);
@@ -27,9 +14,8 @@ OpenLayers.Editor.Control.FixedAngleDrawing = OpenLayers.Class(OpenLayers.Contro
         if(activated) {
             if(this.layer && this.layer.events) {
                 this.layer.events.on({
-                    sketchstarted: this.onSketchModified,
+                    sketchstarted: this.onSketchStarted,
                     sketchmodified: this.onSketchModified,
-                    sketchcomplete: this.onSketchComplete,
                     scope: this
                 });
             }
@@ -42,44 +28,50 @@ OpenLayers.Editor.Control.FixedAngleDrawing = OpenLayers.Class(OpenLayers.Contro
         if(deactivated) {
             if(this.layer && this.layer.events) {
                 this.layer.events.un({
-                    sketchstarted: this.onSketchModified,
-                    sketchmodified: this.onSketchModified,
-                    scope: this
+                    sketchstarted: this.onSketchStarted,
+                    sketchmodified: this.onSketchModified
                 });
             }
         }
-        this.feature = null;
-        this.point = null;
         return deactivated;
     },
 
     /**
-     * Detects start of sketching and triggers guideline modification
+     * Triggers guideline modification
      */
     onSketchModified: function(event){
-        if(this.sketch===null){
-            this.sketch = event.feature;
-            this.sketchLength = this.sketch.geometry.components.length;
-        } else if(event.feature.geometry.components.length>this.sketchLength){
-            this.sketchLength = this.sketch.geometry.components.length;
-            if(this.showGuideLines){
-                var vertexLength = this.sketch.geometry.components.length;
-                this.updateGuideLines(this.sketch.geometry.components[vertexLength-3], this.sketch.geometry.components[vertexLength-2]);
-            } else {
-                this.showGuideLines = true;
-            }
+        var vertexLength = event.feature.geometry.getVertices().length;
+        if(vertexLength>2){
+            this.updateGuideLines(
+                event.feature.geometry.components[vertexLength-3],
+                event.feature.geometry.components[vertexLength-2]
+            );
         }
     },
-
+    
     /**
-     * Resets flags once the user is done editing a geometry
+     * Captures sketch and registers handler to hide guidelines after sketching is done
      */
-    onSketchComplete: function(){
-        var snappingGuideLayer = map.getLayersByClass('OpenLayers.Editor.Layer.Snapping')[0];
-        snappingGuideLayer.destroyFeatures();
-        this.sketch = null;
-        this.sketchLength = null;
-        this.showGuideLines = false;
+    onSketchStarted: function(event){
+        // A new sketch was added to the map
+        var sketch = event.feature;
+        
+        this.map.getControlsByClass('OpenLayers.Editor.Control.DrawPath')[0].handler.layer.events.on({
+            featureremoved: function(event){
+                if(event.feature.id===sketch.id){
+                    // Sketch was removed (canceled or completed)
+                    this.getSnappingGuideLayer().destroyFeatures();
+                }
+            },
+            scope: this
+        })
+    },
+    
+    /**
+     * @return {OpenLayers.Editor.Layer.Snapping}
+     */
+    getSnappingGuideLayer: function(){
+        return this.map.getLayersByClass('OpenLayers.Editor.Layer.Snapping')[0];
     },
 
     /**
@@ -88,12 +80,11 @@ OpenLayers.Editor.Control.FixedAngleDrawing = OpenLayers.Class(OpenLayers.Contro
      * @var {OpenLayers.Geometry.Point} pointLastFixed Last point drawn
      */
     updateGuideLines: function(pointEarlierFixed, pointLastFixed){
-        console.log(arguments);
-        var snappingGuideLayer = map.getLayersByClass('OpenLayers.Editor.Layer.Snapping')[0];
+        var snappingGuideLayer = this.getSnappingGuideLayer();
         snappingGuideLayer.destroyFeatures();
         snappingGuideLayer.addFeatures([pointLastFixed.clone()]);
 
-        var maxExtend = map.getMaxExtent()
+        var maxExtend = this.map.getMaxExtent()
 
         // Draw guide along segment
         var m = (pointLastFixed.y-pointEarlierFixed.y)/(pointLastFixed.x-pointEarlierFixed.x);
