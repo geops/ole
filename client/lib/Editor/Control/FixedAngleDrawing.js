@@ -1,5 +1,5 @@
 /**
- * Creates orthogonal guidelines while drawing lines
+ * Creates orthogonal guidelines while drawing features
  */
 OpenLayers.Editor.Control.FixedAngleDrawing = OpenLayers.Class(OpenLayers.Control, {
     CLASS_NAME: 'OpenLayers.Editor.Control.FixedAngleDrawing',
@@ -40,11 +40,11 @@ OpenLayers.Editor.Control.FixedAngleDrawing = OpenLayers.Class(OpenLayers.Contro
      * Triggers guideline modification
      */
     onSketchModified: function(event){
-        var vertexLength = event.feature.geometry.getVertices().length;
-        if(vertexLength>2){
+        var vertices = event.feature.geometry.getVertices();
+        if(vertices.length>2){
             this.updateGuideLines(
-                event.feature.geometry.components[vertexLength-3],
-                event.feature.geometry.components[vertexLength-2]
+                vertices[vertices.length-3],
+                vertices[vertices.length-2]
             );
         }
     },
@@ -56,7 +56,16 @@ OpenLayers.Editor.Control.FixedAngleDrawing = OpenLayers.Class(OpenLayers.Contro
         // A new sketch was added to the map
         var sketch = event.feature;
         
-        this.map.getControlsByClass('OpenLayers.Editor.Control.DrawPath')[0].handler.layer.events.on({
+        var sketchLayer;
+        if(sketch.geometry instanceof OpenLayers.Geometry.LineString){
+            sketchLayer = this.map.getControlsByClass('OpenLayers.Editor.Control.DrawPath')[0].handler.layer
+        } else if(sketch.geometry instanceof OpenLayers.Geometry.Polygon){
+            sketchLayer = this.map.getControlsByClass('OpenLayers.Editor.Control.DrawPolygon')[0].handler.layer
+        } else {
+            // Feature type is not supported
+            return;
+        }
+        sketchLayer.events.on({
             featureremoved: function(event){
                 if(event.feature.id===sketch.id){
                     // Sketch was removed (canceled or completed)
