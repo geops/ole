@@ -57,10 +57,11 @@ OpenLayers.Editor.Control.FixedAngleDrawing = OpenLayers.Class(OpenLayers.Contro
         var sketch = event.feature;
         
         var sketchLayer;
-        if(sketch.geometry instanceof OpenLayers.Geometry.LineString){
-            sketchLayer = this.map.getControlsByClass('OpenLayers.Editor.Control.DrawPath')[0].handler.layer
-        } else if(sketch.geometry instanceof OpenLayers.Geometry.Polygon){
-            sketchLayer = this.map.getControlsByClass('OpenLayers.Editor.Control.DrawPolygon')[0].handler.layer
+        if(sketch.geometry instanceof OpenLayers.Geometry.LineString || sketch.geometry instanceof OpenLayers.Geometry.Polygon){
+            // Look for the active drawing control and get its temporary sketch layer
+            sketchLayer = this.map.controls.filter(function(control){
+                return control.active && control.handler instanceof OpenLayers.Handler.Path;
+            })[0].handler.layer
         } else {
             // Feature type is not supported
             return;
