@@ -9,7 +9,7 @@ OpenLayers.Editor.Layer.Snapping = OpenLayers.Class(OpenLayers.Layer.Vector, {
             // Set default styles for guide lines
             options.styleMap = new OpenLayers.StyleMap({
                 // Base styles to be merged with specific styles from rules
-                default: new OpenLayers.Style(
+                'default': new OpenLayers.Style(
                     {
                         strokeColor: '#ff00ff',
                         strokeOpacity: 0.5,
@@ -50,7 +50,7 @@ OpenLayers.Editor.Layer.Snapping = OpenLayers.Class(OpenLayers.Layer.Vector, {
 
     /**
      * Adds geometries or vector features as guidelines
-     * @param {Array[OpenLayers.Feature.Vector|OpenLayers.Geometry]} features
+     * @param {Array.<(OpenLayers.Feature.Vector|OpenLayers.Geometry)>} features
      * @param {Object} options
      */
     addFeatures: function(features, options){

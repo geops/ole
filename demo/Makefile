@@ -3,6 +3,7 @@ JAVA?=java
 CLOSURE_COMPILER=$(JAVA) -jar tools/closure-compiler.jar
 YUI_COMPRESSOR=$(JAVA) -jar tools/yuicompressor.jar
 MARKDOWN=perl tools/Markdown.pl --html4tags
+OLE_SOURCE=../client/lib
 
 all: html js
 
@@ -52,24 +53,33 @@ js-jquery: js-dir
 
 js-ole: js-dir
 	# ole related js
-	# the ordering in the following command corresponds to the ordering in the file
 	rm -f $(COMPILED_JS_DIR)/ole.js
-	cat public/js/ole/lib/Editor.js \
-		public/js/ole/lib/Editor/Lang/en.js \
-		public/js/ole/lib/Editor/Control/CleanFeature.js \
-		public/js/ole/lib/Editor/Control/DeleteFeature.js \
-		public/js/ole/lib/Editor/Control/Dialog.js \
-		public/js/ole/lib/Editor/Control/DrawHole.js \
-		public/js/ole/lib/Editor/Control/DrawPoint.js \
-		public/js/ole/lib/Editor/Control/DrawPath.js \
-		public/js/ole/lib/Editor/Control/DrawPolygon.js \
-		public/js/ole/lib/Editor/Control/EditorPanel.js \
-		public/js/ole/lib/Editor/Control/ImportFeature.js \
-		public/js/ole/lib/Editor/Control/LayerSettings.js \
-		public/js/ole/lib/Editor/Control/MergeFeature.js \
-		public/js/ole/lib/Editor/Control/SnappingSettings.js \
-		public/js/ole/lib/Editor/Control/UndoRedo.js \
-		public/js/ole/lib/Editor/Control/SplitFeature.js >/tmp/js.tmp.js
+	# the ordering in the following command corresponds to the ordering in the file
+	#rm -f $(COMPILED_JS_DIR)/ole.js
+	cat $(OLE_SOURCE)/Editor/Lang/en.js \
+		$(OLE_SOURCE)/Editor.js \
+		$(OLE_SOURCE)/Editor/Control/CleanFeature.js \
+		$(OLE_SOURCE)/Editor/Control/DragFeature.js \
+		$(OLE_SOURCE)/Editor/Control/DeleteFeature.js \
+		$(OLE_SOURCE)/Editor/Control/Dialog.js \
+		$(OLE_SOURCE)/Editor/Control/DrawHole.js \
+		$(OLE_SOURCE)/Editor/Control/DrawPolygon.js \
+		$(OLE_SOURCE)/Editor/Control/DrawPath.js \
+		$(OLE_SOURCE)/Editor/Control/DrawPoint.js \
+		$(OLE_SOURCE)/Editor/Control/EditorPanel.js \
+		$(OLE_SOURCE)/Editor/Control/ImportFeature.js \
+		$(OLE_SOURCE)/Editor/Control/LayerSettings.js \
+		$(OLE_SOURCE)/Editor/Control/MergeFeature.js \
+		$(OLE_SOURCE)/Editor/Control/SaveFeature.js \
+		$(OLE_SOURCE)/Editor/Control/FixedAngleDrawing.js \
+		$(OLE_SOURCE)/Editor/Layer.js \
+		$(OLE_SOURCE)/Editor/Layer/Snapping.js \
+		$(OLE_SOURCE)/Editor/Control/SnappingSettings.js \
+		$(OLE_SOURCE)/Editor/Control/SplitFeature.js \
+		$(OLE_SOURCE)/Editor/Control/UndoRedo.js \
+		$(OLE_SOURCE)/Editor/Control/FixedAngleDrawing.js \
+		$(OLE_SOURCE)/Editor/Control/CADTools.js \
+		> /tmp/js.tmp.js
 	$(CLOSURE_COMPILER) --js /tmp/js.tmp.js --js_output_file $(COMPILED_JS_DIR)/ole.js
 	rm -f /tmp/js.tmp.js
 
