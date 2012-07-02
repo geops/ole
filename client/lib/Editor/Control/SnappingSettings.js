@@ -99,6 +99,7 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
 
             if(!(layer instanceof OpenLayers.Layer.Vector.RootContainer) &&
                  layer instanceof OpenLayers.Layer.Vector &&
+                 !(layer instanceof OpenLayers.Editor.Layer.Snapping) &&
                  layer.name.search(/OpenLayers.Handler.+/) == -1) {
 
                 content = document.createElement('div');

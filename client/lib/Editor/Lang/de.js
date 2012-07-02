@@ -13,7 +13,7 @@ OpenLayers.Util.extend(OpenLayers.Lang.de, {
 
     'oleDialogSaveButton': 'Speichern',
 
-    'oleDialogOkButton': 'Ok',
+    'oleDialogOkButton': 'Übernehmen',
 
     'oleDragFeature': 'Geometrie verschieben',
 
@@ -59,6 +59,18 @@ OpenLayers.Util.extend(OpenLayers.Lang.de, {
 
     'oleSplitFeature': 'Selektierte Geometrien teilen',
 
-    'oleSplitFeatureSelectFeature': 'Bitte mindestens 1 Flächen auswählen.'
+    'oleSplitFeatureSelectFeature': 'Bitte mindestens 1 Flächen auswählen.',
+
+    'oleCADTools': 'CAD Funktionen',
+
+    'oleCADToolsDialogParallelDrawing': 'Paralleles Zeichnen aktivieren',
+
+    'oleCADToolsDialogGuidedDrawing': 'Geführtes Zeichnen aktivieren',
+
+    'oleCADToolsDialogShowLayer': 'Hilfslinien anzeigen',
+
+    'oleCADToolsDialogTolerance': 'px Toleranz',
+
+    'oleParallelFeature': 'Parallele Geometrie zur selektierten Geometrie'
 
 });

@@ -19,6 +19,8 @@ OpenLayers.Editor.Control.Dialog =  OpenLayers.Class(OpenLayers.Control, {
 
     inputTextClass: null,
 
+    modal: true,
+
     initialize: function (options) {
 
         OpenLayers.Control.prototype.initialize.apply(this, [options]);
@@ -39,7 +41,12 @@ OpenLayers.Editor.Control.Dialog =  OpenLayers.Class(OpenLayers.Control, {
 
         this.dialogDiv = document.createElement('div');
         OpenLayers.Element.addClass(this.dialogDiv, 'oleDialog');
-        OpenLayers.Element.addClass(this.div, 'oleFadeMap');
+
+        if (!options.toolbox) {
+            OpenLayers.Element.addClass(this.div, 'oleFadeMap');
+        } else {
+            this.dialogDiv.setAttribute('style', 'right:5px;position:absolute;top:30px;');
+        }
 
         if (options.title) {
             element = document.createElement('h3');
@@ -66,7 +73,7 @@ OpenLayers.Editor.Control.Dialog =  OpenLayers.Class(OpenLayers.Control, {
             if (options.cancel) {
                 OpenLayers.Event.observe(cancelButton, 'click', options.cancel.bind(this));
             }
-        } else {
+        } else if (!options.toolbox) {
             okButton = this.getButton('okButton', 'save', 'oleDialogOkButton');
             this.dialogDiv.appendChild(okButton);
 

@@ -73,6 +73,9 @@
 .olEditorControlEditorPanel .olEditorControlDrawHoleItemActive,
 .olEditorControlEditorPanel .olEditorControlMergeFeatureItemActive,
 .olEditorControlEditorPanel .olEditorControlDragFeatureItemActive,
+.olEditorControlEditorPanel .olEditorControlCADToolsItemActive,
+.olEditorControlEditorPanel .olEditorParallelDrawingActive,
+.olEditorControlEditorPanel .olEditorGuidedDrawingActive,
 .olEditorControlEditorPanel .olEditorControlCleanFeatureItemActive {
      background-color: #fff;
 }
@@ -223,6 +226,30 @@
 .olEditorControlEditorPanel .olEditorControlCleanFeatureItemActive,
 .olEditorControlEditorPanel .olEditorControlCleanFeatureItemInactive {
     background-image: url("img/cleanFeature.png");
+}
+
+/**
+ *  CAD Tools
+ */
+.olEditorControlEditorPanel .olEditorControlCADToolsItemActive,
+.olEditorControlEditorPanel .olEditorControlCADToolsItemInactive {
+    background-image: url("img/cadTools.png");
+}
+
+/**
+ *  Parallel Drawing
+ */
+.olEditorControlEditorPanel .olEditorParallelDrawingActive,
+.olEditorControlEditorPanel .olEditorParallelDrawingInactive {
+    background-image: url("img/parallelDrawing.png");
+}
+
+/**
+ *  Guided Drawing
+ */
+.olEditorControlEditorPanel .olEditorGuidedDrawingActive,
+.olEditorControlEditorPanel .olEditorGuidedDrawingInactive {
+    background-image: url("img/guidedDrawing.png");
 }
 
 .olEditorWaiting {
