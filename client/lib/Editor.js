@@ -72,7 +72,7 @@ OpenLayers.Editor = OpenLayers.Class({
      */
     editorControls: ['CleanFeature', 'DeleteFeature', 'Dialog', 'DrawHole', 
         'DrawPolygon', 'DrawPath', 'DrawPoint', 'EditorPanel', 'ImportFeature',
-        'MergeFeature', 'SaveFeature', 'SnappingSettings', 'SplitFeature'],
+        'MergeFeature', 'SaveFeature', 'SnappingSettings', 'SplitFeature', 'CADTools'],
 
     /**
      * Geometry types available for editing

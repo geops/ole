@@ -68,7 +68,7 @@ OpenLayers.Editor.Control.CADTools = OpenLayers.Class(OpenLayers.Control.Button,
         content = document.createElement('div');
 
         var toolbar = document.createElement('div');
-        toolbar.setAttribute('class', 'oleditorcontroleditorpanel');
+        toolbar.setAttribute('class', 'olEditorControlEditorPanel');
         toolbar.setAttribute('style', 'top:10px;right:10px;');
 
         this.parallelDrawingButton = document.createElement('div');
@@ -121,12 +121,14 @@ OpenLayers.Editor.Control.CADTools = OpenLayers.Class(OpenLayers.Control.Button,
         content.appendChild(toleranceHeader);
         */
 
+        var settings = document.createElement('div');
+        var showGuideLine = document.createElement('p');
         var showLayer = document.createElement('input');
         showLayer.type = 'checkbox';
         showLayer.id = 'oleCADToolsDialogShowLayer';
         showLayer.name = 'guidedDrawing';
         showLayer.value = 'true';
-        content.appendChild(showLayer);
+        showGuideLine.appendChild(showLayer);
 
         OpenLayers.Event.observe(showLayer, 'click', OpenLayers.Function.bind(function() {
             var snappingLayer = this.map.getLayersByClass('OpenLayers.Editor.Layer.Snapping')[0];
@@ -136,21 +138,24 @@ OpenLayers.Editor.Control.CADTools = OpenLayers.Class(OpenLayers.Control.Button,
         element = document.createElement('label');
         element.setAttribute('for', 'oleCADToolsDialogShowLayer');
         element.innerHTML = OpenLayers.i18n('oleCADToolsDialogShowLayer');
-        content.appendChild(element);
+        showGuideLine.appendChild(element);
+        settings.appendChild(showGuideLine);
 
+        var toleranceSetting = document.createElement('p');
         element = document.createElement('input');
         element.type = 'text';
         element.id = 'oleCADToolsDialogTolerance';
         element.size = 4;
         element.value = this.tolerance;
-        element.setAttribute('style', 'margin-left:20px;');
-        content.appendChild(element);
+        toleranceSetting.appendChild(element);
 
         element = document.createElement('label');
         element.setAttribute('for', 'oleCADToolsDialogTolerance');
         element.innerHTML = OpenLayers.i18n('oleCADToolsDialogTolerance');
-        content.appendChild(element);
+        toleranceSetting.appendChild(element);
+        settings.appendChild(toleranceSetting);
 
+        content.appendChild(settings);
         this.map.editor.dialog.show({
             content: content,
             toolbox: true

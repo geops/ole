@@ -55,6 +55,12 @@
     overflow: auto;
     border:2px solid #ddd;
 }
+.oleDialog p:first-child {
+    margin-top:0;
+}
+.oleDialog p:last-child {
+    margin-bottom:0;
+}
 
 /**
  * Active control

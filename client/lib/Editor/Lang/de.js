@@ -1,5 +1,5 @@
 
-OpenLayers.Util.extend(OpenLayers.Lang.de, {
+OpenLayers.Lang.de = OpenLayers.Util.extend(OpenLayers.Lang.de, {
 
     'oleCleanFeature': 'Selektierte Geometrien bereinigen',
 
