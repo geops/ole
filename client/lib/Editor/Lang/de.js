@@ -59,6 +59,6 @@ OpenLayers.Util.extend(OpenLayers.Lang.de, {
 
     'oleSplitFeature': 'Selektierte Geometrien teilen',
 
-    'oleSplitFeatureSelectFeature': 'Bitte mindestens 1 Flächen auswählen.'
+    'oleSplitFeatureSelectFeature': 'Bitte mindestens 1 Fläche auswählen.'
 
 });
