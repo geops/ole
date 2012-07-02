@@ -24,7 +24,9 @@
         'Editor/Layer/Snapping.js',
         'Editor/Control/SnappingSettings.js',
         'Editor/Control/SplitFeature.js',
-        'Editor/Control/UndoRedo.js'
+        'Editor/Control/UndoRedo.js',
+        'Editor/Control/FixedAngleDrawing.js',
+        'Editor/Control/CADTools.js'
     ];
     
     // Load translations if HTML page defines a language
