@@ -134,9 +134,9 @@ OpenLayers.Editor.Layer.Snapping = OpenLayers.Class(OpenLayers.Layer.Vector, {
         var xBoundary;
         var candidateY = m*x+b;
         if(candidateY>maxExtent.top){
-            xBoundary = (90-b)/m;
+            xBoundary = (maxExtent.top-b)/m;
         } else if(candidateY<maxExtent.bottom){
-            xBoundary = (-90-b)/m;
+            xBoundary = (maxExtent.bottom-b)/m;
         } else {
             xBoundary = x;
         }
