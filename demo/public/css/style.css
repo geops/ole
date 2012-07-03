@@ -107,8 +107,3 @@ div.content {
 a img {
     border: none;
 }
-
-/* IE7 Hack: fix with of toolbar */
-.olEditorControlEditorPanel {
-    width: 426px;
-}
