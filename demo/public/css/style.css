@@ -107,3 +107,11 @@ div.content {
 a img {
     border: none;
 }
+
+div.olControlZoom a {
+    background: rgba(0, 0, 0, 0.7);
+}
+.oleDialog p {
+    margin-left:0;
+    margin-right:0;
+}
