@@ -32,18 +32,14 @@ OpenLayers.Editor.Control.DrawPolygon = OpenLayers.Class(OpenLayers.Control.Draw
      *     to extend the control.
      */
     initialize: function (layer, options) {
-
-        handlerOptions = {
-            'callbacks': {
-                point: function(point) {
-                    this.layer.events.triggerEvent('pointadded', {point: point});
-                }
+        this.callbacks = OpenLayers.Util.extend(this.callbacks, {
+            point: function(point) {
+                this.layer.events.triggerEvent('pointadded', {point: point});
             }
-        };
-        OpenLayers.Control.prototype.initialize.apply(this, [options]);
+        });
         
         OpenLayers.Control.DrawFeature.prototype.initialize.apply(this,
-            [layer, OpenLayers.Handler.Polygon, handlerOptions]);
+            [layer, OpenLayers.Handler.Polygon, options]);
 
         this.title = OpenLayers.i18n('oleDrawPolygon');
     },

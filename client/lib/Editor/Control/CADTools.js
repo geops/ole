@@ -17,24 +17,21 @@ OpenLayers.Editor.Control.CADTools = OpenLayers.Class(OpenLayers.Control.Button,
 
     layer: null,
 
-    parallelDrawingActive: false,
-
     parallelDrawingButton: null,
-
-    guidedDrawingActive: false,
 
     guidedDrawingButton: null,
 
     tolerance: 10,
 
     fixedAngleDrawingControl: null,
+    parallelDrawingControl: null,
 
     initialize: function(layer, options) {
 
         this.layer = layer;
 
         this.fixedAngleDrawingControl = new OpenLayers.Editor.Control.FixedAngleDrawing(layer);
-        
+        this.parallelDrawingControl = new OpenLayers.Editor.Control.ParallelDrawing(layer);
 
         OpenLayers.Control.Button.prototype.initialize.apply(this, [options]);
         
@@ -51,7 +48,7 @@ OpenLayers.Editor.Control.CADTools = OpenLayers.Class(OpenLayers.Control.Button,
         OpenLayers.Control.Button.prototype.setMap.call(this, map);
 
         this.map.addControl(this.fixedAngleDrawingControl);
-
+        this.map.addControl(this.parallelDrawingControl);
     },
 
     openCADToolsDialog: function() {
@@ -61,105 +58,108 @@ OpenLayers.Editor.Control.CADTools = OpenLayers.Class(OpenLayers.Control.Button,
             this.map.editor.dialog.hide();
         } else {
 
-        this.activate();
+            this.activate();
 
-        var content, element;
-        
-        content = document.createElement('div');
+            var content, element;
 
-        var toolbar = document.createElement('div');
-        toolbar.setAttribute('class', 'olEditorControlEditorPanel');
-        toolbar.setAttribute('style', 'top:10px;right:10px;');
+            content = document.createElement('div');
 
-        this.parallelDrawingButton = document.createElement('div');
-        if (this.parallelDrawingActive) {
-            this.parallelDrawingButton.setAttribute('class', 'olEditorParallelDrawingActive');
-        } else {
-            this.parallelDrawingButton.setAttribute('class', 'olEditorParallelDrawingInactive');
-        }
-        OpenLayers.Event.observe(this.parallelDrawingButton, 'click', OpenLayers.Function.bind(function() {
-            if (this.parallelDrawingActive) {
-                this.parallelDrawingActive = false;
-                this.parallelDrawingButton.setAttribute('class', 'olEditorParallelDrawingInactive');
-            } else {
-                this.parallelDrawingActive = true;
+            var toolbar = document.createElement('div');
+            toolbar.setAttribute('class', 'olEditorControlEditorPanel');
+            toolbar.setAttribute('style', 'top:10px;right:10px;');
+
+            this.parallelDrawingButton = document.createElement('div');
+            this.parallelDrawingButton.title = OpenLayers.i18n('oleCADToolsDialogParallelDrawing');
+            if (this.parallelDrawingControl.active) {
                 this.parallelDrawingButton.setAttribute('class', 'olEditorParallelDrawingActive');
-            }
-        }, this, this.parallelDrawingButton));
-        toolbar.appendChild(this.parallelDrawingButton);
-
-        this.guidedDrawingButton = document.createElement('div');
-        if (this.guidedDrawingActive) {
-            this.fixedAngleDrawingControl.deactivate();
-            this.guidedDrawingButton.setAttribute('class', 'olEditorGuidedDrawingActive');
-        } else {
-            this.fixedAngleDrawingControl.activate();
-            this.guidedDrawingButton.setAttribute('class', 'olEditorGuidedDrawingInactive');
-        }
-        OpenLayers.Event.observe(this.guidedDrawingButton, 'click', OpenLayers.Function.bind(function() {
-            if (this.guidedDrawingActive) {
-                this.guidedDrawingActive = false;
-                this.guidedDrawingButton.setAttribute('class', 'olEditorGuidedDrawingInactive');
             } else {
-                var layer = this.map.getLayersByClass('OpenLayers.Editor.Layer.Snapping')[0];
-                var snapping = new OpenLayers.Control.Snapping({
-                    layer: this.layer,
-                    targets: [{layer: layer, tolerance: this.tolerance}]
-                });
-                snapping.activate();
-                this.guidedDrawingActive = true;
-                this.guidedDrawingButton.setAttribute('class', 'olEditorGuidedDrawingActive');
+                this.parallelDrawingButton.setAttribute('class', 'olEditorParallelDrawingInactive');
             }
-        }, this, this.guidedDrawingButton));
-        toolbar.appendChild(this.guidedDrawingButton);
+            OpenLayers.Event.observe(this.parallelDrawingButton, 'click', OpenLayers.Function.bind(function() {
+                if (this.parallelDrawingControl.active) {
+                    this.parallelDrawingControl.deactivate();
+                    this.parallelDrawingButton.setAttribute('class', 'olEditorParallelDrawingInactive');
+                } else {
+                    this.parallelDrawingControl.activate();
+                    this.parallelDrawingButton.setAttribute('class', 'olEditorParallelDrawingActive');
+                }
+            }, this, this.parallelDrawingButton));
+            toolbar.appendChild(this.parallelDrawingButton);
 
-        content.appendChild(toolbar);
-        
-        /*
-        toleranceHeader = document.createElement('h4');
-        toleranceHeader.innerHTML = OpenLayers.i18n('oleSnappingSettingsTolerance');
-        content.appendChild(toleranceHeader);
-        */
+            this.guidedDrawingButton = document.createElement('div');
+            this.guidedDrawingButton.title = OpenLayers.i18n('oleCADToolsDialogGuidedDrawing');
+            if (this.fixedAngleDrawingControl.active) {
+                this.guidedDrawingButton.setAttribute('class', 'olEditorGuidedDrawingActive');
+            } else {
+                this.guidedDrawingButton.setAttribute('class', 'olEditorGuidedDrawingInactive');
+            }
+            OpenLayers.Event.observe(this.guidedDrawingButton, 'click', OpenLayers.Function.bind(function() {
+                if (this.fixedAngleDrawingControl.active) {
+                    this.fixedAngleDrawingControl.deactivate();
+                    this.guidedDrawingButton.setAttribute('class', 'olEditorGuidedDrawingInactive');
+                } else {
+                    var layer = this.map.getLayersByClass('OpenLayers.Editor.Layer.Snapping')[0];
+                    var snapping = new OpenLayers.Control.Snapping({
+                        layer: this.layer,
+                        targets: [{layer: layer, tolerance: this.tolerance}]
+                    });
+                    snapping.activate();
+                    this.fixedAngleDrawingControl.activate();
+                    this.guidedDrawingButton.setAttribute('class', 'olEditorGuidedDrawingActive');
+                }
+            }, this, this.guidedDrawingButton));
+            toolbar.appendChild(this.guidedDrawingButton);
 
-        var settings = document.createElement('div');
-        var showGuideLine = document.createElement('p');
-        var showLayer = document.createElement('input');
-        showLayer.type = 'checkbox';
-        showLayer.id = 'oleCADToolsDialogShowLayer';
-        showLayer.name = 'guidedDrawing';
-        showLayer.value = 'true';
-        showGuideLine.appendChild(showLayer);
+            content.appendChild(toolbar);
 
-        OpenLayers.Event.observe(showLayer, 'click', OpenLayers.Function.bind(function() {
-            var snappingLayer = this.map.getLayersByClass('OpenLayers.Editor.Layer.Snapping')[0];
-            snappingLayer.setVisibility(showLayer.checked);
-        }, this, showLayer));
+            /*
+            toleranceHeader = document.createElement('h4');
+            toleranceHeader.innerHTML = OpenLayers.i18n('oleSnappingSettingsTolerance');
+            content.appendChild(toleranceHeader);
+            */
 
-        element = document.createElement('label');
-        element.setAttribute('for', 'oleCADToolsDialogShowLayer');
-        element.innerHTML = OpenLayers.i18n('oleCADToolsDialogShowLayer');
-        showGuideLine.appendChild(element);
-        settings.appendChild(showGuideLine);
+            var settings = document.createElement('div');
+            var showGuideLine = document.createElement('p');
+            var showLayer = document.createElement('input');
+            showLayer.type = 'checkbox';
+            showLayer.id = 'oleCADToolsDialogShowLayer';
+            showLayer.name = 'guidedDrawing';
+            showLayer.value = 'true';
+            showGuideLine.appendChild(showLayer);
 
-        var toleranceSetting = document.createElement('p');
-        element = document.createElement('input');
-        element.type = 'text';
-        element.id = 'oleCADToolsDialogTolerance';
-        element.size = 4;
-        element.value = this.tolerance;
-        toleranceSetting.appendChild(element);
+            OpenLayers.Event.observe(showGuideLine, 'click', OpenLayers.Function.bind(function(event) {
+                // Prevent propagation of event to drawing controls
+                OpenLayers.Event.stop(event, true);
+                
+                var snappingLayer = this.map.getLayersByClass('OpenLayers.Editor.Layer.Snapping')[0];
+                snappingLayer.setVisibility(showLayer.checked);
+            }, this));
 
-        element = document.createElement('label');
-        element.setAttribute('for', 'oleCADToolsDialogTolerance');
-        element.innerHTML = OpenLayers.i18n('oleCADToolsDialogTolerance');
-        toleranceSetting.appendChild(element);
-        settings.appendChild(toleranceSetting);
+            element = document.createElement('label');
+            element.setAttribute('for', 'oleCADToolsDialogShowLayer');
+            element.innerHTML = OpenLayers.i18n('oleCADToolsDialogShowLayer');
+            showGuideLine.appendChild(element);
+            settings.appendChild(showGuideLine);
 
-        content.appendChild(settings);
-        this.map.editor.dialog.show({
-            content: content,
-            toolbox: true
-        });
+            var toleranceSetting = document.createElement('p');
+            element = document.createElement('input');
+            element.type = 'text';
+            element.id = 'oleCADToolsDialogTolerance';
+            element.size = 4;
+            element.value = this.tolerance;
+            toleranceSetting.appendChild(element);
+
+            element = document.createElement('label');
+            element.setAttribute('for', 'oleCADToolsDialogTolerance');
+            element.innerHTML = OpenLayers.i18n('oleCADToolsDialogTolerance');
+            toleranceSetting.appendChild(element);
+            settings.appendChild(toleranceSetting);
+
+            content.appendChild(settings);
+            this.map.editor.dialog.show({
+                content: content,
+                toolbox: true
+            });
         }
     },
 

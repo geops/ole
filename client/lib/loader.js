@@ -26,7 +26,8 @@
         'Editor/Control/SplitFeature.js',
         'Editor/Control/UndoRedo.js',
         'Editor/Control/FixedAngleDrawing.js',
-        'Editor/Control/CADTools.js'
+        'Editor/Control/CADTools.js',
+        'Editor/Control/ParallelDrawing.js'
     ];
     
     // Load translations if HTML page defines a language

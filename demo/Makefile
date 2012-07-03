@@ -79,6 +79,7 @@ js-ole: js-dir
 		$(OLE_SOURCE)/Editor/Control/UndoRedo.js \
 		$(OLE_SOURCE)/Editor/Control/FixedAngleDrawing.js \
 		$(OLE_SOURCE)/Editor/Control/CADTools.js \
+		$(OLE_SOURCE)/Editor/Control/ParallelDrawing.js \
 		> /tmp/js.tmp.js
 	$(CLOSURE_COMPILER) --js /tmp/js.tmp.js --js_output_file $(COMPILED_JS_DIR)/ole.js
 	rm -f /tmp/js.tmp.js
