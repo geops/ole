@@ -183,5 +183,14 @@ OpenLayers.Editor.Layer.Snapping = OpenLayers.Class(OpenLayers.Layer.Vector, {
             }
         }, this);
         this.addFeatures(this.intersectionPoints);
+    },
+
+    removeFeatures: function(features, options) {
+        OpenLayers.Layer.Vector.prototype.removeFeatures.apply(this, arguments);
+
+        // Update intersections whenever an external caller removes features
+        if(features!==this.intersectionPoints){
+            this.rebuildIntersectionPoints();
+        }
     }
 });
