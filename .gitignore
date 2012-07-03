@@ -1,2 +1,6 @@
 *.pyc
 demo/public/js/min/
+demo/public/js/ole/
+demo/application/configs/application.ini
+demo/ENVIRONMENT
+demo/public/.htaccess

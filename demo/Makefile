@@ -4,6 +4,7 @@ CLOSURE_COMPILER=$(JAVA) -jar tools/closure-compiler.jar
 YUI_COMPRESSOR=$(JAVA) -jar tools/yuicompressor.jar
 MARKDOWN=perl tools/Markdown.pl --html4tags
 OLE_SOURCE=../client/lib
+APPLICATION_CONFIG=application/configs/application.ini
 
 all: html js
 
@@ -84,4 +85,16 @@ js-ole: js-dir
 	$(CLOSURE_COMPILER) --js /tmp/js.tmp.js --js_output_file $(COMPILED_JS_DIR)/ole.js
 	rm -f /tmp/js.tmp.js
 
+setup:
+	if test -f $(APPLICATION_CONFIG); \
+	then \
+		echo 'Leaving existing configuration untouched'; \
+	else \
+		cp $(APPLICATION_CONFIG).dist $(APPLICATION_CONFIG); \
+		echo 'Created configuration'; \
+	fi
+
+	# Copying OLE from its source (copy instead of symlinks because Apache's limits)
+	rm -rf public/js/ole
+	cp -r ../client/ public/js/ole
 
