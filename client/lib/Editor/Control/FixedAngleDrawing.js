@@ -4,6 +4,11 @@
 OpenLayers.Editor.Control.FixedAngleDrawing = OpenLayers.Class(OpenLayers.Control, {
     CLASS_NAME: 'OpenLayers.Editor.Control.FixedAngleDrawing',
     
+    /**
+     * @var {Number} Amount of vertices in sketch when guidelines have been last painted
+     */
+    sketchVerticesAmount: null,
+    
     initialize: function(editLayer) {
         OpenLayers.Control.prototype.initialize.call(this);
         this.layer = editLayer;
@@ -41,7 +46,8 @@ OpenLayers.Editor.Control.FixedAngleDrawing = OpenLayers.Class(OpenLayers.Contro
      */
     onSketchModified: function(event){
         var vertices = event.feature.geometry.getVertices();
-        if(vertices.length>2){
+        if(vertices.length>2 && this.sketchVerticesAmount!==vertices.length){
+            this.sketchVerticesAmount = vertices.length;
             this.updateGuideLines(
                 vertices[vertices.length-3],
                 vertices[vertices.length-2]
@@ -57,10 +63,11 @@ OpenLayers.Editor.Control.FixedAngleDrawing = OpenLayers.Class(OpenLayers.Contro
         var sketch = event.feature;
         
         var sketchLayer;
-        if(sketch.geometry instanceof OpenLayers.Geometry.LineString){
-            sketchLayer = this.map.getControlsByClass('OpenLayers.Editor.Control.DrawPath')[0].handler.layer
-        } else if(sketch.geometry instanceof OpenLayers.Geometry.Polygon){
-            sketchLayer = this.map.getControlsByClass('OpenLayers.Editor.Control.DrawPolygon')[0].handler.layer
+        if(sketch.geometry instanceof OpenLayers.Geometry.LineString || sketch.geometry instanceof OpenLayers.Geometry.Polygon){
+            // Look for the active drawing control and get its temporary sketch layer
+            sketchLayer = this.map.controls.filter(function(control){
+                return control.active && control.handler instanceof OpenLayers.Handler.Path;
+            })[0].handler.layer
         } else {
             // Feature type is not supported
             return;
@@ -69,6 +76,7 @@ OpenLayers.Editor.Control.FixedAngleDrawing = OpenLayers.Class(OpenLayers.Contro
             featureremoved: function(event){
                 if(event.feature.id===sketch.id){
                     // Sketch was removed (canceled or completed)
+                    this.sketchVerticesAmount = null;
                     this.getSnappingGuideLayer().destroyFeatures();
                 }
             },
@@ -94,25 +102,62 @@ OpenLayers.Editor.Control.FixedAngleDrawing = OpenLayers.Class(OpenLayers.Contro
         snappingGuideLayer.addFeatures([pointLastFixed.clone()]);
 
         var maxExtend = this.map.getMaxExtent()
+        
+        var guidelines = [];
+        if(pointLastFixed.x===pointEarlierFixed.x || pointLastFixed.y===pointEarlierFixed.y){
+            // Horizontal line
+            guidelines.push(new OpenLayers.Geometry.LineString([
+                new OpenLayers.Geometry.Point(maxExtend.left, pointLastFixed.y),
+                new OpenLayers.Geometry.Point(maxExtend.right, pointLastFixed.y)
+            ]));
+            // Vertical line
+            guidelines.push(new OpenLayers.Geometry.LineString([
+                new OpenLayers.Geometry.Point(pointLastFixed.x, maxExtend.top),
+                new OpenLayers.Geometry.Point(pointLastFixed.x, maxExtend.bottom)
+            ]));
+        } else {
 
-        // Draw guide along segment
-        var m = (pointLastFixed.y-pointEarlierFixed.y)/(pointLastFixed.x-pointEarlierFixed.x);
-        var b = pointLastFixed.y-(m*pointLastFixed.x);
-        snappingGuideLayer.addFeatures([
-            new OpenLayers.Geometry.LineString([
-                new OpenLayers.Geometry.Point(maxExtend.left, m*(maxExtend.left)+b),
-                new OpenLayers.Geometry.Point(maxExtend.right, m*maxExtend.right+b)
-            ])
-        ]);
+            // Draw guide along segment
+            var m = (pointLastFixed.y-pointEarlierFixed.y)/(pointLastFixed.x-pointEarlierFixed.x);
+            var b = pointLastFixed.y-(m*pointLastFixed.x);
+            guidelines.push(
+                new OpenLayers.Geometry.LineString([
+                    this.createWorldBoundaryPoint(m, maxExtend.left, b, maxExtend),
+                    this.createWorldBoundaryPoint(m, maxExtend.right, b, maxExtend)
+                ])
+            );
 
-        // Draw guide orthogonal to segment with intersection at pointLastFixed
-        var m2 = (-1/m);
-        var b2 = pointLastFixed.y-(m2*pointLastFixed.x);
-        snappingGuideLayer.addFeatures([
-            new OpenLayers.Geometry.LineString([
-                new OpenLayers.Geometry.Point(maxExtend.left, m2*(maxExtend.left)+b2),
-                new OpenLayers.Geometry.Point(maxExtend.right, m2*maxExtend.right+b2)
-            ])
-        ]);
+            // Draw guide orthogonal to segment with intersection at pointLastFixed
+            var m2 = (-1/m);
+            var b2 = pointLastFixed.y-(m2*pointLastFixed.x);
+            guidelines.push(
+                new OpenLayers.Geometry.LineString([
+                    this.createWorldBoundaryPoint(m2, maxExtend.left, b2, maxExtend),
+                    this.createWorldBoundaryPoint(m2, maxExtend.right, b2, maxExtend)
+                ])
+            );
+        }
+        snappingGuideLayer.addFeatures(guidelines);
+    },
+    
+    /**
+     * Create a point that lies on the world boundary and the guideline such that this point is closest to the given x coordinate
+     * @param {Number} m Slope of the guideline
+     * @param {Number} x Horizontal ordinate on the guideline to select closest world boundary by proximity
+     * @param {Number} b Vertical offset of guideline from coordinate system's origin
+     * @param {OpenLayers.Bounds} maxExtend World boundary
+     * @return {OpenLayers.Geometry.Point}
+     */
+    createWorldBoundaryPoint: function(m, x, b, maxExtend){
+        var xBoundary;
+        var candidateY = m*x+b;
+        if(candidateY>maxExtend.top){
+            xBoundary = (90-b)/m;
+        } else if(candidateY<maxExtend.bottom){
+            xBoundary = (-90-b)/m;
+        } else {
+            xBoundary = x;
+        }
+        return new OpenLayers.Geometry.Point(xBoundary, m*xBoundary+b);
     }
 });
