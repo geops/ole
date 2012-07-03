@@ -5,7 +5,7 @@
  */
 
 /**
- * Class: OpenLayers.Editor.Control.SnappingSettings
+ * Class: OpenLayers.Editor.Control.CADTools
  * ...
  *
  * Inherits from:
@@ -21,10 +21,24 @@ OpenLayers.Editor.Control.CADTools = OpenLayers.Class(OpenLayers.Control.Button,
 
     guidedDrawingButton: null,
 
+    /**
+     * @var {Number} Snapping tolerance in pixels
+     */
     tolerance: 10,
 
+    /**
+     * @var {OpenLayers.Editor.Control.FixedAngleDrawing}
+     */
     fixedAngleDrawingControl: null,
+    /**
+     * @var {OpenLayers.Editor.Control.ParallelDrawing}
+     */
     parallelDrawingControl: null,
+
+    /**
+     * @var {OpenLayers.Control.Snapping} Snapping for all CAD tools
+     */
+    snappingControl: null,
 
     initialize: function(layer, options) {
 
@@ -43,14 +57,41 @@ OpenLayers.Editor.Control.CADTools = OpenLayers.Class(OpenLayers.Control.Button,
 
     },
 
+    activate: function() {
+        var activated = OpenLayers.Control.Button.prototype.activate.call(this);
+        if(activated) {
+            this.snappingControl.activate();
+        }
+        return activated;
+    },
+
+    deactivate: function() {
+        var deactivated = OpenLayers.Control.Button.prototype.deactivate.call(this);
+        if(deactivated) {
+            this.snappingControl.deactivate();
+        }
+        return deactivated;
+    },
+
     setMap: function(map) {
 
         OpenLayers.Control.Button.prototype.setMap.call(this, map);
 
         this.map.addControl(this.fixedAngleDrawingControl);
         this.map.addControl(this.parallelDrawingControl);
+
+        this.snappingControl = new OpenLayers.Control.Snapping({
+            layer: this.layer,
+            targets: [{
+                layer: this.map.getLayersByClass('OpenLayers.Editor.Layer.Snapping')[0],
+                tolerance: this.tolerance
+            }]
+        });
     },
 
+    /**
+     * Handles showing and hiding of the CAD tools dialog
+     */
     openCADToolsDialog: function() {
 
         if (this.active) {
@@ -98,12 +139,6 @@ OpenLayers.Editor.Control.CADTools = OpenLayers.Class(OpenLayers.Control.Button,
                     this.fixedAngleDrawingControl.deactivate();
                     this.guidedDrawingButton.setAttribute('class', 'olEditorGuidedDrawingInactive');
                 } else {
-                    var layer = this.map.getLayersByClass('OpenLayers.Editor.Layer.Snapping')[0];
-                    var snapping = new OpenLayers.Control.Snapping({
-                        layer: this.layer,
-                        targets: [{layer: layer, tolerance: this.tolerance}]
-                    });
-                    snapping.activate();
                     this.fixedAngleDrawingControl.activate();
                     this.guidedDrawingButton.setAttribute('class', 'olEditorGuidedDrawingActive');
                 }
@@ -111,12 +146,6 @@ OpenLayers.Editor.Control.CADTools = OpenLayers.Class(OpenLayers.Control.Button,
             toolbar.appendChild(this.guidedDrawingButton);
 
             content.appendChild(toolbar);
-
-            /*
-            toleranceHeader = document.createElement('h4');
-            toleranceHeader.innerHTML = OpenLayers.i18n('oleSnappingSettingsTolerance');
-            content.appendChild(toleranceHeader);
-            */
 
             var settings = document.createElement('div');
             var showGuideLine = document.createElement('p');
@@ -147,6 +176,9 @@ OpenLayers.Editor.Control.CADTools = OpenLayers.Class(OpenLayers.Control.Button,
             element.id = 'oleCADToolsDialogTolerance';
             element.size = 4;
             element.value = this.tolerance;
+            OpenLayers.Event.observe(element, 'change', OpenLayers.Function.bind(function(event){
+                this.setTolerance(event.target.value);
+            }, this));
             toleranceSetting.appendChild(element);
 
             element = document.createElement('label');
@@ -163,7 +195,17 @@ OpenLayers.Editor.Control.CADTools = OpenLayers.Class(OpenLayers.Control.Button,
         }
     },
 
+    /**
+     * @param {Number} tolerance Snapping tolerance in pixels
+     */
+    setTolerance: function(tolerance){
+        this.tolerance = tolerance;
 
+        this.snappingControl.setTargets([{
+            layer: this.map.getLayersByClass('OpenLayers.Editor.Layer.Snapping')[0],
+            tolerance: this.tolerance
+        }]);
+    },
 
     CLASS_NAME: "OpenLayers.Editor.Control.CADTools"
 });
