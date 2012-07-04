@@ -21,7 +21,10 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
 
     tolerance: 10,
 
-    snappingLayers: [],
+    /**
+     * @var {Array.<String>} Identifiers of checkboxes to enable snapping for individual layers
+     */
+    snappingLayers: null,
 
     /**
      * Layer that displays guide lines and snapping points
@@ -34,7 +37,7 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
     toleranceInput: null,
 
     initialize: function(layer, options) {
-
+        this.snappingLayers = [];
         this.layer = layer;
 
         OpenLayers.Control.Button.prototype.initialize.apply(this, [options]);
@@ -155,7 +158,8 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
                 targets: targets
             });
             for (var i = 0; i <  targets.length; i++) {
-                targets[i].layer.setVisibility(true);
+                // moveTo call is to trigger loading of layer contents
+                targets[i].layer.moveTo(this.map.getExtent(), false, false);
             }
             this.snapping.activate();
         } else {
