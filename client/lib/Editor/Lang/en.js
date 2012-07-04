@@ -65,7 +65,7 @@ OpenLayers.Lang.en = OpenLayers.Util.extend(OpenLayers.Lang.en, {
 
     'oleCADToolsDialogParallelDrawing': 'Parallel Drawing',
 
-    'oleCADToolsDialogGuidedDrawing': 'Guided Drawomg',
+    'oleCADToolsDialogGuidedDrawing': 'Guided Drawing',
 
     'oleCADToolsDialogShowLayer': 'Show Guide Lines',
 
