@@ -16,8 +16,7 @@ See [`client/example`](https://github.com/geops/ole/tree/master/client/example) 
 
 ### Requirements
 
-* [OpenLayers](http://openlayers.org/) 2.11
-* some controls depend on server-side processing
+* [OpenLayers](http://openlayers.org/)
 
 ### Server-side processing
 

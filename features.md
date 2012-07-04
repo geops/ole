@@ -1,17 +1,22 @@
 
 ## Features
 
+OpenLayers Editor is a web-based tool for easy and precise creation of spatial data. It is build purely
+with HTML and JavaScript and thus runs on the desktop and mobile devices without plug-ins.
+
 ### General
 
 * Based on OpenLayers
-* Easily customizeable and extendable
+* Easily customizable and extensible
 * Small and fast
 * Open Source
 
 ### Editor
 
 * Supports point, path and polygon geometry types
-* Custom snapping settings
+* Vector layer support (for example WFS)
+* Snapping to existing features, guide lines or features from external data sources
+* CAD-like feature construction
 * Undo and redo
 * Modify geometries
 * Drag geometries
@@ -22,5 +27,5 @@
 * Split polygons and lines
 * Merge polygons
 * Clean and validate geometries
-* Includes Durpal and Zend Framework integration
+* Includes Drupal and Zend Framework integration
 * Based on PostGIS geometry processing

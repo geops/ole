@@ -108,7 +108,10 @@ a img {
     border: none;
 }
 
-/* IE7 Hack: fix with of toolbar */
-.olEditorControlEditorPanel {
-    width: 426px;
+div.olControlZoom a {
+    background: rgba(0, 0, 0, 0.7);
+}
+.oleDialog p {
+    margin-left:0;
+    margin-right:0;
 }

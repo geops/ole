@@ -19,9 +19,15 @@
         'Editor/Control/LayerSettings.js',
         'Editor/Control/MergeFeature.js',
         'Editor/Control/SaveFeature.js',
+        'Editor/Control/FixedAngleDrawing.js',
+        'Editor/Layer.js',
+        'Editor/Layer/Snapping.js',
         'Editor/Control/SnappingSettings.js',
         'Editor/Control/SplitFeature.js',
-        'Editor/Control/UndoRedo.js'
+        'Editor/Control/UndoRedo.js',
+        'Editor/Control/FixedAngleDrawing.js',
+        'Editor/Control/CADTools.js',
+        'Editor/Control/ParallelDrawing.js'
     ];
     
     // Load translations if HTML page defines a language

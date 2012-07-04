@@ -1,5 +1,5 @@
 
-OpenLayers.Util.extend(OpenLayers.Lang.ca, {
+OpenLayers.Lang.ca = OpenLayers.Util.extend(OpenLayers.Lang.ca, {
 
     'oleCleanFeature': 'Netejar la geometria seleccionada',
 

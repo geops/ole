@@ -21,7 +21,7 @@
         </ul>
         <h1>OpenLayers Editor</h1>
         <div id="map" class="content"></div>
-        <div id="features" class="content">
+        <div id="features" class="content" style="height:auto">
             <?php echo $this->action('features', 'index'); ?>
         </div>
         <div id="documentation" class="content">
@@ -37,6 +37,7 @@
 <?php if (ini_get("display_errors")) : ?>
     <script src="<?php echo ROOT_DIR ?>js/openlayers/lib/OpenLayers.js"></script>
     <script src="<?php echo ROOT_DIR ?>js/openlayers/lib/OpenLayers/Lang/en.js"></script>
+    <script src="<?php echo ROOT_DIR ?>js/ole/lib/Editor/Lang/en.js"></script>
     <script src="<?php echo ROOT_DIR ?>js/ole/lib/loader.js"></script>
     <script src="<?php echo ROOT_DIR ?>js/jquery.js"></script>
     <script src="<?php echo ROOT_DIR ?>js/demo.js"></script>

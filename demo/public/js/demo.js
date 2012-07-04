@@ -14,7 +14,7 @@ $(function() {
     map.setCenter(new OpenLayers.LonLat(872949, 6106592), 12);
 
     editor = new OpenLayers.Editor(map, {
-        activeControls: ['Navigation', 'SnappingSettings', 'Separator', 'SplitFeature', 'MergeFeature', 'CleanFeature', 'DeleteFeature', 'SelectFeature', 'Separator', 'DragFeature', 'DrawHole', 'ModifyFeature', 'Separator'],
+        activeControls: ['Navigation', 'SnappingSettings', 'CADTools', 'Separator', 'SplitFeature', 'MergeFeature', 'CleanFeature', 'DeleteFeature', 'SelectFeature', 'Separator', 'DragFeature', 'DrawHole', 'ModifyFeature', 'Separator'],
         featureTypes: ['polygon', 'path', 'point'],
         showStatus: function(type, message) {
             alert(message);

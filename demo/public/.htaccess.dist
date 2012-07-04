@@ -1,0 +1,14 @@
+RewriteEngine on
+
+RewriteBase /
+
+php_value default_charset "UTF-8"
+
+# if a file exits - serve it
+RewriteCond %{REQUEST_FILENAME} -s [OR]
+RewriteCond %{REQUEST_FILENAME} -l
+RewriteRule ^.*$ - [NC,L]
+
+
+# otherwise forward to index.php
+RewriteRule ^.*$ index.php [NC,L]

@@ -1,5 +1,5 @@
 
-OpenLayers.Util.extend(OpenLayers.Lang.en, {
+OpenLayers.Lang.en = OpenLayers.Util.extend(OpenLayers.Lang.en, {
 
     'oleCleanFeature': 'Clean selected geometry',
 
@@ -15,7 +15,7 @@ OpenLayers.Util.extend(OpenLayers.Lang.en, {
 
     'oleDialogOkButton': 'Ok',
 
-    'oleDragFeature': 'Drage geometry',
+    'oleDragFeature': 'Drag geometry',
 
     'oleDrawHole': 'Draw hole',
 
@@ -59,6 +59,18 @@ OpenLayers.Util.extend(OpenLayers.Lang.en, {
 
     'oleSplitFeature': 'Split selected geometry',
 
-    'oleSplitFeatureSelectFeature': 'Please select a geometry first.'
+    'oleSplitFeatureSelectFeature': 'Please select a geometry first.',
+    
+    'oleCADTools': 'CAD Tools',
+
+    'oleCADToolsDialogParallelDrawing': 'Parallel Drawing',
+
+    'oleCADToolsDialogGuidedDrawing': 'Guided Drawing',
+
+    'oleCADToolsDialogShowLayer': 'Show Guide Lines',
+
+    'oleCADToolsDialogTolerance': 'px tolerance',
+
+    'oleParallelFeature': 'Draw Parallel Geometry'
 
 });
