@@ -4,3 +4,5 @@ demo/public/js/ole/
 demo/application/configs/application.ini
 demo/ENVIRONMENT
 demo/public/.htaccess
+demo/application/views/scripts/index/documentation.phtml
+demo/application/views/scripts/index/features.phtml

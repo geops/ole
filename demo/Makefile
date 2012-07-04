@@ -36,13 +36,13 @@ js-dir:
 	# create the diretory if it does not exist
 	[ -d $(COMPILED_JS_DIR) ] || mkdir $(COMPILED_JS_DIR)
 
-js-openlayers: js-dir
+js-openlayers: js-dir setup
 	# for adapting the openlayers build please alter the file at
 	# public/js/openlayers/build/demo.cfg
 	# or use full.cfg to avoid the horrible js dependency tracking
 	# Closure-compiler will break openlayers, yui-compressor works
 	rm -f $(COMPILED_JS_DIR)/openlayers.js
-	cd public/js/openlayers/build && python build.py demo.cfg
+	cd public/js/openlayers/build && python build.py ../../../../openlayers.cfg
 	$(YUI_COMPRESSOR) -o $(COMPILED_JS_DIR)/openlayers.js public/js/openlayers/build/OpenLayers.js
 	rm -f public/js/openlayers/build/OpenLayers.js
 
