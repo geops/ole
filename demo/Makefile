@@ -37,6 +37,7 @@ js-dir:
 	[ -d $(COMPILED_JS_DIR) ] || mkdir $(COMPILED_JS_DIR)
 
 js-openlayers: js-dir setup
+	cd .. && git submodule update
 	# for adapting the openlayers build please alter the file at
 	# public/js/openlayers/build/demo.cfg
 	# or use full.cfg to avoid the horrible js dependency tracking
@@ -97,4 +98,6 @@ setup:
 	# Copying OLE from its source (copy instead of symlinks because Apache's limits)
 	rm -rf public/js/ole
 	cp -r ../client/ public/js/ole
+
+	cd .. && git submodule init
 
