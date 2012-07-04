@@ -192,5 +192,56 @@ OpenLayers.Editor.Layer.Snapping = OpenLayers.Class(OpenLayers.Layer.Vector, {
         if(features!==this.intersectionPoints){
             this.rebuildIntersectionPoints();
         }
+    },
+
+    drawFeature: function(feature, style) {
+        var returnValue = OpenLayers.Layer.Vector.prototype.drawFeature.apply(this, arguments);
+        if(this.unrenderedFeatures[feature.id] === feature){
+            // The renderer chose not to render a feature.
+            var viewportExtent =  map.getExtent();
+            if(feature.geometry.intersects(viewportExtent.toGeometry())){
+                // Due to a bug in the renders clipping the feature was not rendered even though it should be visible.
+                if(feature.geometry instanceof OpenLayers.Geometry.LineString && feature.geometry.components.length===2){
+                    // Assume a guide line was not rendered. This can be corrected by moving its end points to the viewport boundaries.
+                    var lineSegmentWorldBoundary = feature.geometry.getSortedSegments()[0];
+                    var line = this.getLine(lineSegmentWorldBoundary);
+                    var viewportBoundaryFirst;
+                    var viewportBoundarySecond;
+                    if(line.m===Infinity){
+                        viewportBoundaryFirst = new OpenLayers.Geometry.Point(line.x, viewportExtent.top);
+                        viewportBoundarySecond = new OpenLayers.Geometry.Point(line.x, viewportExtent.bottom);
+                    } else {
+                        viewportBoundaryFirst = this.createWorldBoundaryPoint(line.m, viewportExtent.left, line.b, viewportExtent);
+                        viewportBoundarySecond = this.createWorldBoundaryPoint(line.m, viewportExtent.right, line.b, viewportExtent);
+                    }
+
+                    // Move the end point to the viewport boundaries
+                    var firstPoint = feature.geometry.components[0];
+                    firstPoint.x = viewportBoundaryFirst.x;
+                    firstPoint.y = viewportBoundaryFirst.y;
+                    var secondPoint = feature.geometry.components[1];
+                    secondPoint.x = viewportBoundarySecond.x;
+                    secondPoint.y = viewportBoundarySecond.y;
+                    // Render the modified line
+                    returnValue = OpenLayers.Layer.Vector.prototype.drawFeature.apply(this, arguments);
+                    // Restore the correct line in the data model
+                    firstPoint.x = lineSegmentWorldBoundary.x1;
+                    firstPoint.y = lineSegmentWorldBoundary.y1;
+                    secondPoint.x = lineSegmentWorldBoundary.x2;
+                    secondPoint.y = lineSegmentWorldBoundary.y2;
+                } else {
+                    console.warn('Failed to render a feature', feature);
+                }
+            }
+        }
+        return returnValue;
+    },
+
+    moveTo: function(bounds, zoomChanged, dragging) {
+        OpenLayers.Layer.Vector.prototype.moveTo.apply(this, arguments);
+        // Render the guides again because there might be guide lines that need another modification as applied by draw feature
+        this.features.forEach(function(feature){
+            this.drawFeature(feature);
+        }, this);
     }
 });
