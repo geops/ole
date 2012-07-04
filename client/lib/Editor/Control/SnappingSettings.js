@@ -155,7 +155,6 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
                 targets: targets
             });
             for (var i = 0; i <  targets.length; i++) {
-                targets[i].layer.redraw();
                 targets[i].layer.setVisibility(true);
             }
             this.snapping.activate();
