@@ -33,7 +33,6 @@
         </div>
     </div>
     <div id="credit">developed by <a href="http://www.geops.de"><img src="<?php echo ROOT_DIR ?>img/geops.png" alt="geOps"></a></div>
-</body>
 
 <?php if (ini_get("display_errors")) : ?>
     <script src="<?php echo ROOT_DIR ?>js/openlayers/lib/OpenLayers.js"></script>
@@ -47,10 +46,11 @@
     <script src="<?php echo ROOT_DIR ?>js/min/ole.js"></script>
     <script src="<?php echo ROOT_DIR ?>js/min/jquery.js"></script>
 <?php endif; ?>
-    <script>
+    <script type="text/javascript">
         OpenLayers.ImgPath = '<?php echo ROOT_DIR ?>img/openlayers/';
         $(function() {
             $('#map').data('editor').oleUrl = '<?php echo ROOT_DIR ?>ole/';
         });
     </script>
+    </body>
 </html>

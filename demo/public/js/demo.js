@@ -11,7 +11,21 @@ $(function() {
         maxExtent: new OpenLayers.Bounds(-500,-500, 500, 500)
     });
     map.addLayer(new OpenLayers.Layer.OSM());
-    map.setCenter(new OpenLayers.LonLat(872949, 6106592), 12);
+    /**
+     * Restricts rendering of IE because its rendering is way too slow to be usable and might hang the browser
+     * when zooming in (co-ordinate systems boundaries influence rendering speed).
+     */
+    if(jQuery.browser.msie && Number(jQuery.browser.version.split('.')[0])<9){
+        map.events.register('zoomend', map, function(){
+            if(map.getZoom()>10){
+                alert('Your browser tends to draw vectors very slowly at this resolution and perhaps even appears to hang.\nZoom out for a more responsive demo.');
+            }
+        });
+        zoom = 10;
+    } else {
+        zoom = 12;
+    }
+    map.setCenter(new OpenLayers.LonLat(872949, 6106592), zoom);
 
     editor = new OpenLayers.Editor(map, {
         activeControls: ['Navigation', 'SnappingSettings', 'CADTools', 'Separator', 'SplitFeature', 'MergeFeature', 'CleanFeature', 'DeleteFeature', 'SelectFeature', 'Separator', 'DragFeature', 'DrawHole', 'ModifyFeature', 'Separator'],
