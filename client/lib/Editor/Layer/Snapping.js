@@ -198,7 +198,7 @@ OpenLayers.Editor.Layer.Snapping = OpenLayers.Class(OpenLayers.Layer.Vector, {
         var returnValue = OpenLayers.Layer.Vector.prototype.drawFeature.apply(this, arguments);
         if(this.unrenderedFeatures[feature.id] === feature){
             // The renderer chose not to render a feature.
-            var viewportExtent =  map.getExtent();
+            var viewportExtent =  this.map.getExtent();
             if(feature.geometry.intersects(viewportExtent.toGeometry())){
                 // Due to a bug in the renders clipping the feature was not rendered even though it should be visible.
                 if(feature.geometry instanceof OpenLayers.Geometry.LineString && feature.geometry.components.length===2){

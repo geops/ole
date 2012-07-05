@@ -8,8 +8,9 @@
     border:1px solid #aaa;
     height:20px;
     position:absolute;
-    right:35px;
-    top:4px;
+    right:8px;
+    top:8px;
+    cursor: default;
 }
 .olEditorControlEditorPanel > div {
     background-repeat: no-repeat;
@@ -91,10 +92,6 @@
  */
 .oleControlDisabled {
     opacity: 0.5;
-}
-
-.olEditorControlEditorPanel {
-    cursor: default;
 }
 
 .olEditorControlEditorPanel > div:not(.olControlSeparatorItemInactive):not(.oleControlDisabled) {
@@ -237,9 +234,20 @@
 /**
  *  CAD Tools
  */
+.olEditorControlEditorPanel.olEditorCADToolsToolbar {
+    top: 10px;
+    right: 10px;
+    /** Use a fixed width to support IE7, IE9. Other browsers are correctly calculating the width anyway. */
+    width: 60px;
+}
 .olEditorControlEditorPanel .olEditorControlCADToolsItemActive,
 .olEditorControlEditorPanel .olEditorControlCADToolsItemInactive {
     background-image: url("img/cadTools.png");
+}
+.oleDialog.oleDialogToolbar {
+    top:38px;
+    right:8px;
+    position:absolute;
 }
 
 /**

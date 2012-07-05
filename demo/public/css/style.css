@@ -107,7 +107,7 @@ div.content {
 .olEditorControlEditorPanel {
     top:8px;
     right:8px;
-    /** Use a fixed height to support IE7, IE9. Other browsers are correctly calculating the width anyway. */
+    /** Use a fixed width to support IE7, IE9. Other browsers are correctly calculating the width anyway. */
     width:456px;
 }
 

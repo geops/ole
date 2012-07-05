@@ -42,10 +42,10 @@ OpenLayers.Editor.Control.Dialog =  OpenLayers.Class(OpenLayers.Control, {
         this.dialogDiv = document.createElement('div');
         OpenLayers.Element.addClass(this.dialogDiv, 'oleDialog');
 
-        if (!options.toolbox) {
-            OpenLayers.Element.addClass(this.div, 'oleFadeMap');
+        if (options.toolbox) {
+            OpenLayers.Element.addClass(this.dialogDiv, 'oleDialogToolbar');
         } else {
-            this.dialogDiv.setAttribute('style', 'right:5px;position:absolute;top:30px;');
+            OpenLayers.Element.addClass(this.div, 'oleFadeMap');
         }
 
         if (options.title) {
