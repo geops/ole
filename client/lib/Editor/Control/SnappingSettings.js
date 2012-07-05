@@ -112,17 +112,21 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
                 element.name = 'snappingLayer';
                 element.id = 'Snapping.'+layer.id;
                 element.value = 'true';
-                if(this.snappingLayers.indexOf('Snapping.'+layer.id) >= 0) {
+                if(this.snappingLayers.indexOf(layer) >= 0) {
                     element.checked = 'checked';
                     element.defaultChecked = 'selected'; // IE7 hack
                 }
                 content.appendChild(element);
                 OpenLayers.Event.observe(element, 'click',
-                    OpenLayers.Function.bind(this.addSnappingLayer, this));
+                    OpenLayers.Function.bind(this.setLayerSnapping, this, layer, element.checked));
 
                 element = document.createElement('label');
                 element.setAttribute('for', 'Snapping.'+layer.id);
                 element.innerHTML = layer.name;
+                OpenLayers.Event.observe(element, 'click', OpenLayers.Function.bind(function(event) {
+                    // Allow to check checkbox by clicking its label even when drawing tools are active
+                    OpenLayers.Event.stop(event, true);
+                }, this));
                 content.appendChild(element);
 
                 this.layerListDiv.appendChild(content);
@@ -130,11 +134,16 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
         }
     },
 
-    addSnappingLayer: function(event) {
-        if(this.snappingLayers.indexOf(event.currentTarget.id) >= 0) {
-            this.snappingLayers.splice(this.snappingLayers.indexOf(event.currentTarget.id), 1);
+    /**
+     * Enables or disables a layer for snapping
+     * @param {OpenLayers.Layer} layer
+     * @param {Boolean} snappingEnabled Set TRUE to enable snapping to this layer's objects
+     */
+    setLayerSnapping: function(layer, snappingEnabled) {
+        if(snappingEnabled) {
+            this.snappingLayers.splice(this.snappingLayers.indexOf(layer), 1);
         } else {
-            this.snappingLayers.push(event.currentTarget.id);
+            this.snappingLayers.push(layer);
         }
         this.redraw();
     },
@@ -149,7 +158,7 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
             var targets = [];
             for (var i = 0; i <  this.snappingLayers.length; i++) {
                 targets.push({
-                    layer:this.map.getLayersBy('id',this.snappingLayers[i].substr(9))[0],
+                    layer: this.snappingLayers[i],
                     tolerance: this.tolerance
                 });
             }
