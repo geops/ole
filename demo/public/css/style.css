@@ -99,9 +99,16 @@ div.content {
 }
 
 .olControlAttribution {
-    right: 4px!important;
-    bottom: 4px!important;
+    right: 8px!important;
+    bottom: 8px!important;
     font-size: 0.8em;
+}
+
+.olEditorControlEditorPanel {
+    top:8px;
+    right:8px;
+    /** Use a fixed height to support IE7, IE9. Other browsers are correctly calculating the width anyway. */
+    width:456px;
 }
 
 a img {
@@ -109,6 +116,7 @@ a img {
 }
 
 div.olControlZoom a {
+    background:#444;
     background: rgba(0, 0, 0, 0.7);
 }
 .oleDialog p {
