@@ -156,6 +156,8 @@ OpenLayers.Editor.Control.CADTools = OpenLayers.Class(OpenLayers.Control.Button,
             showLayer.name = 'guidedDrawing';
             showLayer.value = 'true';
             showLayer.checked = true;
+            // The following IE is required due to a bug in IE (below version 8) to tick the checkbox prior inserting it into the DOM
+            showLayer.defaultChecked = true;
             this.setShowGuides(showLayer.checked);
             showGuideLine.appendChild(showLayer);
 
