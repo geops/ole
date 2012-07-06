@@ -14,9 +14,9 @@ h1 {
     margin: 0;
     position: absolute;
     top: 28px;
-    left: 0;
+    left: 28px;
     width: 250px;
-    text-align: center;
+    text-align: left;
 }
 h2 {
     display: none;
@@ -58,7 +58,7 @@ div.content li {
 #navigation {
   position: absolute;
   top: 25px;
-  right: 0;
+  right: 28px;
   list-style: none;
   margin: 0;
 }
@@ -69,7 +69,7 @@ div.content li {
 #navigation a {
     background: #444;
     display: block;
-    margin: 0 40px 0 0;
+    margin: 0 0 0 18px;
     padding: 0 15px;
     text-decoration: none;
     line-height: 30px;
@@ -87,6 +87,9 @@ div.content li {
     color: #999;
     text-align: center;
     font-size: 0.8em;
+    position: absolute;
+    right: 28px;
+    bottom:23px;
 }
 
 #credit img {
@@ -122,4 +125,21 @@ div.olControlZoom a {
 .oleDialog p {
     margin-left:0;
     margin-right:0;
+}
+
+a.share-button:first-child {
+    margin: 0;
+}
+a.share-button {
+    background-color: #444;
+    border-radius: 8px 8px 8px 8px;
+    display: inline-block;
+    height: 32px;
+    margin: 0 0 0 5px;
+    padding: 5px;
+    position: relative;
+    width: 32px;
+}
+a.share-button:hover {
+    background-color: #6E90A6;
 }
