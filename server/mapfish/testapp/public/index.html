@@ -16,8 +16,12 @@
     <!-- Use a OpenLayers version later than 2.10 for supporting
         parallel script loading as in Firefox 4 and higher -->
     <script type="text/javascript"
-        src="http://openlayers.org/api/2.11/OpenLayers.js">
+        src="http://openlayers.org/api/2.12/OpenLayers.js">
     </script>
+
+    <!-- Provide thing missing in IE -->
+    <script type="text/javascript" src="json2.js"></script>
+    <script type="text/javascript" src="iefixes.js"></script>
     
     <!-- Load OLE, the OpenLayers Editor, into your page -->
     <link rel="stylesheet" href="lib/geosilk/geosilk.css"
@@ -218,7 +222,7 @@
     <!-- OpenLayers Editor is an open source product by geOps,
         it can be found and forked on GetHub -->
     <a href="http://github.com/geops/ole">
-        <img id="github" src="https://a248.e.akamai.net/assets.github.com/img/7afbc8b248c68eb468279e8c17986ad46549fb71/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub">
+        <img id="github" src="http://ole.geops.de/img/github-ribbon.png" alt="Fork me on GitHub">
     </a>
     
     <div id="page">
