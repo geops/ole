@@ -254,7 +254,7 @@ OpenLayers.Editor = OpenLayers.Class({
 
         var selectFeature = this.editor.editorPanel.getControlsByClass('OpenLayers.Control.SelectFeature')[0];
         
-        if (this.layer.selectedFeatures.length > 0 && selectFeature.active) {
+        if (this.layer.selectedFeatures.length > 0 && selectFeature && selectFeature.active) {
             // enable controls
             for (var ic = 0, lic = this.controls.length; ic < lic; ic++) {
                 var control = this.editor.editorPanel.getControlsByClass(this.controls[ic])[0];
