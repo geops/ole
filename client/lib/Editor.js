@@ -292,7 +292,7 @@ OpenLayers.Editor = OpenLayers.Class({
     },
     
     /**
-     * Initializes configured controls and creates toolbar
+     * Initializes configured controls and shows them
      */
     addEditorControls: function(){
         var control = null, controls = [];
@@ -361,9 +361,20 @@ OpenLayers.Editor = OpenLayers.Class({
         }
         
         // Add toolbar to map
-        this.editorPanel = new OpenLayers.Editor.Control.EditorPanel(this);
-        this.editorPanel.addControls(controls);
+        this.editorPanel = this.createEditorPanel(controls);
         editor.map.addControl(this.editorPanel);
+    },
+
+    /**
+     * Instantiates the container which displays the tools.
+     * To be called by OLE only and intended to be overridden by subclasses that want to display something else instead of the default toolbar
+     * @param {Array.<OpenLayers.Control>} controls Editing controls
+     * @return {OpenLayers.Editor.Control.EditorPanel} Widget to display editing tools
+     */
+    createEditorPanel: function(controls){
+        var editorPanel = new OpenLayers.Editor.Control.EditorPanel(this);
+        editorPanel.addControls(controls);
+        return editorPanel;
     },
 
     status: function(options) {
