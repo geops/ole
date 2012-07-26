@@ -73,6 +73,7 @@ OpenLayers.Editor.Control.DrawHole = OpenLayers.Class(OpenLayers.Control.DrawFea
                     }
                 }
                 if (intersects) {
+                    layerFeature.state = OpenLayers.State.UPDATE;
                     // Notify listeners that a feature is about to be modified
                     this.layer.events.triggerEvent("beforefeaturemodified", {
                         feature: layerFeature
