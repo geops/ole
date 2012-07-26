@@ -144,9 +144,15 @@ OpenLayers.Editor = OpenLayers.Class({
 
         this.id = OpenLayers.Util.createUniqueID('OpenLayers.Editor_');
 
-        this.editLayer = new OpenLayers.Layer.Vector('Editor', {
-            displayInLayerSwitcher: false,
-            styleMap: new OpenLayers.StyleMap({
+        if(options.editLayer){
+            this.editLayer = options.editLayer
+        } else {
+            this.editLayer = new OpenLayers.Layer.Vector('Editor', {
+                displayInLayerSwitcher: false
+            });
+        }
+        if(!options.styleMap){
+            this.editLayer.styleMap = new OpenLayers.StyleMap({
                 'default': new OpenLayers.Style({
                     fillColor: '#07f',
                     fillOpacity: 0.8,
@@ -168,8 +174,8 @@ OpenLayers.Editor = OpenLayers.Class({
                     graphicZIndex: 2,
                     pointRadius: 5
                 })
-            })
-        });
+            });
+        }
 
         var selectionContext = {
             editor: this,
