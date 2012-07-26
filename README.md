@@ -1,9 +1,17 @@
 About
 -----
 
-OpenLayers Editor (ole) provides a set of controls for extended editing of spatial data. Visit [http://ole.geops.de](http://ole.geops.de) for a demo. 
+OpenLayers Editor (OLE) provides a set of controls for extended editing of spatial data. It renders a map along with geometry editing tools in the browser without using plugins.
+
+OLE can be bound to a range of back-ends using custom JavaScript or simply be attached using WFS-T.
 
 [License](https://github.com/geops/ole/blob/master/license.txt)
+
+
+Demo
+-----
+
+Visit [http://ole.geops.de](http://ole.geops.de) for a demo.
 
 
 Features
