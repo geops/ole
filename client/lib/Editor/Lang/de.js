@@ -60,6 +60,8 @@ OpenLayers.Lang.de = OpenLayers.Util.extend(OpenLayers.Lang.de, {
     'oleSplitFeature': 'Selektierte Geometrien teilen',
 
     'oleSplitFeatureSelectFeature': 'Bitte mindestens 1 Fläche auswählen.',
+    
+    'oleTransformFeature': 'Geometrie skalieren, drehen und verschieben',
 
     'oleCADTools': 'CAD Funktionen',
 

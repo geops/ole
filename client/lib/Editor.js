@@ -72,7 +72,8 @@ OpenLayers.Editor = OpenLayers.Class({
      */
     editorControls: ['CleanFeature', 'DeleteFeature', 'Dialog', 'DrawHole', 
         'DrawPolygon', 'DrawPath', 'DrawPoint', 'EditorPanel', 'ImportFeature',
-        'MergeFeature', 'SaveFeature', 'SnappingSettings', 'SplitFeature', 'CADTools'],
+        'MergeFeature', 'SaveFeature', 'SnappingSettings', 'SplitFeature', 'CADTools',
+        'TransformFeature'],
 
     /**
      * Geometry types available for editing
@@ -369,6 +370,16 @@ OpenLayers.Editor = OpenLayers.Class({
         // Add toolbar to map
         this.editorPanel = this.createEditorPanel(controls);
         editor.map.addControl(this.editorPanel);
+    },
+    
+    /**
+     * Adds a control to the editor and its panel
+     * @param {OpenLayers.Editor.Control} control
+     */
+    addEditorControl: function(control){
+        this.controls[control.CLASS_NAME] = control;
+        this.editorPanel.addControls([control]);
+        editor.map.addControl(control);
     },
 
     /**

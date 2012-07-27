@@ -80,6 +80,7 @@
 .olEditorControlEditorPanel .olEditorControlDrawHoleItemActive,
 .olEditorControlEditorPanel .olEditorControlMergeFeatureItemActive,
 .olEditorControlEditorPanel .olEditorControlDragFeatureItemActive,
+.olEditorControlEditorPanel .olEditorControlTransformFeatureItemActive,
 .olEditorControlEditorPanel .olEditorControlCADToolsItemActive,
 .olEditorControlEditorPanel .olEditorParallelDrawingActive,
 .olEditorControlEditorPanel .olEditorGuidedDrawingActive,
@@ -170,6 +171,14 @@
 
 .olEditorControlDragFeatureActive {
     cursor: move;
+}
+
+/**
+ * Transform Feature
+ */
+.olEditorControlEditorPanel .olEditorControlTransformFeatureItemActive,
+.olEditorControlEditorPanel .olEditorControlTransformFeatureItemInactive {
+    background-image: url("img/transformFeature.png");
 }
 
 /**

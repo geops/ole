@@ -61,6 +61,8 @@ OpenLayers.Lang.en = OpenLayers.Util.extend(OpenLayers.Lang.en, {
 
     'oleSplitFeatureSelectFeature': 'Please select a geometry first.',
     
+    'oleTransformFeature': 'Scale, rotate and move geometry',
+    
     'oleCADTools': 'CAD Tools',
 
     'oleCADToolsDialogParallelDrawing': 'Parallel Drawing',
