@@ -84,7 +84,7 @@ OpenLayers.Editor.Control.TransformFeature = OpenLayers.Class(OpenLayers.Control
     },
     
     activate: function(){
-        OpenLayers.Control.TransformFeature.prototype.activate.call(this);
+        var activated = OpenLayers.Control.TransformFeature.prototype.activate.call(this);
         if(this.feature===null || this.feature.geometry instanceof OpenLayers.Geometry.Point){
             // Re-render handles to hide them when control is activated initially without a feature selected so far
             this.editLayer.drawFeature(this.box, this.renderIntent);
@@ -94,7 +94,43 @@ OpenLayers.Editor.Control.TransformFeature = OpenLayers.Class(OpenLayers.Control
             this.handles.forEach(function(f){
                 this.editLayer.drawFeature(f, this.renderIntent);
             }, this);
+        } else {
+            // Adjust box and handles to current feature geometry. This is basically the same as a call to setFeature but setFeature does not get invoked if another control modifies the feature's geometry without switching to another feature.
+            var initialParams = {
+                rotation: 0,
+                scale: 1,
+                ratio: 1
+            };
+
+            var oldRotation = this.rotation;
+            var oldCenter = this.center;
+            OpenLayers.Util.extend(this, initialParams);
+            this._setfeature = true;
+
+            var featureBounds = this.feature.geometry.getBounds();
+            this.box.move(featureBounds.getCenterLonLat());
+            this.box.geometry.rotate(-oldRotation, oldCenter);
+            this._angle = 0;
+
+            var ll;
+            if(this.rotation) {
+                var geom = feature.geometry.clone();
+                geom.rotate(-this.rotation, this.center);
+                var box = new OpenLayers.Feature.Vector(
+                    geom.getBounds().toGeometry());
+                box.geometry.rotate(this.rotation, this.center);
+                this.box.geometry.rotate(this.rotation, this.center);
+                this.box.move(box.geometry.getBounds().getCenterLonLat());
+                var llGeom = box.geometry.components[0].components[0];
+                ll = llGeom.getBounds().getCenterLonLat();
+            } else {
+                ll = new OpenLayers.LonLat(featureBounds.left, featureBounds.bottom);
+            }
+            this.handles[0].move(ll);
+            
+            delete this._setfeature;
         }
+        return activated;
     },
     
     /**
