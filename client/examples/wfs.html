@@ -35,11 +35,11 @@
                 protocol: new OpenLayers.Protocol.WFS({
                     version: "1.0.0",
                     srsName: "EPSG:4326",
-                    url: "http://localhost/geoserver/ole-test/ows",
+                    url: "/geoserver/ole-test/ows",
                     featurePrefix: "wfst",
                     featureNS :  "ole-test",
                     featureType: "WaterBody",
-                    geometryName: "geo",
+                    geometryName: "geo"
                 }),
                 extractAttributes: true,
                 visibility: true
