@@ -1,5 +1,8 @@
 /**
  * Layer to draw guidelines and points for snapping
+ * @param {String} name
+ * @param {Object} options
+ * @constructor
  */
 OpenLayers.Editor.Layer.Snapping = OpenLayers.Class(OpenLayers.Layer.Vector, {
     CLASS_NAME: 'OpenLayers.Editor.Layer.Snapping',

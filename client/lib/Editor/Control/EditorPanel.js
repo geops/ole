@@ -11,6 +11,10 @@
  *
  * Inherits from:
  *  - <OpenLayers.Control.Panel>
+ * 
+ * @constructor
+ * @param {OpenLayers.Editor} editor
+ * @param {Object=} options
  */
 OpenLayers.Editor.Control.EditorPanel = OpenLayers.Class(OpenLayers.Control.Panel, {
     /*

@@ -17,7 +17,7 @@ OpenLayers.Editor.Control.TransformFeature = OpenLayers.Class(OpenLayers.Control
     
     /**
      * List of strategies that have been temporarily suspended to prevent side effects
-     * @type {Array<OpenLayers.Strategy}
+     * @type {Array.<OpenLayers.Strategy>}
      */
     strategiesOnHold: null,
     

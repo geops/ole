@@ -150,7 +150,7 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
 
     changeSnapping: function() {
 
-        this.tolerance = parseInt(this.toleranceInput.value);
+        this.tolerance = parseInt(this.toleranceInput.value, 10);
 
         if(this.snappingLayers.length > 0) {
 

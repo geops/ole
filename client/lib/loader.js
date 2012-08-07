@@ -26,7 +26,6 @@
         'Editor/Control/SnappingSettings.js',
         'Editor/Control/SplitFeature.js',
         'Editor/Control/UndoRedo.js',
-        'Editor/Control/FixedAngleDrawing.js',
         'Editor/Control/CADTools.js',
         'Editor/Control/ParallelDrawing.js'
     ];

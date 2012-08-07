@@ -14,6 +14,9 @@
  *     Highlevel functions are implemented in different controls and can be
  *     activated by the editor constructor. 
  *
+ * @constructor
+ * @param {OpenLayers.Map} map
+ * @param {Object=} options
  */
 OpenLayers.Editor = OpenLayers.Class({
 
@@ -56,8 +59,13 @@ OpenLayers.Editor = OpenLayers.Class({
 
     /**
      * Property: status
+     * @type {function(string, string)} Function to display states, receives status type and message
      */
-    showStatus: null,
+    showStatus: function(status, message){
+        if(status==='error'){
+            alert(message);
+        }
+    },
 
     /**
      * Property: activeControls
@@ -72,7 +80,7 @@ OpenLayers.Editor = OpenLayers.Class({
      */
     editorControls: ['CleanFeature', 'DeleteFeature', 'Dialog', 'DrawHole', 
         'DrawPolygon', 'DrawPath', 'DrawPoint', 'EditorPanel', 'ImportFeature',
-        'MergeFeature', 'SaveFeature', 'SnappingSettings', 'SplitFeature', 'CADTools',
+        'MergeFeature', 'SnappingSettings', 'SplitFeature', 'CADTools',
         'TransformFeature'],
 
     /**
@@ -379,7 +387,7 @@ OpenLayers.Editor = OpenLayers.Class({
     addEditorControl: function(control){
         this.controls[control.CLASS_NAME] = control;
         this.editorPanel.addControls([control]);
-        editor.map.addControl(control);
+        this.map.addControl(control);
     },
 
     /**
@@ -400,41 +408,21 @@ OpenLayers.Editor = OpenLayers.Class({
         }
     },
 
+    /**
+     * Destroys existing features and loads the provided one into editor
+     * @param {Array.<OpenLayers.Feature.Vector>} features
+     */
     loadFeatures: function (features) {
         this.editLayer.destroyFeatures();
         if (features) {
             this.editLayer.addFeatures(features);
             this.map.zoomToExtent(this.editLayer.getDataExtent());
-        } 
-        else if (this.options.LoadFeature.url) {
-            OpenLayers.Request.GET({
-                url: this.options.LoadFeature.url,
-                params: options.params,
-                callback: this.loadFeaturesComplete,
-                proxy: null,
-                scope: this
-            });
         }
     },
 
-    loadFeaturesComplete: function (request) {
-        var geo, responseJSON = new OpenLayers.Format.JSON().read(request.responseText);
-        if (responseJSON.length > 0) {
-            if (responseJSON[0].error) {
-                this.showStatus('error', responseJSON.message);
-            } else {
-                OpenLayers.Util.extend(this.params, responseJSON[0].params);
-                geo =  new OpenLayers.Format.GeoJSON().read(responseJSON[0].geo);
-                if (!geo) {
-                    this.showStatus('error', 'Geometrie konnte nicht geladen werden.')
-                } else {
-                    this.editLayer.addFeatures(this.toFeatures(geo));
-                    this.map.zoomToExtent(this.editLayer.getDataExtent());
-                }
-            }
-        }
-    },
-
+    /**
+     * Callback to update selected feature with result of server side processing
+     */
     requestComplete: function (response) {
         var responseJSON = new OpenLayers.Format.JSON().read(response.responseText);
         this.map.editor.stopWaiting();
@@ -457,7 +445,7 @@ OpenLayers.Editor = OpenLayers.Class({
 
     /**
      * Flattens multipolygons and returns a list of their features
-     * @param {Object|Array} Geometry or list of geometries to flatten. Geometries can be of types
+     * @param {Object|Array} multiPolygon Geometry or list of geometries to flatten. Geometries can be of types
      *     OpenLayers.Geometry.MultiPolygon, OpenLayers.Geometry.Collection,
      *     OpenLayers.Geometry.Polygon.
      * @return {Array} List for features of type OpenLayers.Feature.Vector.
@@ -509,6 +497,9 @@ OpenLayers.Editor = OpenLayers.Class({
     CLASS_NAME: 'OpenLayers.Editor'
 });
 
+/**
+ * @constructor
+ */
 OpenLayers.Editor.Control = OpenLayers.Class(OpenLayers.Control, {
 
     initialize: function (options) {
