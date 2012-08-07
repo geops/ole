@@ -16,9 +16,26 @@ OpenLayers.Editor.Control.TransformFeature = OpenLayers.Class(OpenLayers.Control
     editLayer: null,
     
     /**
+     * List of strategies that have been temporarily suspended to prevent side effects
+     * @type {Array<OpenLayers.Strategy}
+     */
+    strategiesOnHold: null,
+    
+    /**
+     * @type {OpenLayers.Feature.Vector} Feature that was selected for transform previously
+     */
+    drawOriginalsFeature: null,
+    /**
+     * @type {String} Render intent of previously transformed feature
+     */
+    drawOriginalsRenderIntent: null,
+    
+    /**
      * @param {OpenLayers.Layer.Vector} editLayer
      */
     initialize: function(editLayer){
+        this.strategiesOnHold = [];
+        
         OpenLayers.Control.TransformFeature.prototype.initialize.call(this, editLayer, {
             renderIntent: "transform",
             rotationHandleSymbolizer: "rotate"
@@ -50,9 +67,12 @@ OpenLayers.Editor.Control.TransformFeature = OpenLayers.Class(OpenLayers.Control
             display: "${getDisplay}",
             cursor: "${role}",
             pointRadius: 5,
-            fillColor: "white",
+            fillColor: "#07f",
+            strokeOpacity: "${getStrokeOpacity}",
             fillOpacity: 1,
-            strokeColor: "black"
+            strokeColor: "${getStrokeColor}",
+            strokeWidth: "${getStrokeWidth}",
+            strokeDashstyle: '${getStrokeDashstyle}'
         }, {
             context: {
                 getDisplay: function(feature) {
@@ -61,6 +81,18 @@ OpenLayers.Editor.Control.TransformFeature = OpenLayers.Class(OpenLayers.Control
                     }
                     // hide the resize handle at the south-east corner
                     return feature.attributes.role === "se-resize" ? "none" : "";
+                },
+                getStrokeColor: function(feature){
+                    return feature.geometry instanceof OpenLayers.Geometry.Point ? '#037' : "#ff00ff";
+                },
+                getStrokeOpacity: function(feature){
+                    return feature.geometry instanceof OpenLayers.Geometry.Point ? 0.8 : 0.5;
+                },
+                getStrokeWidth: function(feature){
+                    return feature.geometry instanceof OpenLayers.Geometry.Point ? 2 : 1;
+                },
+                getStrokeDashstyle: function(feature){
+                    return feature.geometry instanceof OpenLayers.Geometry.Point ? 'solid' : 'longdash';
                 }
             }
         });
@@ -69,7 +101,11 @@ OpenLayers.Editor.Control.TransformFeature = OpenLayers.Class(OpenLayers.Control
             pointRadius: 10,
             fillColor: "#ddd",
             fillOpacity: 1,
-            strokeColor: "black"
+            strokeColor: "black",
+            // Display arrow image (rotationHandle.png) unless Browser is IE which does not reliable support data URI
+            externalGraphic: OpenLayers.Util.getBrowserName()==='msie' ? undefined : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAWCAYAAAArdgcFAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAAOnAAADnUBiCgbeAAAAAd0SU1FB9wIAgsPAyGVVyoAAAQFSURBVDjLjZVfTJNnFMZ//aQ0UVMgIi11Kngx1KUGBo0XU+bmmFnmErzRkBK2RBMUyfaV4cQ4t5GNm8UMTJTMbDSj4YI5GFmcMxvyZ4yIJJUbY5GNJv7ZQtGJNBoTL+yzC+NnugJykpO8Oe85z/u85z3vOUhiPj13tsfcX71PGzesV0ZGhgA5nU5tWF+gfXvf0089Z8yF4uc0XvjtnOkrKRbwXC1+uUjnzvaYiwL/4vNPtWTJEgHKyclRTU2Nurq6FA6HFY1GdfnyZXV3d+vgwYPKyckRIMMw9MnHR7Qg+Id1HwiQzWZTdXW1rly5omg0Oq9evXpVtbW1MgxDgGpr9mtO8OC3X5s2m01paWk6derUgqD/19OnT8tutwtQ68kTVopskgDIzl6hu3dnaGxspLKykvnk4cOHRCKRJJvD4eDatWs0NDSQkeFkdjZuA54wP1QfEKDNmzc/l6Xf70951DVr1igajaq0tFSA3q+tkSQMgO/PdAFgmmYSo4mJiRTm9+/ft9Z1dXWEQiGOHz8OQCAQAOCHrh8BMEaGB8ybN2/hcrnw+XxWYDgcZufOnfT29qYckJmZSV5eHu3t7Xi9XoqLiwHYtGkTq1evZioWY7D/V9P486/JZoDCwkJsNpsF0NLSgsfjobS0NAV86dKltLa2MjMzQygUStorKSkBYHx8otmYmooBkJubazk8evSI0dFRdu3ahcPhmPNhCwoKKCoqYmhoKMm+cuVKAGKxGGlP2SYSCcshHo+TSCRwu90poKZp8uDBAwBcLhfj4+NJ+0+rzzAM0jyeJ4ynpqYsh6ysLNLT07l+/XoK+Nq1a631jRs3Ugjcvn0bALfbhVFQ8GIAYGxsjMePHwNgt9vZtm0b3d3d3Lt3b860XLx4kUgkQllZWRLrS5cuAfDSxg0BJJGfnydA7e3tVj2fP39eDodDXq9Xg4ODSbXe0dGhrKws5efnKxKJWPbOzk4BWrXKI+v7HzvaIECFhYWanJy0nNva2rRs2TLZ7XZt3bpV5eXl8nq9ArRu3ToNDAwkHerz+QToUH1ASd8/1+1WbHqa+vp6Dhw4YF11enqaYDDIyMgI8Xgct9vNjh078Pv9SZUUDAZpamoiO3sFd+78awOegZ/p7DAr/O82AzQ1NbF7924WKz09PRw+fJhEIkHou2+orNr7rLc81cbPjln9Ys+ePVYPn0/D4bCqqqqsmKNHPtKCw6L15Ak5HOkCtHz5clVUVKitrU19fX0aGxtTf3+/gsGg/H6/nE6nANntdrV89aUWNeZGR4bMN8u2L2rMbX/9NQ3/fmHOMWflfC4ZGR4wz/78S/PQH8Pc+vsfZmfjZGZm8MIqD1u2vMI7b78V2PLqGy3zxf8Hbd5G4wGXKsEAAAAASUVORK5CYII=',
+            graphicWidth:23,
+            graphicHeight:22
         }, {
             context: {
                 getDisplay: function(feature) {
@@ -84,53 +120,72 @@ OpenLayers.Editor.Control.TransformFeature = OpenLayers.Class(OpenLayers.Control
     },
     
     activate: function(){
+        // Disable BBOX strategy since it destroys all features whilst updating data
+        for(var strategyIter=0; strategyIter<this.layer.strategies.length; strategyIter++){
+            if(this.layer.strategies[strategyIter] instanceof OpenLayers.Strategy.BBOX){
+                this.strategiesOnHold.push(this.layer.strategies[strategyIter]);
+                this.layer.strategies[strategyIter].deactivate();
+            }
+        }
+        
         var activated = OpenLayers.Control.TransformFeature.prototype.activate.call(this);
         if(this.feature===null || this.feature.geometry instanceof OpenLayers.Geometry.Point){
             // Re-render handles to hide them when control is activated initially without a feature selected so far
             this.editLayer.drawFeature(this.box, this.renderIntent);
-            this.rotationHandles.forEach(function(f){
+            var f, handleIter;
+            for(handleIter=0; handleIter<this.rotationHandles.length; handleIter++){
+                f = this.rotationHandles[handleIter];
                 this.editLayer.drawFeature(f, this.renderIntent);
-            }, this);
-            this.handles.forEach(function(f){
-                this.editLayer.drawFeature(f, this.renderIntent);
-            }, this);
-        } else {
-            // Adjust box and handles to current feature geometry. This is basically the same as a call to setFeature but setFeature does not get invoked if another control modifies the feature's geometry without switching to another feature.
-            var initialParams = {
-                rotation: 0,
-                scale: 1,
-                ratio: 1
-            };
-
-            var oldRotation = this.rotation;
-            var oldCenter = this.center;
-            OpenLayers.Util.extend(this, initialParams);
-            this._setfeature = true;
-
-            var featureBounds = this.feature.geometry.getBounds();
-            this.box.move(featureBounds.getCenterLonLat());
-            this.box.geometry.rotate(-oldRotation, oldCenter);
-            this._angle = 0;
-
-            var ll;
-            if(this.rotation) {
-                var geom = feature.geometry.clone();
-                geom.rotate(-this.rotation, this.center);
-                var box = new OpenLayers.Feature.Vector(
-                    geom.getBounds().toGeometry());
-                box.geometry.rotate(this.rotation, this.center);
-                this.box.geometry.rotate(this.rotation, this.center);
-                this.box.move(box.geometry.getBounds().getCenterLonLat());
-                var llGeom = box.geometry.components[0].components[0];
-                ll = llGeom.getBounds().getCenterLonLat();
-            } else {
-                ll = new OpenLayers.LonLat(featureBounds.left, featureBounds.bottom);
             }
-            this.handles[0].move(ll);
-            
-            delete this._setfeature;
+            for(handleIter=0; handleIter<this.handles.length; handleIter++){
+                f = this.handles[handleIter];
+                this.editLayer.drawFeature(f, this.renderIntent);
+            }
         }
+        
+        this.events.on({
+            setfeature: this.highlightTransformedFeature,
+            scope: this
+        });
         return activated;
+    },
+    
+    deactivate: function(){
+        // Re-enable strategies that have been disabled by this control
+        for(var strategyIter=0; strategyIter<this.strategiesOnHold.length; strategyIter++){
+            this.strategiesOnHold[strategyIter].activate();
+        }
+        
+        var deactivated = OpenLayers.Control.TransformFeature.prototype.deactivate.apply(this, arguments);
+        // Clear old selection to so that after re-activation the box handle geometries are calculated again
+        this.unsetFeature();
+        
+        this.events.un({
+            setfeature: this.highlightTransformedFeature,
+            scope: this
+        });
+        // Restore rendering style of highlighted feature
+        if(this.drawOriginalsFeature){
+            this.layer.drawFeature(this.drawOriginalsFeature, this.drawOriginalsRenderIntent);
+            this.drawOriginalsFeature = null;
+            this.drawOriginalsRenderIntent = null;
+        }
+        
+        return deactivated;
+    },
+    
+    /**
+     * Highlights the feature currently being transformed
+     * @param {Object} e setfeature events
+     */
+    highlightTransformedFeature: function(e){
+        if(this.drawOriginalsFeature){
+            this.layer.drawFeature(this.drawOriginalsFeature, this.drawOriginalsRenderIntent);
+        }
+        this.drawOriginalsFeature = e.feature;
+        this.drawOriginalsRenderIntent = e.feature.renderIntent;
+        
+        this.layer.drawFeature(e.feature, 'select');
     },
     
     /**
