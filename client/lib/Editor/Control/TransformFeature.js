@@ -121,7 +121,7 @@ OpenLayers.Editor.Control.TransformFeature = OpenLayers.Class(OpenLayers.Control
     
     activate: function(){
         // Disable BBOX strategy since it destroys all features whilst updating data
-        for(var strategyIter=0; strategyIter<this.layer.strategies.length; strategyIter++){
+        for(var strategyIter=0; OpenLayers.Util.isArray(this.layer.strategies) && strategyIter<this.layer.strategies.length; strategyIter++){
             if(this.layer.strategies[strategyIter] instanceof OpenLayers.Strategy.BBOX){
                 this.strategiesOnHold.push(this.layer.strategies[strategyIter]);
                 this.layer.strategies[strategyIter].deactivate();
