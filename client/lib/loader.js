@@ -18,7 +18,6 @@
         'Editor/Control/ImportFeature.js',
         'Editor/Control/LayerSettings.js',
         'Editor/Control/MergeFeature.js',
-        'Editor/Control/SaveFeature.js',
         'Editor/Control/TransformFeature.js',
         'Editor/Control/FixedAngleDrawing.js',
         'Editor/Layer.js',
