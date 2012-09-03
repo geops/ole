@@ -30,4 +30,7 @@ minified:
 	--js 'client/lib/Editor/Control/UndoRedo.js' \
 	--js 'client/lib/Editor/Control/CADTools.js' \
 	--js 'client/lib/Editor/Control/ParallelDrawing.js' \
+	--js 'client/lib/Editor/Lang/ca.js' \
+	--js 'client/lib/Editor/Lang/de.js' \
+	--js 'client/lib/Editor/Lang/en.js' \
 	--js_output_file client/examples/ole.min.js
