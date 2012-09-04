@@ -509,3 +509,7 @@ OpenLayers.Editor.Control = OpenLayers.Class(OpenLayers.Control, {
     CLASS_NAME: 'OpenLayers.Editor.Control'
 });
 
+/**
+ * Constant: VERSION_NUMBER
+ */
+OpenLayers.Editor.VERSION_NUMBER="1.0-beta1";
