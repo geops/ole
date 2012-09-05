@@ -37,9 +37,9 @@ minified:
 	--js 'client/lib/Editor/Lang/en.js' \
 	--js_output_file client/ole.min.js
 
-pack_distribution:
+pack_distribution: minified
 	rm -f $(DISTRIBUTION_NAME).zip
 	zip --recurse-paths $(DISTRIBUTION_NAME).zip client/ documentation.md features.md license.txt Makefile README.md
 	
 	rm -f $(DISTRIBUTION_NAME).tar.gz
-	tar -pcf ole-1.0-beta1.tar.gz client/ documentation.md features.md license.txt Makefile README.md
+	tar -pczf ole-1.0-beta1.tar.gz client/ documentation.md features.md license.txt Makefile README.md
