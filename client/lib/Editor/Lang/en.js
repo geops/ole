@@ -27,5 +27,8 @@ OpenLayers.Lang.en = OpenLayers.Util.extend(OpenLayers.Lang.en, {
 	"oleCADToolsDialogParallelDrawing": "Parallel Drawing",
 	"oleCADToolsDialogGuidedDrawing": "Guided Drawing",
 	"oleCADToolsDialogShowLayer": "Show Guide Lines",
-	"oleCADToolsDialogTolerance": "px tolerance"
+	"oleCADToolsDialogTolerance": "px tolerance",
+	"oleDialogCancelButton": "Cancel",
+	"oleDialogSaveButton": "Save",
+	"oleDialogOkButton": "Okay"
 });

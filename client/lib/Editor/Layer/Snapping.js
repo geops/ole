@@ -69,7 +69,7 @@ OpenLayers.Editor.Layer.Snapping = OpenLayers.Class(OpenLayers.Layer.Vector, {
             if(features[i] instanceof OpenLayers.Feature.Vector){
                 vectorFeatures[i] = features[i];
             } else {
-                vectorFeatures[i] = new OpenLayers.Feature.Vector(features[i]);
+                vectorFeatures[i] = new OpenLayers.Feature.Vector(/** @type{!OpenLayers.Geometry} */(features[i]));
             }
         }
         OpenLayers.Layer.Vector.prototype.addFeatures.call(this, vectorFeatures, options);

@@ -63,9 +63,9 @@ OpenLayers.Editor.Control.Dialog =  OpenLayers.Class(OpenLayers.Control, {
         }
 
         if (options.save) {
-            cancelButton = this.getButton('cancelButton', 'cancel', 'oleDialogCancelButton');
+            cancelButton = this.getButton(OpenLayers.i18n('oleDialogCancelButton'));
             this.dialogDiv.appendChild(cancelButton);
-            saveButton = this.getButton('saveButton', 'save', 'oleDialogSaveButton');
+            saveButton = this.getButton(OpenLayers.i18n('oleDialogSaveButton'));
             this.dialogDiv.appendChild(saveButton);
             OpenLayers.Event.observe(cancelButton, 'click', this.hide.bind(this));
             OpenLayers.Event.observe(saveButton, 'click', this.hide.bind(this));
@@ -74,7 +74,7 @@ OpenLayers.Editor.Control.Dialog =  OpenLayers.Class(OpenLayers.Control, {
                 OpenLayers.Event.observe(cancelButton, 'click', options.cancel.bind(this));
             }
         } else if (!options.toolbox) {
-            okButton = this.getButton('okButton', 'save', 'oleDialogOkButton');
+            okButton = this.getButton(OpenLayers.i18n('oleDialogOkButton'));
             this.dialogDiv.appendChild(okButton);
 
             if (options.close) {
@@ -110,13 +110,17 @@ OpenLayers.Editor.Control.Dialog =  OpenLayers.Class(OpenLayers.Control, {
         OpenLayers.Event.stop(event, true);
     },
 
-    getButton: function(id, name, value) {
+    /**
+     * Instantiates a button
+     * @param {string} value Value and text on button
+     * @return {!HTMLButtonElement}
+     */
+    getButton: function(value) {
         var button = document.createElement('input');
-        button.id = id;
-        button.name = name;
-        button.value = OpenLayers.i18n(value);
+        button.value = value;
         button.type = 'button';
         OpenLayers.Element.addClass(button, this.buttonClass);
+        /** @type {!HTMLButtonElement} */
         return button;
     },
 
