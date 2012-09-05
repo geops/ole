@@ -1,3 +1,5 @@
+DISTRIBUTION_NAME = ole-1.0-beta1
+
 # Minifies OLE using Closure Compiler
 minified:
 	java -jar closurecompiler.jar \
@@ -33,4 +35,11 @@ minified:
 	--js 'client/lib/Editor/Lang/ca.js' \
 	--js 'client/lib/Editor/Lang/de.js' \
 	--js 'client/lib/Editor/Lang/en.js' \
-	--js_output_file client/examples/ole.min.js
+	--js_output_file client/ole.min.js
+
+pack_distribution:
+	rm -f $(DISTRIBUTION_NAME).zip
+	zip --recurse-paths $(DISTRIBUTION_NAME).zip client/ documentation.md features.md license.txt Makefile README.md
+	
+	rm -f $(DISTRIBUTION_NAME).tar.gz
+	tar -pcf ole-1.0-beta1.tar.gz client/ documentation.md features.md license.txt Makefile README.md
