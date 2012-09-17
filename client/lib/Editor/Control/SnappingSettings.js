@@ -74,6 +74,10 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
         this.toleranceInput.size = 4;
         this.toleranceInput.value = this.tolerance;
         content.appendChild(this.toleranceInput);
+        
+        content.appendChild(document.createTextNode(
+            OpenLayers.i18n('olePixelUnit')
+        ));
 
         layerHeader = document.createElement('h4');
         layerHeader.innerHTML = OpenLayers.i18n('oleSnappingSettingsLayer');

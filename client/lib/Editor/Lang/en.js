@@ -17,6 +17,7 @@ OpenLayers.Lang.en = OpenLayers.Util.extend(OpenLayers.Lang.en, {
 	"oleMergeFeatureSelectFeature": "Please select at least 2 geometries.",
 	"oleModifyFeature": "Modify geometry",
 	"oleNavigation": "Navigation",
+    "olePixelUnit": "px",
 	"oleSelectFeature": "Select geometry",
 	"oleSnappingSettings": "Snapping settings",
 	"oleSnappingSettingsLayer": "Snapping layer",
