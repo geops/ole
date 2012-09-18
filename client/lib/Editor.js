@@ -153,14 +153,16 @@ OpenLayers.Editor = OpenLayers.Class({
 
         this.id = OpenLayers.Util.createUniqueID('OpenLayers.Editor_');
 
-        if(options.editLayer){
+        if (options.editLayer) {
             this.editLayer = options.editLayer
         } else {
             this.editLayer = new OpenLayers.Layer.Vector('Editor', {
                 displayInLayerSwitcher: false
             });
         }
-        if(!options.styleMap){
+        if (options.styleMap) {
+            this.editLayer.styleMap = options.styleMap;
+        } else {
             this.editLayer.styleMap = new OpenLayers.StyleMap({
                 'default': new OpenLayers.Style({
                     fillColor: '#07f',
