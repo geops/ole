@@ -150,7 +150,11 @@ OpenLayers.Editor.Control.TransformFeature = OpenLayers.Class(OpenLayers.Control
         return activated;
     },
     
-    deactivate: function(){
+    deactivate: function () {
+        this._moving = true;
+        this.box.geometry.rotate(-this.rotation, this.center);
+        delete this._moving;
+        
         // Re-enable strategies that have been disabled by this control
         for(var strategyIter=0; strategyIter<this.strategiesOnHold.length; strategyIter++){
             this.strategiesOnHold[strategyIter].activate();
