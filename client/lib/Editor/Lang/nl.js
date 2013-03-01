@@ -14,7 +14,7 @@ OpenLayers.Lang.nl = OpenLayers.Util.extend(OpenLayers.Lang.nl, {
 	"olelayerSettingsLegendHeader": "Legenda",
 	"olelayerSettingsOpacityHeader": "Ondoorzichtigheid (%)",
 	"oleMergeFeature": "Combineer geselecteerde geometrie",
-	"oleMergeFeatureSelectFeature": "Selecteer tenminste 2 geometrie‘n.",
+	"oleMergeFeatureSelectFeature": "Selecteer tenminste 2 geometrieâ€˜n.",
 	"oleModifyFeature": "Geometrie wijzigen",
 	"oleNavigation": "Navigatie",
     "olePixelUnit": "px",
