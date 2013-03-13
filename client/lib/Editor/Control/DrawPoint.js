@@ -13,6 +13,7 @@
 OpenLayers.Editor.Control.DrawPoint = OpenLayers.Class(OpenLayers.Control.DrawFeature, {
 
     title: OpenLayers.i18n('oleDrawPoint'),
+	featureType: 'point',
 
     /**
      * Constructor: OpenLayers.Editor.Control.DrawPath
@@ -42,7 +43,11 @@ OpenLayers.Editor.Control.DrawPoint = OpenLayers.Class(OpenLayers.Control.DrawFe
     drawFeature: function (geometry) {
         var feature = new OpenLayers.Feature.Vector(geometry),
             proceed = this.layer.events.triggerEvent('sketchcomplete', {feature: feature});
+
+		feature.featureType = this.featureType;
+
         if (proceed !== false) {
+			this.events.triggerEvent('beforefeatureadded', {feature : feature});
             feature.state = OpenLayers.State.INSERT;
             this.layer.addFeatures([feature]);
             this.featureAdded(feature);

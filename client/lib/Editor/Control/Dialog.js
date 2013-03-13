@@ -65,13 +65,17 @@ OpenLayers.Editor.Control.Dialog =  OpenLayers.Class(OpenLayers.Control, {
         if (options.save) {
             cancelButton = this.getButton(OpenLayers.i18n('oleDialogCancelButton'));
             this.dialogDiv.appendChild(cancelButton);
-            saveButton = this.getButton(OpenLayers.i18n('oleDialogSaveButton'));
+            saveButton = this.getButton(OpenLayers.i18n(options.saveButtonText? options.saveButtonText : 'oleDialogSaveButton'));
             this.dialogDiv.appendChild(saveButton);
-            OpenLayers.Event.observe(cancelButton, 'click', this.hide.bind(this));
-            OpenLayers.Event.observe(saveButton, 'click', this.hide.bind(this));
-            OpenLayers.Event.observe(saveButton, 'click', options.save.bind(this));
+            OpenLayers.Event.observe(cancelButton, 'click', OpenLayers.Function.bind(this.hide, this));
+
+			// In some cases the Dialog client will hide the dialog div
+			if (!options.noHideOnSave) {
+            	OpenLayers.Event.observe(saveButton, 'click', OpenLayers.Function.bind(this.hide, this));
+            }
+            OpenLayers.Event.observe(saveButton, 'click', options.save);
             if (options.cancel) {
-                OpenLayers.Event.observe(cancelButton, 'click', options.cancel.bind(this));
+                OpenLayers.Event.observe(cancelButton, 'click', options.cancel);
             }
         } else if (!options.toolbox) {
             okButton = this.getButton(OpenLayers.i18n('oleDialogOkButton'));
