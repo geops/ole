@@ -5,6 +5,7 @@
     var path = src.substring(0, src.lastIndexOf("/") + 1);
 
     var files = [
+		'compat.js',
         'Editor.js',
         'Editor/Control/CleanFeature.js',
         'Editor/Control/DragFeature.js',

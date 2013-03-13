@@ -10,6 +10,7 @@ minified:
 	--jscomp_warning=duplicate \
 	--jscomp_warning=invalidCasts \
 	--externs client/lib/externs.js \
+	--js 'client/lib/compat.js' \
 	--js 'client/lib/Editor.js' \
 	--js 'client/lib/Editor/Control/CleanFeature.js' \
 	--js 'client/lib/Editor/Control/DragFeature.js' \
