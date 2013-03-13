@@ -8,7 +8,7 @@
 
     editor = new OpenLayers.Editor(map, {
         activeControls: ['SnappingSettings', 'SplitFeature', 'MergeFeature', 'CleanFeature'],
-        featureTypes: ['polygon', 'path', 'point']
+        featureTypes: ['polygon', 'path', 'point', 'text']
     });
     editor.startEditMode();
 
