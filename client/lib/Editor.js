@@ -188,7 +188,7 @@ OpenLayers.Editor = OpenLayers.Class({
 					labelAlign: "cm",
 					labelXOffset: "${xOffset}",
 					labelYOffset: "${yOffset}",
-					labelOutlineColor: "white",
+					labelOutlineColor: 'white',
 					labelOutlineWidth: 4,
 					labelSelect: true
 				}),
@@ -209,7 +209,7 @@ OpenLayers.Editor = OpenLayers.Class({
 					labelYOffset: "${yOffset}",
 					fillColor: '#fc0',
 					strokeColor: '#f70',
-					labelOutlineColor: "#fc0",
+					labelOutlineColor: '#fc0',
 					labelOutlineWidth: 6,
 					graphicZIndex: 2
 				}),

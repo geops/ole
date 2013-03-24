@@ -49,8 +49,15 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
         this.title = OpenLayers.i18n('oleSnappingSettings');
     },
 
+	deactivate: function () {
+		OpenLayers.Control.Button.prototype.deactivate.call(this);
+		if (this.map && this.map.editor && this.map.editor.dialog) {
+			this.map.editor.dialog.hide();
+		}
+	},
+
     onDeactivate: function() {
-        if(this.snapping.active) {
+        if (this.snapping.active) {
             this.activate();
         }
     },
@@ -90,7 +97,6 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
             title: OpenLayers.i18n('oleSnappingSettings'),
             close: OpenLayers.Function.bind(this.changeSnapping, this)
         });
-
         this.redraw();
     },
 
@@ -153,7 +159,6 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
     },
 
     changeSnapping: function() {
-
         this.tolerance = parseInt(this.toleranceInput.value, 10);
 
         if(this.snappingLayers.length > 0) {

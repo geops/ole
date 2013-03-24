@@ -81,12 +81,11 @@ OpenLayers.Editor.Control.Dialog =  OpenLayers.Class(OpenLayers.Control, {
             okButton = this.getButton(OpenLayers.i18n('oleDialogOkButton'));
             this.dialogDiv.appendChild(okButton);
 
+			OpenLayers.Event.observe(okButton, 'click', OpenLayers.Function.bind(this.hide, this));
             if (options.close) {
                 OpenLayers.Event.observe(okButton, 'click', options.close);
             }
-
-            OpenLayers.Event.observe(okButton, 'click', OpenLayers.Function.bind(this.hide, this));
-        }
+         }
 
         // Add class to text input elements.
         var inputElements = this.dialogDiv.getElementsByTagName('input');
@@ -106,8 +105,15 @@ OpenLayers.Editor.Control.Dialog =  OpenLayers.Class(OpenLayers.Control, {
     },
 
     hide: function () {
-        this.map.viewPortDiv.removeChild(this.dialogDiv);
-        OpenLayers.Element.removeClass(this.div, 'oleFadeMap');
+		// Clients may call hide from different internal states
+		// Do some defensive checks here...
+		if (!this.dialogDiv) {
+			return;
+		}
+
+		this.map.viewPortDiv.removeChild(this.dialogDiv);
+		OpenLayers.Element.removeClass(this.div, 'oleFadeMap');
+		this.dialogDiv = null;
     },
 
     ignoreEvent: function (event) {

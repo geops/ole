@@ -37,7 +37,8 @@ OpenLayers.Editor.Control.UploadFeature = OpenLayers.Class(OpenLayers.Control, {
 	 */
 	params: {
 		action: 'upload',
-		mime: 'text/html'
+		mime: 'text/html',
+		encoding: 'escape'
 	},
 
 	/**
@@ -91,9 +92,32 @@ OpenLayers.Editor.Control.UploadFeature = OpenLayers.Class(OpenLayers.Control, {
 	},
 
 	/**
+	 * Clean up .
+	 */
+	cleanUp: function (self) {
+		self.map.editor.dialog.hide();
+		if (!self.iframe) {
+			return;
+		}
+		self.removeIFrame();
+	},
+	/**
+	 * Creates and pops up file chooser Dialog.
+	 */
+	delayedOpenDialog: function () {
+		var self = this;
+		setTimeout(function () {
+			self.openDialog();
+		}, 200);
+
+	},
+
+	/**
 	 * Creates and pops up file chooser Dialog.
 	 */
 	openDialog: function () {
+		// this.cleanUp(this);
+
 		// Create content div for Dialog
 		var content = document.createElement("div");
 
@@ -149,22 +173,16 @@ OpenLayers.Editor.Control.UploadFeature = OpenLayers.Class(OpenLayers.Control, {
 		// Add Form to content
 		content.appendChild(formElm);
 
-		// Show the upload Dialog. We do Form-submit ourselves.
-		this.map.editor.dialog.show({
-			title: OpenLayers.i18n('oleUploadFeature'),
-			content: content,
-			save: OpenLayers.Function.bind(this.uploadFeature, this),
-			cancel: OpenLayers.Function.bind(this.cancel, this),
-			saveButtonText: 'oleDialogOkButton',
-			noHideOnSave: true
-		});
+		this.showUploadDialog(content);
 
 		// Set format selector on selected format if file chosen based on file extension
-		document.getElementById('oleFile').onchange = function(e) {
-			if (this.files && this.files.length == 1) {
-				var fnameArr = this.files[0].name.split('.');
+		var self = this;
+		document.getElementById('oleFile').onchange = function (e) {
+			var fileName = self.fileInputValue(this);
+			if (fileName) {
+				var fnameArr = fileName.split('.');
 				if (fnameArr.length > 1) {
-					var ext = '.' + fnameArr[fnameArr.length-1].toLowerCase();
+					var ext = '.' + fnameArr[fnameArr.length - 1].toLowerCase();
 					// Find option with .ext file extension
 					var selectElm = document.getElementById('format_select');
 					var options = selectElm.options;
@@ -183,22 +201,28 @@ OpenLayers.Editor.Control.UploadFeature = OpenLayers.Class(OpenLayers.Control, {
 	/**
 	 * Show message via Dialog.
 	 */
-	showMessage: function (content) {
+	showMessage: function (content, close) {
 		this.map.editor.dialog.show({
 			title: OpenLayers.i18n('oleUploadFeature'),
-			content: content
+			content: content,
+			close: close
 		});
 	},
 
 	/**
-	 * Clean up .
+	 * Show file upload Dialog.
+	 * @param {!HTMLElement} content - HTML (form) content for the Dialog
 	 */
-	cleanUp: function (self) {
-		if (!this.iframe) {
-			return;
-		}
-		self.removeIFrame();
-		self.map.editor.dialog.hide();
+	showUploadDialog: function (content) {
+		// Show the upload Dialog. We do Form-submit ourselves.
+		this.map.editor.dialog.show({
+			title: OpenLayers.i18n('oleUploadFeature'),
+			content: content,
+			save: OpenLayers.Function.bind(this.uploadFeature, this),
+			cancel: OpenLayers.Function.bind(this.cancel, this),
+			saveButtonText: 'oleDialogOkButton',
+			noHideOnSave: true
+		});
 	},
 
 	/**
@@ -284,9 +308,9 @@ OpenLayers.Editor.Control.UploadFeature = OpenLayers.Class(OpenLayers.Control, {
 	uploadFeature: function () {
 		// At least one file needs to be specified
 		var fileInputElm = document.getElementById('oleFile');
-		if (fileInputElm.files && fileInputElm.files.length != 1) {
-			this.deactivate();
-			this.showMessage(OpenLayers.i18n('oleUploadFeatureNoFile'));
+		if (!this.fileInputValue(fileInputElm)) {
+			this.cleanUp(this);
+			this.showMessage(OpenLayers.i18n('oleUploadFeatureNoFile'), OpenLayers.Function.bind(this.delayedOpenDialog, this));
 			return;
 		}
 
@@ -313,6 +337,14 @@ OpenLayers.Editor.Control.UploadFeature = OpenLayers.Class(OpenLayers.Control, {
 				content = iframe.contentWindow.document.body.innerHTML;
 			} else if (iframe.document) {
 				content = iframe.document.body.innerHTML;
+			}
+
+			// We normally use HTML-escaping, needed otherwise the iframe will garble GML (converting tags to lowercase)
+			if (content && self.params.encoding == 'escape') {
+				content = content.replace(/&quot;/g, '"')
+						.replace(/&gt;/g, '>')
+						.replace(/&lt;/g, '<')
+						.replace(/&amp;/g, '&')
 			}
 
 			var features = self.parseFeatures(content);
@@ -363,5 +395,17 @@ OpenLayers.Editor.Control.UploadFeature = OpenLayers.Class(OpenLayers.Control, {
 		return parentElm;
 	},
 
+	/**
+	 * Get the filename value from a File Input element
+	 * @param {!HTMLElement} fileElm file input Element
+	 * @return {string}
+	 */
+	fileInputValue: function (fileElm) {
+		if (fileElm.files) {
+			return fileElm.files.length == 1 ? fileElm.files[0].name : null;
+		} else {
+			return fileElm.value;
+		}
+	},
 	CLASS_NAME: "OpenLayers.Editor.Control.UploadFeature"
 });

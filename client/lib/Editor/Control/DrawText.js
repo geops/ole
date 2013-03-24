@@ -46,6 +46,22 @@ OpenLayers.Editor.Control.DrawText = OpenLayers.Class(OpenLayers.Editor.Control.
 		});
 	},
 
+	deactivate: function () {
+		var deactivated = OpenLayers.Control.Button.prototype.deactivate.call(this);
+		if (this.popup && this.popup.feature) {
+			var feature = this.popup.feature;
+			// remove and destroy Popup
+			if (feature.layer) {
+				feature.layer.map.removePopup(feature.popup);
+				feature.layer.removeFeatures([feature]);
+			}
+			feature.popup.destroy();
+			feature.popup = null;
+
+			this.popup = null;
+		}
+	},
+
 	/**
 	 * Assign text to feature and redraw.
 	 *
@@ -68,6 +84,8 @@ OpenLayers.Editor.Control.DrawText = OpenLayers.Class(OpenLayers.Editor.Control.
 	 * feature - {<OpenLayers.Feature.Vector>} the Vector feature.
 	 */
 	removePopup: function (feature) {
+		this.popup = null;
+
 		if (!feature.popup) {
 			return;
 		}
@@ -90,14 +108,17 @@ OpenLayers.Editor.Control.DrawText = OpenLayers.Class(OpenLayers.Editor.Control.
 	 * evt - {Object} event object (unused)
 	 */
 	onPopupClose: function (evt) {
+		this.popup = null;
+
 		// 'this' is the Popup.
 		var feature = this.feature;
 		if (!feature) {
 			return false;
 		}
 
-		var editControl = feature.editControl;
-		if (!editControl) {
+		// 'self' is the DrawText Control.
+		var self = feature.editControl;
+		if (!self) {
 			return false;
 		}
 
@@ -105,8 +126,8 @@ OpenLayers.Editor.Control.DrawText = OpenLayers.Class(OpenLayers.Editor.Control.
 		var labelInput = document.getElementById('olLabelInput');
 
 		// Assign Popup-text to feature attribute 'label' and close Popup
-		editControl.setLabelText(feature, labelInput.value);
-		editControl.removePopup(feature);
+		self.setLabelText(feature, labelInput.value);
+		self.removePopup(feature);
 
 		// Feature does not exist without text: delete in that case
 		if (!labelInput.value) {
@@ -192,7 +213,7 @@ OpenLayers.Editor.Control.DrawText = OpenLayers.Class(OpenLayers.Editor.Control.
 		var labelInput = document.getElementById('olLabelInput');
 		var self = this;
 		labelInput.onkeypress = function (event) {
-			var keyCode = ('which' in event) ? event.which : event.keyCode;
+			var keyCode = window.event ? window.event.keyCode : event.keyCode;
 			if (keyCode == 13) {
 				self.setLabelText(feature, labelInput.value);
 				self.removePopup(feature);
@@ -200,6 +221,7 @@ OpenLayers.Editor.Control.DrawText = OpenLayers.Class(OpenLayers.Editor.Control.
 		};
 
 		labelInput.focus();
+		this.popup = popup;
 	},
 
 	CLASS_NAME: 'OpenLayers.Editor.Control.DrawText'
