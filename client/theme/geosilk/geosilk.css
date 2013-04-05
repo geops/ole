@@ -45,10 +45,11 @@
     position: absolute;
 }
 .oleDialog {
+    cursor: auto;
     background-color: white;
     margin: auto;
     position: relative;
-    width: 400px;
+    width: 300px;
     z-index: 11000;
     padding: 10px 20px;
     top: 50px;
@@ -63,12 +64,17 @@
     margin-bottom:0;
 }
 
+.oleDialog .oleDrawRegularIrregular {
+    float: right;
+}
+
 /**
  * Active control
  */
 .olEditorControlEditorPanel .olControlNavigationItemActive,
 .olEditorControlEditorPanel .olControlModifyFeatureItemActive,
 .olEditorControlEditorPanel .olEditorControlSplitFeatureItemActive,
+.olEditorControlEditorPanel .olEditorControlDrawRegularItemActive,
 .olEditorControlEditorPanel .olEditorControlDrawPolygonItemActive,
 .olEditorControlEditorPanel .olEditorControlDrawPathItemActive,
 .olEditorControlEditorPanel .olEditorControlDrawPointItemActive,
@@ -131,8 +137,17 @@
     background-image: url("img/drawPolygon.png");
 }
 
+/**
+ * Draw Polygon
+ */
+.olEditorControlEditorPanel .olEditorControlDrawRegularItemActive,
+.olEditorControlEditorPanel .olEditorControlDrawRegularItemInactive {
+    background-image: url("img/drawRegular.png");
+}
+
 .olEditorControlDrawPointActive,
 .olEditorControlDrawPathActive,
+.olEditorControlDrawRegularActive,
 .olEditorControlDrawPolygonActive {
     cursor: crosshair;
 }

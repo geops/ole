@@ -18,8 +18,8 @@
             map.setCenter(new OpenLayers.LonLat(10, 50), 5);
 
             editor = new OpenLayers.Editor(map, {
-                activeControls: ['Navigation', 'SnappingSettings', 'CADTools', 'Separator', 'DeleteFeature', 'DragFeature', 'SelectFeature', 'Separator', 'DrawHole', 'ModifyFeature', 'Separator'],
-                featureTypes: ['polygon', 'path', 'point']
+                activeControls: ['Navigation', 'SnappingSettings', 'CADTools', 'TransformFeature', 'Separator', 'DeleteFeature', 'DragFeature', 'SelectFeature', 'Separator', 'DrawHole', 'ModifyFeature', 'Separator'],
+                featureTypes: ['regular', 'polygon', 'path', 'point']
             });
             editor.startEditMode();
         }
