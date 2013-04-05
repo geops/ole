@@ -40,11 +40,6 @@ OpenLayers.Editor.Control.CADTools = OpenLayers.Class(OpenLayers.Control.Button,
      */
     snappingControl: null,
 
-    /**
-     * @var {Array} List of sides available to the regular drawing option. Values above 20 will be handled as circle.
-     */
-    regularDrawingSides: [3,4,5,6,40],
-
     initialize: function(layer, options) {
 
         this.layer = layer;
@@ -67,14 +62,6 @@ OpenLayers.Editor.Control.CADTools = OpenLayers.Class(OpenLayers.Control.Button,
         if(activated) {
             this.snappingControl.activate();
         }
-
-        this.drawPolygon = this.map.getControlsByClass('OpenLayers.Editor.Control.DrawPolygon')[0];
-        if (!this.regularPolygonHandler && this.drawPolygon) {
-            this.polygonHandler = this.drawPolygon.handler;
-            this.regularPolygonHandler = new OpenLayers.Handler.RegularPolygon(
-                this.drawPolygon, this.drawPolygon.callbacks, this.drawPolygon.handlerOptions);
-        }
-
         return activated;
     },
 
@@ -203,69 +190,6 @@ OpenLayers.Editor.Control.CADTools = OpenLayers.Class(OpenLayers.Control.Button,
             element.appendChild(document.createTextNode(OpenLayers.i18n('oleCADToolsDialogTolerance')));
             toleranceSetting.appendChild(element);
             settings.appendChild(toleranceSetting);
-
-            // Regular drawing only available if drawPolygonControl is present.
-            if (this.drawPolygon && this.regularDrawingSides.length > 0) {
-
-                regularDrawingHeader = document.createElement('h4');
-                regularDrawingHeader.innerHTML = OpenLayers.i18n('oleCADToolsDialogRegularDrawing');
-                settings.appendChild(regularDrawingHeader);
-
-                var regularSetting = document.createElement('p');
-                var sidesSelect = document.createElement('select');
-                sidesSelect.id = 'oleCADToolsDialogSides';
-                element = document.createElement('option');
-                element.value = '0';
-                element.text = '-';
-                sidesSelect.appendChild(element);
-
-                for(var i = 0; i < this.regularDrawingSides.length; ++i) {
-                    element = document.createElement('option');
-                    element.value = this.regularDrawingSides[i];
-                    if (this.regularDrawingSides[i] < 20) {
-                        element.text = OpenLayers.i18n('oleCADToolsDialogRegularDrawingSides'+this.regularDrawingSides[i]);
-                    } else {
-                        element.text = OpenLayers.i18n('oleCADToolsDialogRegularDrawingCircle');
-                    }
-                    sidesSelect.appendChild(element);
-                }
-
-                OpenLayers.Event.observe(sidesSelect, 'change', OpenLayers.Function.bind(function(event){
-                    var sides = parseInt(event.target.value);
-                    if (sides > 0) {
-                        this.polygonHandler.deactivate();
-                        this.regularPolygonHandler.setOptions({sides: sides});
-                        this.drawPolygon.handler = this.regularPolygonHandler;
-                    } else {
-                        this.regularPolygonHandler.deactivate();
-                        this.drawPolygon.handler = this.polygonHandler;
-                    }
-                    if (this.drawPolygon.active) {
-                        this.drawPolygon.deactivate();
-                        this.drawPolygon.activate();
-                    }
-                }, this));
-                regularSetting.appendChild(sidesSelect);
-
-                element = document.createElement('label');
-                element.htmlFor = 'oleCADToolsDialogSides';
-                element.appendChild(document.createTextNode(OpenLayers.i18n('oleCADToolsDialogRegularDrawingShape')));
-                regularSetting.appendChild(element);
-                settings.appendChild(regularSetting);
-
-                regularSetting = document.createElement('p');
-                element = document.createElement('input');
-                element.type = 'checkbox';
-                element.id = 'oleCADToolsDialogIrregular';
-                element.value = 'true';
-                regularSetting.appendChild(element);
-
-                element = document.createElement('label');
-                element.htmlFor = 'oleCADToolsDialogIrregular';
-                element.appendChild(document.createTextNode(OpenLayers.i18n('oleCADToolsDialogRegularDrawingIrregular')));
-                regularSetting.appendChild(element);
-                settings.appendChild(regularSetting);
-            }
 
             content.appendChild(settings);
             this.map.editor.dialog.show({

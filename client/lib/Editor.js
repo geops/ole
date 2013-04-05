@@ -78,7 +78,7 @@ OpenLayers.Editor = OpenLayers.Class({
      * {Array} Contains names of all available editor controls. In particular
      *   this information is needed by this EditorPanel.
      */
-    editorControls: ['CleanFeature', 'DeleteFeature', 'Dialog', 'DrawHole', 
+    editorControls: ['CleanFeature', 'DeleteFeature', 'Dialog', 'DrawHole', 'DrawRegular',
         'DrawPolygon', 'DrawPath', 'DrawPoint', 'EditorPanel', 'ImportFeature',
         'MergeFeature', 'SnappingSettings', 'SplitFeature', 'CADTools',
         'TransformFeature'],
@@ -87,7 +87,7 @@ OpenLayers.Editor = OpenLayers.Class({
      * Geometry types available for editing
      * {Array}
      */
-    featureTypes: ['point', 'path', 'polygon'],
+    featureTypes: ['point', 'path', 'polygon', 'regular'],
 
     /**
      * Property: sourceLayers
@@ -209,6 +209,9 @@ OpenLayers.Editor = OpenLayers.Class({
             }
             else if (this.featureTypes[i] == 'point') {
                 this.activeControls.push('DrawPoint');
+            }
+            else if (this.featureTypes[i] == 'regular') {
+                this.activeControls.push('DrawRegular');
             }
         }
 
