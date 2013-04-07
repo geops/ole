@@ -17,6 +17,7 @@
         'Editor/Control/DrawPath.js',
         'Editor/Control/DrawPoint.js',
 		'Editor/Control/DrawText.js',
+        'Editor/Control/DrawRegular.js',
         'Editor/Control/EditorPanel.js',
         'Editor/Control/ImportFeature.js',
         'Editor/Control/LayerSettings.js',

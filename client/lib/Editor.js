@@ -78,7 +78,7 @@ OpenLayers.Editor = OpenLayers.Class({
 	 * {Array} Contains names of all available editor controls. In particular
 	 *   this information is needed by this EditorPanel.
 	 */
-	editorControls: ['CleanFeature', 'DeleteFeature', 'DeleteAllFeatures', 'Dialog', 'DrawHole',
+	editorControls: ['CleanFeature', 'DeleteFeature', 'DeleteAllFeatures', 'Dialog', 'DrawHole', 'DrawRegular',
 		'DrawPolygon', 'DrawPath', 'DrawPoint', 'DrawText', 'EditorPanel', 'ImportFeature',
 		'MergeFeature', 'SnappingSettings', 'SplitFeature', 'CADTools',
 		'TransformFeature'],
@@ -87,7 +87,7 @@ OpenLayers.Editor = OpenLayers.Class({
 	 * Geometry types available for editing
 	 * {Array}
 	 */
-	featureTypes: ['text', 'point', 'path', 'polygon'],
+	featureTypes: ['text', 'point', 'path', 'polygon', 'regular'],
 
 	/**
 	 * Property: sourceLayers
@@ -160,7 +160,6 @@ OpenLayers.Editor = OpenLayers.Class({
 				displayInLayerSwitcher: false
 			});
 		}
-
 		if (options.styleMap) {
 			this.editLayer.styleMap = options.styleMap;
 		} else {
@@ -173,31 +172,7 @@ OpenLayers.Editor = OpenLayers.Class({
 					graphicZIndex: 1,
 					pointRadius: 5
 				}),
-//				backgroundGraphic: "${getBackgroundGraphic}",
-//    backgroundWidth: "${getBackgroundWidth}",
-//    backgroundHeight: "${getBackgroundHeight}",
-//    backgroundGraphicZIndex: 10,
-//    backgroundXOffset: "${getBackgroundXOffset}",
-//    backgroundYOffset: "${getBackgroundYOffset}",
-//    externalGraphic: "${getExternalGraphic}",
-//    graphicWidth: "${getGraphicWidth}",
-//    graphicHeight: "${getGraphicHeight}",
-//    graphicZIndex: 11,
-//
-//    cursor: 'default',
-//
-//    label: "${getLabel}",
-//    labelAlign: "lt",
-//    labelXOffset: "-16",
-//    labelYOffset: "-20",
-//
-//    fontColor: "black",
-//    fontSize: "${getFontSize}",
-//    fontFamily: "'Arial'",
-//    fontWeight: "bold",
-//
-//    labelOutlineColor: "#FFFFC0",
-//    labelOutlineWidth: 4
+
 				'defaultLabel': new OpenLayers.Style({
 					fillColor: '#07f',
 					fillOpacity: 0.8,
@@ -271,6 +246,9 @@ OpenLayers.Editor = OpenLayers.Class({
 			}
 			else if (this.featureTypes[i] == 'point') {
 				this.activeControls.push('DrawPoint');
+			}
+			else if (this.featureTypes[i] == 'regular') {
+				this.activeControls.push('DrawRegular');
 			}
 			else if (this.featureTypes[i] == 'text') {
 				this.activeControls.push('DrawText');
@@ -390,6 +368,7 @@ OpenLayers.Editor = OpenLayers.Class({
 			}
 
 			switch (control) {
+
 				case 'Separator':
 					controls.push(new OpenLayers.Control.Button({
 						displayClass: 'olControlSeparator'
