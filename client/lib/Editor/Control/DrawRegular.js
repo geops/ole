@@ -105,7 +105,7 @@ OpenLayers.Editor.Control.DrawRegular = OpenLayers.Class(OpenLayers.Control.Draw
     deactivate: function() {
         var deactivated = OpenLayers.Control.Button.prototype.deactivate.call(this);
 
-        if(deactivated) {
+        if (deactivated && typeof this.map.editor.dialog.hide == 'function') {
             this.map.editor.dialog.hide();
         }
 
