@@ -142,7 +142,7 @@ OpenLayers.Editor.Control.DrawText = OpenLayers.Class(OpenLayers.Editor.Control.
      * feature - {<OpenLayers.Feature.Vector>} the Vector feature.
      */
     isTextFeature: function (feature) {
-        return feature ? feature.featureType && feature.featureType == 'text' : false;
+        return feature ? feature.featureType === 'text' : false;
     },
 
     /**
