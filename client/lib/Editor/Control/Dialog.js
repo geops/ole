@@ -11,7 +11,7 @@
  * Inherits from:
  *  - <OpenLayers.Control>
  */
-OpenLayers.Editor.Control.Dialog =  OpenLayers.Class(OpenLayers.Control, {
+OpenLayers.Editor.Control.Dialog = OpenLayers.Class(OpenLayers.Control, {
 
     dialogDiv: null,
 
@@ -65,13 +65,13 @@ OpenLayers.Editor.Control.Dialog =  OpenLayers.Class(OpenLayers.Control, {
         if (options.save) {
             cancelButton = this.getButton(OpenLayers.i18n('oleDialogCancelButton'));
             this.dialogDiv.appendChild(cancelButton);
-            saveButton = this.getButton(OpenLayers.i18n(options.saveButtonText? options.saveButtonText : 'oleDialogSaveButton'));
+            saveButton = this.getButton(OpenLayers.i18n(options.saveButtonText ? options.saveButtonText : 'oleDialogSaveButton'));
             this.dialogDiv.appendChild(saveButton);
             OpenLayers.Event.observe(cancelButton, 'click', OpenLayers.Function.bind(this.hide, this));
 
-			// In some cases the Dialog client will hide the dialog div
-			if (!options.noHideOnSave) {
-            	OpenLayers.Event.observe(saveButton, 'click', OpenLayers.Function.bind(this.hide, this));
+            // In some cases the Dialog client will hide the dialog div
+            if (!options.noHideOnSave) {
+                OpenLayers.Event.observe(saveButton, 'click', OpenLayers.Function.bind(this.hide, this));
             }
             OpenLayers.Event.observe(saveButton, 'click', options.save);
             if (options.cancel) {
@@ -81,11 +81,11 @@ OpenLayers.Editor.Control.Dialog =  OpenLayers.Class(OpenLayers.Control, {
             okButton = this.getButton(OpenLayers.i18n('oleDialogOkButton'));
             this.dialogDiv.appendChild(okButton);
 
-			OpenLayers.Event.observe(okButton, 'click', OpenLayers.Function.bind(this.hide, this));
+            OpenLayers.Event.observe(okButton, 'click', OpenLayers.Function.bind(this.hide, this));
             if (options.close) {
                 OpenLayers.Event.observe(okButton, 'click', options.close);
             }
-         }
+        }
 
         // Add class to text input elements.
         var inputElements = this.dialogDiv.getElementsByTagName('input');
@@ -105,15 +105,15 @@ OpenLayers.Editor.Control.Dialog =  OpenLayers.Class(OpenLayers.Control, {
     },
 
     hide: function () {
-		// Clients may call hide from different internal states
-		// Do some defensive checks here...
-		if (!this.dialogDiv) {
-			return;
-		}
+        // Clients may call hide from different internal states
+        // Do some defensive checks here...
+        if (!this.dialogDiv) {
+            return;
+        }
 
-		this.map.viewPortDiv.removeChild(this.dialogDiv);
-		OpenLayers.Element.removeClass(this.div, 'oleFadeMap');
-		this.dialogDiv = null;
+        this.map.viewPortDiv.removeChild(this.dialogDiv);
+        OpenLayers.Element.removeClass(this.div, 'oleFadeMap');
+        this.dialogDiv = null;
     },
 
     ignoreEvent: function (event) {
@@ -125,7 +125,7 @@ OpenLayers.Editor.Control.Dialog =  OpenLayers.Class(OpenLayers.Control, {
      * @param {string} value Value and text on button
      * @return {!HTMLButtonElement}
      */
-    getButton: function(value) {
+    getButton: function (value) {
         var button = document.createElement('input');
         button.value = value;
         button.type = 'button';

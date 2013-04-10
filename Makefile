@@ -20,6 +20,7 @@ minified:
 	--js 'client/lib/Editor/Control/DrawPolygon.js' \
 	--js 'client/lib/Editor/Control/DrawPath.js' \
 	--js 'client/lib/Editor/Control/DrawPoint.js' \
+    --js 'client/lib/Editor/Control/DrawRegular.js' \
 	--js 'client/lib/Editor/Control/DeleteAllFeatures.js' \
     --js 'client/lib/Editor/Control/DownloadFeature.js' \
     --js 'client/lib/Editor/Control/DrawText.js' \

@@ -37,7 +37,7 @@ OpenLayers.Editor.Control.DeleteAllFeatures = OpenLayers.Class(OpenLayers.Contro
 
         this.layer = layer;
 
-		this.title = OpenLayers.i18n('oleDeleteAllFeatures');
+        this.title = OpenLayers.i18n('oleDeleteAllFeatures');
 
         OpenLayers.Control.Button.prototype.initialize.apply(this, [options]);
 
@@ -50,13 +50,13 @@ OpenLayers.Editor.Control.DeleteAllFeatures = OpenLayers.Class(OpenLayers.Contro
     /**
      * Method: deleteAllFeatures
      */
-	deleteAllFeatures: function () {
+    deleteAllFeatures: function () {
         if (this.layer.features.length > 0) {
             this.layer.destroyFeatures();
         }
-		if (this.map.editor.editLayer) {
-			this.map.editor.editLayer.destroyFeatures();
-		}
+        if (this.map.editor.editLayer) {
+            this.map.editor.editLayer.destroyFeatures();
+        }
     },
 
     CLASS_NAME: 'OpenLayers.Editor.Control.DeleteAllFeatures'
