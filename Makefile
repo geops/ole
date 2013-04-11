@@ -10,6 +10,7 @@ minified:
 	--jscomp_warning=duplicate \
 	--jscomp_warning=invalidCasts \
 	--externs client/lib/externs.js \
+	--js 'client/lib/compat.js' \
 	--js 'client/lib/Editor.js' \
 	--js 'client/lib/Editor/Control/CleanFeature.js' \
 	--js 'client/lib/Editor/Control/DragFeature.js' \
@@ -19,6 +20,11 @@ minified:
 	--js 'client/lib/Editor/Control/DrawPolygon.js' \
 	--js 'client/lib/Editor/Control/DrawPath.js' \
 	--js 'client/lib/Editor/Control/DrawPoint.js' \
+    --js 'client/lib/Editor/Control/DrawRegular.js' \
+	--js 'client/lib/Editor/Control/DeleteAllFeatures.js' \
+    --js 'client/lib/Editor/Control/DownloadFeature.js' \
+    --js 'client/lib/Editor/Control/DrawText.js' \
+    --js 'client/lib/Editor/Control/UploadFeature.js' \
 	--js 'client/lib/Editor/Control/EditorPanel.js' \
 	--js 'client/lib/Editor/Control/ImportFeature.js' \
 	--js 'client/lib/Editor/Control/LayerSettings.js' \
@@ -35,6 +41,8 @@ minified:
 	--js 'client/lib/Editor/Lang/ca.js' \
 	--js 'client/lib/Editor/Lang/de.js' \
 	--js 'client/lib/Editor/Lang/en.js' \
+	--js 'client/lib/Editor/Lang/hu.js' \
+	--js 'client/lib/Editor/Lang/nl.js' \
 	--js_output_file client/ole.min.js
 
 pack_distribution: minified

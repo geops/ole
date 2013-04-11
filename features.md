@@ -14,6 +14,7 @@ with HTML and JavaScript and thus runs on the desktop and mobile devices without
 ### Editor
 
 * Supports point, path and polygon geometry types
+* Support point text labels
 * Vector layer support (for example WFS)
 * Snapping to existing features, guide lines or features from external data sources
 * CAD-like feature construction
@@ -21,6 +22,8 @@ with HTML and JavaScript and thus runs on the desktop and mobile devices without
 * Modify geometries
 * Drag geometries
 * Draw hole into polygons
+* Download drawn features to local file
+* Upload features into drawing from local file
 
 ### Server-side geometry processing
 

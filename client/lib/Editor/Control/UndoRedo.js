@@ -56,7 +56,7 @@ OpenLayers.Editor.Control.UndoRedo = OpenLayers.Class(OpenLayers.Control, {
      *
      * Called after a successful redo, passing in the feature that was altered.
      */
-	onRedo: function(){},
+    onRedo: function(){},
 
 	/**
      * APIMethod: onRemoveFeature

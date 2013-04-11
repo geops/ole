@@ -32,7 +32,7 @@
 .olEditor .olControlLayerSwitcher .layersDiv {
     color: #333;
     background-color:  transparent!important;
-    background-image: url(../img/bg-control.png);
+    background-image: url(img/bg-control.png);
 }
 
 .oleFadeMap {
@@ -45,6 +45,11 @@
     position: absolute;
 }
 .oleDialog {
+    background-color: #eee;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    text-decoration: none;
+    line-height: 25px;
     cursor: auto;
     background-color: white;
     margin: auto;
@@ -55,13 +60,31 @@
     top: 50px;
     max-height: 300px;
     overflow: auto;
-    border:2px solid #ddd;
+    border:2px solid #999;
 }
 .oleDialog p:first-child {
     margin-top:0;
 }
 .oleDialog p:last-child {
     margin-bottom:0;
+}
+
+.oleDialog select, .oleDialog input {
+    margin-top: 6px;
+    margin-bottom: 6px;
+    background-color: #eee;
+    color: #000;
+    height: 20px;
+}
+
+.oleDialog input[type=button] {
+    /*box-shadow:-1px 1px #aaa inset;*/
+    margin-right: 6px;
+    width: 52px;
+    border-color: #666;
+    border-top-color: #999;
+    border-right-color: #999;
+    /*text-transform:uppercase;*/
 }
 
 .oleDialog .oleDrawRegularIrregular {
@@ -78,6 +101,7 @@
 .olEditorControlEditorPanel .olEditorControlDrawPolygonItemActive,
 .olEditorControlEditorPanel .olEditorControlDrawPathItemActive,
 .olEditorControlEditorPanel .olEditorControlDrawPointItemActive,
+.olEditorControlEditorPanel .olEditorControlDrawTextItemActive,
 .olEditorControlEditorPanel .olEditorControlSaveFeatureItemActive,
 .olEditorControlEditorPanel .olEditorControlDeleteFeatureItemActive,
 .olEditorControlEditorPanel .olControlSelectFeatureItemActive,
@@ -169,6 +193,53 @@
 }
 
 /**
+ * Draw Text
+ */
+.olEditorControlEditorPanel .olEditorControlDrawTextItemActive,
+.olEditorControlEditorPanel .olEditorControlDrawTextItemInactive {
+    background-image: url("img/drawText.png");
+}
+
+/**
+ * Draw Text Popup
+ */
+.oleDrawTextPopup  {
+    background-color: #eee;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    text-decoration: none;
+    padding: 10px 10px;
+    margin: 6px;
+    line-height: 12px;
+}
+.olFramedCloudPopupContent {
+    overflow: hidden;
+}
+.oleDrawTextPopup #olLabelInput {
+    background-color: #dddddd;
+    margin-top: 5px;
+    margin-bottom: 8px;
+    height: 20px;
+    border: #888 2px dotted;
+}
+
+/**
+ * Upload Features
+ */
+.olEditorControlEditorPanel .olEditorControlUploadFeatureItemActive,
+.olEditorControlEditorPanel .olEditorControlUploadFeatureItemInactive {
+    background-image: url("img/uploadFeature.png");
+}
+
+/**
+ * Download Features
+ */
+.olEditorControlEditorPanel .olEditorControlDownloadFeatureItemActive,
+.olEditorControlEditorPanel .olEditorControlDownloadFeatureItemInactive {
+    background-image: url("img/downloadFeature.png");
+}
+
+/**
  * Save Features
  */
 .olEditorControlEditorPanel .olEditorControlSaveFeatureItemActive,
@@ -202,6 +273,14 @@
 .olEditorControlEditorPanel .olEditorControlDeleteFeatureItemActive,
 .olEditorControlEditorPanel .olEditorControlDeleteFeatureItemInactive {
     background-image: url("img/deleteFeature.png");
+}
+
+/**
+ * Delete all Features
+ */
+.olEditorControlEditorPanel .olEditorControlDeleteAllFeaturesItemActive,
+.olEditorControlEditorPanel .olEditorControlDeleteAllFeaturesItemInactive {
+    background-image: url("img/deleteAllFeatures.png");
 }
 
 /**

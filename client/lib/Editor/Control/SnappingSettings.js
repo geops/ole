@@ -36,12 +36,12 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
 
     toleranceInput: null,
 
-    initialize: function(layer, options) {
+    initialize: function (layer, options) {
         this.snappingLayers = [];
         this.layer = layer;
 
         OpenLayers.Control.Button.prototype.initialize.apply(this, [options]);
-        
+
         this.trigger = OpenLayers.Function.bind(this.openSnappingDialog, this);
 
         this.events.register("deactivate", this, this.onDeactivate);
@@ -49,20 +49,27 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
         this.title = OpenLayers.i18n('oleSnappingSettings');
     },
 
-    onDeactivate: function() {
-        if(this.snapping.active) {
+    deactivate: function () {
+        OpenLayers.Control.Button.prototype.deactivate.call(this);
+        if (this.map && this.map.editor && this.map.editor.dialog) {
+            this.map.editor.dialog.hide();
+        }
+    },
+
+    onDeactivate: function () {
+        if (this.snapping.active) {
             this.activate();
         }
     },
 
-    openSnappingDialog: function() {
+    openSnappingDialog: function () {
 
         var content, toleranceHeader, layerHeader;
 
         this.activate();
 
         this.layerListDiv = document.createElement('div');
-        
+
         content = document.createElement('div');
 
         toleranceHeader = document.createElement('h4');
@@ -74,9 +81,9 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
         this.toleranceInput.size = 4;
         this.toleranceInput.value = this.tolerance;
         content.appendChild(this.toleranceInput);
-        
+
         content.appendChild(document.createTextNode(
-            OpenLayers.i18n('olePixelUnit')
+                OpenLayers.i18n('olePixelUnit')
         ));
 
         layerHeader = document.createElement('h4');
@@ -90,44 +97,42 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
             title: OpenLayers.i18n('oleSnappingSettings'),
             close: OpenLayers.Function.bind(this.changeSnapping, this)
         });
-
         this.redraw();
     },
 
-    redraw: function() {
+    redraw: function () {
 
         var layer, element, content;
 
         this.layerListDiv.innerHTML = '';
 
-        for (var i = 0; i <  this.map.layers.length; i++) {
-            
+        for (var i = 0; i < this.map.layers.length; i++) {
+
             layer = this.map.layers[i];
 
-            if(!(layer instanceof OpenLayers.Layer.Vector.RootContainer) &&
-                 layer instanceof OpenLayers.Layer.Vector &&
-                 !(layer instanceof OpenLayers.Editor.Layer.Snapping) &&
-                 layer.name.search(/OpenLayers.Handler.+/) == -1) {
+            if (!(layer instanceof OpenLayers.Layer.Vector.RootContainer) &&
+                    layer instanceof OpenLayers.Layer.Vector && !(layer instanceof OpenLayers.Editor.Layer.Snapping) &&
+                    layer.name.search(/OpenLayers.Handler.+/) == -1) {
 
                 content = document.createElement('div');
 
                 element = document.createElement('input');
                 element.type = 'checkbox';
                 element.name = 'snappingLayer';
-                element.id = 'Snapping.'+layer.id;
+                element.id = 'Snapping.' + layer.id;
                 element.value = 'true';
-                if(this.snappingLayers.indexOf(layer) >= 0) {
+                if (this.snappingLayers.indexOf(layer) >= 0) {
                     element.checked = 'checked';
                     element.defaultChecked = 'selected'; // IE7 hack
                 }
                 content.appendChild(element);
                 OpenLayers.Event.observe(element, 'click',
-                    OpenLayers.Function.bind(this.setLayerSnapping, this, layer, element.checked));
+                        OpenLayers.Function.bind(this.setLayerSnapping, this, layer, element.checked));
 
                 element = document.createElement('label');
-                element.setAttribute('for', 'Snapping.'+layer.id);
+                element.setAttribute('for', 'Snapping.' + layer.id);
                 element.innerHTML = layer.name;
-                OpenLayers.Event.observe(element, 'click', OpenLayers.Function.bind(function(event) {
+                OpenLayers.Event.observe(element, 'click', OpenLayers.Function.bind(function (event) {
                     // Allow to check checkbox by clicking its label even when drawing tools are active
                     OpenLayers.Event.stop(event, true);
                 }, this));
@@ -143,8 +148,8 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
      * @param {OpenLayers.Layer} layer
      * @param {Boolean} snappingEnabled Set TRUE to enable snapping to this layer's objects
      */
-    setLayerSnapping: function(layer, snappingEnabled) {
-        if(snappingEnabled) {
+    setLayerSnapping: function (layer, snappingEnabled) {
+        if (snappingEnabled) {
             this.snappingLayers.splice(this.snappingLayers.indexOf(layer), 1);
         } else {
             this.snappingLayers.push(layer);
@@ -152,15 +157,14 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
         this.redraw();
     },
 
-    changeSnapping: function() {
-
+    changeSnapping: function () {
         this.tolerance = parseInt(this.toleranceInput.value, 10);
 
-        if(this.snappingLayers.length > 0) {
+        if (this.snappingLayers.length > 0) {
 
             this.snapping.deactivate();
             var targets = [];
-            for (var i = 0; i <  this.snappingLayers.length; i++) {
+            for (var i = 0; i < this.snappingLayers.length; i++) {
                 targets.push({
                     layer: this.snappingLayers[i],
                     tolerance: this.tolerance
@@ -170,7 +174,7 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
                 layer: this.layer,
                 targets: targets
             });
-            for (var i = 0; i <  targets.length; i++) {
+            for (var i = 0; i < targets.length; i++) {
                 // moveTo call is to trigger loading of layer contents
                 targets[i].layer.moveTo(this.map.getExtent(), false, false);
             }
@@ -184,10 +188,10 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
         if (!this.snapping.active) this.deactivate();
     },
 
-    setMap: function(map){
+    setMap: function (map) {
         OpenLayers.Control.Button.prototype.setMap.apply(this, arguments);
 
-        if(this.snappingGuideLayer===null){
+        if (this.snappingGuideLayer === null) {
             this.snappingGuideLayer = this.createSnappingGuideLayer();
         }
     },
@@ -196,12 +200,12 @@ OpenLayers.Editor.Control.SnappingSettings = OpenLayers.Class(OpenLayers.Control
      * Adds a layer for guidelines to the map
      * @return {OpenLayers.Editor.Layer.Snapping}
      */
-    createSnappingGuideLayer: function(){
+    createSnappingGuideLayer: function () {
         var snappingGuideLayer = new OpenLayers.Editor.Layer.Snapping(OpenLayers.i18n('Snapping Layer'), {
             visibility: false
         });
         this.map.addLayer(snappingGuideLayer);
-        
+
         return snappingGuideLayer;
     },
 
