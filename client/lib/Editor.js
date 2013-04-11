@@ -12,7 +12,7 @@
  * Class: OpenLayers.Editor
  * The OpenLayers Editor provides basic methods and informations for map editing.
  *     Highlevel functions are implemented in different controls and can be
- *     activated by the editor constructor. 
+ *     activated by the editor constructor.
  *
  * @constructor
  * @param {OpenLayers.Map} map
@@ -61,8 +61,8 @@ OpenLayers.Editor = OpenLayers.Class({
      * Property: status
      * @type {function(string, string)} Function to display states, receives status type and message
      */
-    showStatus: function(status, message){
-        if(status==='error'){
+    showStatus: function (status, message) {
+        if (status === 'error') {
             alert(message);
         }
     },
@@ -78,8 +78,8 @@ OpenLayers.Editor = OpenLayers.Class({
      * {Array} Contains names of all available editor controls. In particular
      *   this information is needed by this EditorPanel.
      */
-    editorControls: ['CleanFeature', 'DeleteFeature', 'Dialog', 'DrawHole', 'DrawRegular',
-        'DrawPolygon', 'DrawPath', 'DrawPoint', 'EditorPanel', 'ImportFeature',
+    editorControls: ['CleanFeature', 'DeleteFeature', 'DeleteAllFeatures', 'Dialog', 'DrawHole', 'DrawRegular',
+        'DrawPolygon', 'DrawPath', 'DrawPoint', 'DrawText', 'EditorPanel', 'ImportFeature',
         'MergeFeature', 'SnappingSettings', 'SplitFeature', 'CADTools',
         'TransformFeature'],
 
@@ -87,7 +87,7 @@ OpenLayers.Editor = OpenLayers.Class({
      * Geometry types available for editing
      * {Array}
      */
-    featureTypes: ['point', 'path', 'polygon', 'regular'],
+    featureTypes: ['text', 'point', 'path', 'polygon', 'regular'],
 
     /**
      * Property: sourceLayers
@@ -114,7 +114,7 @@ OpenLayers.Editor = OpenLayers.Class({
      * {String}
      */
     oleUrl: '',
-    
+
     /**
      * Instantiated controls
      * {Objects}
@@ -141,7 +141,7 @@ OpenLayers.Editor = OpenLayers.Class({
         } else {
             this.map = new OpenLayers.Map();
         }
-        
+
         if (!options) {
             options = {};
         }
@@ -172,9 +172,47 @@ OpenLayers.Editor = OpenLayers.Class({
                     graphicZIndex: 1,
                     pointRadius: 5
                 }),
+                // defaultLabel and selectLabel Styles are needed for DrawText Control
+                'defaultLabel': new OpenLayers.Style({
+                    fillColor: '#07f',
+                    fillOpacity: 0.8,
+                    strokeColor: '#037',
+                    strokeWidth: 2,
+                    graphicZIndex: 11,
+                    pointRadius: 0,
+                    cursor: 'default',
+                    label: '${label}',
+                    fontColor: '#000000',
+                    fontSize: "11px",
+                    fontFamily: "Verdana, Arial, Helvetica, sans-serif",
+                    fontWeight: "bold",
+//					labelAlign: "cm",
+//					labelXOffset: 0,
+//					labelYOffset: 0,
+                    labelOutlineColor: '#FFFFFF',
+                    labelOutlineWidth: 4,
+                    labelSelect: true
+                }),
                 'select': new OpenLayers.Style({
                     fillColor: '#fc0',
                     strokeColor: '#f70',
+                    graphicZIndex: 2
+                }),
+                // defaultLabel and selectLabel Styles are needed for DrawText Control
+                'selectLabel': new OpenLayers.Style({
+                    pointRadius: 5,
+                    label: '${label}',
+                    fontColor: 'black',
+                    fontSize: "11px",
+                    fontFamily: "Verdana, Arial, Helvetica, sans-serif",
+                    fontWeight: "bold",
+                    labelAlign: "cm",
+                    labelXOffset: "${xOffset}",
+                    labelYOffset: "${yOffset}",
+                    fillColor: '#fc0',
+                    strokeColor: '#f70',
+                    labelOutlineColor: '#fc0',
+                    labelOutlineWidth: 6,
                     graphicZIndex: 2
                 }),
                 'temporary': new OpenLayers.Style({
@@ -196,7 +234,7 @@ OpenLayers.Editor = OpenLayers.Class({
                 'OpenLayers.Editor.Control.CleanFeature',
                 'OpenLayers.Editor.Control.MergeFeature',
                 'OpenLayers.Editor.Control.SplitFeature'
-        ]};
+            ]};
         this.editLayer.events.register('featureselected', selectionContext, this.selectionChanged);
         this.editLayer.events.register('featureunselected', selectionContext, this.selectionChanged);
 
@@ -212,6 +250,9 @@ OpenLayers.Editor = OpenLayers.Class({
             }
             else if (this.featureTypes[i] == 'regular') {
                 this.activeControls.push('DrawRegular');
+            }
+            else if (this.featureTypes[i] == 'text') {
+                this.activeControls.push('DrawText');
             }
         }
 
@@ -256,24 +297,24 @@ OpenLayers.Editor = OpenLayers.Class({
         if (this.undoRedoActive) {
             this.map.addControl(new OpenLayers.Editor.Control.UndoRedo(this.editLayer));
         }
-        
+
         this.addEditorControls();
 
         return this;
     },
-    
+
     /**
      * Enable or disable controls that depend on selected features.
-     * 
+     *
      * Requires an active SelectFeature control and the following context variables:
      * - editor: this
      * - layer: The layer with selected features.
      * - controls: An array of class names.
      */
-    selectionChanged: function() {
+    selectionChanged: function () {
 
         var selectFeature = this.editor.editorPanel.getControlsByClass('OpenLayers.Control.SelectFeature')[0];
-        
+
         if (this.layer.selectedFeatures.length > 0 && selectFeature && selectFeature.active) {
             // enable controls
             for (var ic = 0, lic = this.controls.length; ic < lic; ic++) {
@@ -294,7 +335,7 @@ OpenLayers.Editor = OpenLayers.Class({
 
         this.editor.editorPanel.redraw();
     },
-    
+
     /**
      * Makes the toolbar appear and allows editing
      */
@@ -310,20 +351,20 @@ OpenLayers.Editor = OpenLayers.Class({
         this.editMode = false;
         this.editorPanel.deactivate();
     },
-    
+
     /**
      * Initializes configured controls and shows them
      */
-    addEditorControls: function(){
+    addEditorControls: function () {
         var control = null, controls = [];
         var editor = this;
 
-        for (var i=0, len=editor.activeControls.length; i<len; i++) {
+        for (var i = 0, len = editor.activeControls.length; i < len; i++) {
             control = editor.activeControls[i];
-            
+
             if (OpenLayers.Util.indexOf(editor.editorControls, control) > -1) {
                 controls.push(new OpenLayers.Editor.Control[control](
-                    editor.editLayer, editor.options[control]
+                        editor.editLayer, editor.options[control]
                 ));
             }
 
@@ -337,59 +378,72 @@ OpenLayers.Editor = OpenLayers.Class({
 
                 case 'Navigation':
                     controls.push(new OpenLayers.Control.Navigation(
-                        OpenLayers.Util.extend(
-                            {title: OpenLayers.i18n('oleNavigation')},
-                            editor.options.Navigation)
+                            OpenLayers.Util.extend(
+                                    {title: OpenLayers.i18n('oleNavigation')},
+                                    editor.options.Navigation)
                     ));
                     break;
 
                 case 'DragFeature':
                     controls.push(new OpenLayers.Editor.Control.DragFeature(editor.editLayer,
-                        OpenLayers.Util.extend({}, editor.options.DragFeature)
+                            OpenLayers.Util.extend({}, editor.options.DragFeature)
                     ));
                     break;
 
                 case 'ModifyFeature':
                     controls.push(new OpenLayers.Control.ModifyFeature(editor.editLayer,
-                        OpenLayers.Util.extend(
-                            {title: OpenLayers.i18n('oleModifyFeature')},
-                            editor.options.ModifyFeature)
+                            OpenLayers.Util.extend(
+                                    {title: OpenLayers.i18n('oleModifyFeature')},
+                                    editor.options.ModifyFeature)
                     ));
                     break;
 
                 case 'SelectFeature':
                     controls.push(new OpenLayers.Control.SelectFeature(
-                        editor.sourceLayers.concat([editor.editLayer]),
-                        OpenLayers.Util.extend(
-                            {
-                                title: OpenLayers.i18n('oleSelectFeature'),
-                                clickout: true,
-                                toggle: false,
-                                multiple: false,
-                                hover: false,
-                                toggleKey: "ctrlKey",
-                                multipleKey: "ctrlKey",
-                                box: true
-                            },
-                            editor.options.SelectFeature)
+                            editor.sourceLayers.concat([editor.editLayer]),
+                            OpenLayers.Util.extend(
+                                    {
+                                        title: OpenLayers.i18n('oleSelectFeature'),
+                                        clickout: true,
+                                        toggle: false,
+                                        multiple: false,
+                                        hover: false,
+                                        toggleKey: "ctrlKey",
+                                        multipleKey: "ctrlKey",
+                                        box: true
+                                    },
+                                    editor.options.SelectFeature)
                     ));
                     break;
+
+                case 'DownloadFeature':
+                    controls.push(new OpenLayers.Editor.Control.DownloadFeature(editor.editLayer,
+                            OpenLayers.Util.extend({}, this.DownloadFeature)
+                    ));
+                    break;
+
+                case 'UploadFeature':
+                    controls.push(new OpenLayers.Editor.Control.UploadFeature(editor.editLayer,
+                            OpenLayers.Util.extend({}, this.UploadFeature)
+                    ));
+                    break;
+
             }
-            
+
             // Save instance in editor's controls mapping
-            this.controls[control] = controls[controls.length-1];
+            this.controls[control] = controls[controls.length - 1];
         }
-        
+
         // Add toolbar to map
         this.editorPanel = this.createEditorPanel(controls);
         editor.map.addControl(this.editorPanel);
     },
-    
+
     /**
      * Adds a control to the editor and its panel
      * @param {OpenLayers.Editor.Control} control
      */
-    addEditorControl: function(control){
+    addEditorControl: function (control) {
         this.controls[control.CLASS_NAME] = control;
         this.editorPanel.addControls([control]);
         this.map.addControl(control);
@@ -401,13 +455,13 @@ OpenLayers.Editor = OpenLayers.Class({
      * @param {Array.<OpenLayers.Control>} controls Editing controls
      * @return {OpenLayers.Editor.Control.EditorPanel} Widget to display editing tools
      */
-    createEditorPanel: function(controls){
+    createEditorPanel: function (controls) {
         var editorPanel = new OpenLayers.Editor.Control.EditorPanel(this);
         editorPanel.addControls(controls);
         return editorPanel;
     },
 
-    status: function(options) {
+    status: function (options) {
         if (options.type == 'error') {
             alert(options.content);
         }
@@ -456,7 +510,7 @@ OpenLayers.Editor = OpenLayers.Class({
      * @return {Array} List for features of type OpenLayers.Feature.Vector.
      */
     toFeatures: function (multiPolygon) {
-        if(multiPolygon===null || typeof(multiPolygon)!=='object'){
+        if (multiPolygon === null || typeof(multiPolygon) !== 'object') {
             throw new Error('Parameter does not match expected type.');
         }
         var features = [];
@@ -465,10 +519,10 @@ OpenLayers.Editor = OpenLayers.Class({
         }
         for (var i = 0, li = multiPolygon.length; i < li; i++) {
             if (multiPolygon[i].geometry.CLASS_NAME === 'OpenLayers.Geometry.MultiPolygon' ||
-                multiPolygon[i].geometry.CLASS_NAME === 'OpenLayers.Geometry.Collection') {
+                    multiPolygon[i].geometry.CLASS_NAME === 'OpenLayers.Geometry.Collection') {
                 for (var j = 0, lj = multiPolygon[i].geometry.components.length; j < lj; j++) {
                     features.push(new OpenLayers.Feature.Vector(
-                        multiPolygon[i].geometry.components[j]
+                            multiPolygon[i].geometry.components[j]
                     ));
                 }
             } else if (multiPolygon[i].geometry.CLASS_NAME === 'OpenLayers.Geometry.Polygon') {
@@ -494,7 +548,7 @@ OpenLayers.Editor = OpenLayers.Class({
         this.waitingDiv = panel_div;
     },
 
-    stopWaiting: function() {
+    stopWaiting: function () {
         OpenLayers.Element.removeClass(this.waitingDiv, 'olEditorWaiting');
         OpenLayers.Element.removeClass(this.map.div, 'olEditorWaiting');
     },
@@ -519,4 +573,4 @@ OpenLayers.Editor.Control = OpenLayers.Class(OpenLayers.Control, {
  * @const
  * @type {string}
  */
-OpenLayers.Editor.VERSION_NUMBER="1.0-beta1";
+OpenLayers.Editor.VERSION_NUMBER = "1.0-beta1";

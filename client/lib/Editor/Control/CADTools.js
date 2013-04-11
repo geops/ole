@@ -40,7 +40,7 @@ OpenLayers.Editor.Control.CADTools = OpenLayers.Class(OpenLayers.Control.Button,
      */
     snappingControl: null,
 
-    initialize: function(layer, options) {
+    initialize: function (layer, options) {
 
         this.layer = layer;
 
@@ -48,7 +48,7 @@ OpenLayers.Editor.Control.CADTools = OpenLayers.Class(OpenLayers.Control.Button,
         this.parallelDrawingControl = new OpenLayers.Editor.Control.ParallelDrawing(layer);
 
         OpenLayers.Control.Button.prototype.initialize.apply(this, [options]);
-        
+
         this.trigger = OpenLayers.Function.bind(this.openCADToolsDialog, this);
 
         this.events.register("deactivate", this, this.onDeactivate);
@@ -57,23 +57,28 @@ OpenLayers.Editor.Control.CADTools = OpenLayers.Class(OpenLayers.Control.Button,
 
     },
 
-    activate: function() {
+    activate: function () {
         var activated = OpenLayers.Control.Button.prototype.activate.call(this);
-        if(activated) {
+        if (activated) {
             this.snappingControl.activate();
         }
         return activated;
     },
 
-    deactivate: function() {
+    deactivate: function () {
         var deactivated = OpenLayers.Control.Button.prototype.deactivate.call(this);
-        if(deactivated) {
+        if (deactivated) {
             this.snappingControl.deactivate();
         }
         return deactivated;
     },
 
-    setMap: function(map) {
+    onDeactivate: function () {
+        this.deactivate();
+        this.map.editor.dialog.hide();
+    },
+
+    setMap: function (map) {
 
         OpenLayers.Control.Button.prototype.setMap.call(this, map);
 
@@ -82,17 +87,19 @@ OpenLayers.Editor.Control.CADTools = OpenLayers.Class(OpenLayers.Control.Button,
 
         this.snappingControl = new OpenLayers.Control.Snapping({
             layer: this.layer,
-            targets: [{
-                layer: this.map.getLayersByClass('OpenLayers.Editor.Layer.Snapping')[0],
-                tolerance: this.tolerance
-            }]
+            targets: [
+                {
+                    layer: this.map.getLayersByClass('OpenLayers.Editor.Layer.Snapping')[0],
+                    tolerance: this.tolerance
+                }
+            ]
         });
     },
 
     /**
      * Handles showing and hiding of the CAD tools dialog
      */
-    openCADToolsDialog: function() {
+    openCADToolsDialog: function () {
 
         if (this.active) {
             this.deactivate();
@@ -117,7 +124,7 @@ OpenLayers.Editor.Control.CADTools = OpenLayers.Class(OpenLayers.Control.Button,
             } else {
                 this.parallelDrawingButton.className = 'olEditorParallelDrawingInactive';
             }
-            OpenLayers.Event.observe(this.parallelDrawingButton, 'click', OpenLayers.Function.bind(function() {
+            OpenLayers.Event.observe(this.parallelDrawingButton, 'click', OpenLayers.Function.bind(function () {
                 if (this.parallelDrawingControl.active) {
                     this.parallelDrawingControl.deactivate();
                     this.parallelDrawingButton.className = 'olEditorParallelDrawingInactive';
@@ -135,7 +142,7 @@ OpenLayers.Editor.Control.CADTools = OpenLayers.Class(OpenLayers.Control.Button,
             } else {
                 this.guidedDrawingButton.className = 'olEditorGuidedDrawingInactive';
             }
-            OpenLayers.Event.observe(this.guidedDrawingButton, 'click', OpenLayers.Function.bind(function() {
+            OpenLayers.Event.observe(this.guidedDrawingButton, 'click', OpenLayers.Function.bind(function () {
                 if (this.fixedAngleDrawingControl.active) {
                     this.fixedAngleDrawingControl.deactivate();
                     this.guidedDrawingButton.className = 'olEditorGuidedDrawingInactive';
@@ -161,7 +168,7 @@ OpenLayers.Editor.Control.CADTools = OpenLayers.Class(OpenLayers.Control.Button,
             this.setShowGuides(showLayer.checked);
             showGuideLine.appendChild(showLayer);
 
-            OpenLayers.Event.observe(showGuideLine, 'click', OpenLayers.Function.bind(function(event) {
+            OpenLayers.Event.observe(showGuideLine, 'click', OpenLayers.Function.bind(function (event) {
                 // Prevent propagation of event to drawing controls
                 OpenLayers.Event.stop(event, true);
 
@@ -180,7 +187,7 @@ OpenLayers.Editor.Control.CADTools = OpenLayers.Class(OpenLayers.Control.Button,
             element.id = 'oleCADToolsDialogTolerance';
             element.size = 4;
             element.value = this.tolerance;
-            OpenLayers.Event.observe(element, 'change', OpenLayers.Function.bind(function(event){
+            OpenLayers.Event.observe(element, 'change', OpenLayers.Function.bind(function (event) {
                 this.setTolerance(event.target.value);
             }, this));
             toleranceSetting.appendChild(element);
@@ -202,20 +209,22 @@ OpenLayers.Editor.Control.CADTools = OpenLayers.Class(OpenLayers.Control.Button,
     /**
      * @param {Number} tolerance Snapping tolerance in pixels
      */
-    setTolerance: function(tolerance){
+    setTolerance: function (tolerance) {
         this.tolerance = tolerance;
 
-        this.snappingControl.setTargets([{
-            layer: this.map.getLayersByClass('OpenLayers.Editor.Layer.Snapping')[0],
-            tolerance: this.tolerance
-        }]);
+        this.snappingControl.setTargets([
+            {
+                layer: this.map.getLayersByClass('OpenLayers.Editor.Layer.Snapping')[0],
+                tolerance: this.tolerance
+            }
+        ]);
     },
 
     /**
      * Shows or hides guides
      * @param {Boolean} guidesVisible Set to TRUE to show guides
      */
-    setShowGuides: function(guidesVisible){
+    setShowGuides: function (guidesVisible) {
         var snappingLayer = this.map.getLayersByClass('OpenLayers.Editor.Layer.Snapping')[0];
         snappingLayer.setVisibility(guidesVisible);
     },

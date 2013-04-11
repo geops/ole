@@ -13,6 +13,7 @@
 OpenLayers.Editor.Control.DrawPoint = OpenLayers.Class(OpenLayers.Control.DrawFeature, {
 
     title: OpenLayers.i18n('oleDrawPoint'),
+    featureType: 'point',
 
     /**
      * Constructor: OpenLayers.Editor.Control.DrawPath
@@ -25,14 +26,14 @@ OpenLayers.Editor.Control.DrawPoint = OpenLayers.Class(OpenLayers.Control.DrawFe
      */
     initialize: function (layer, options) {
         this.callbacks = OpenLayers.Util.extend(this.callbacks, {
-            point: function(point) {
+            point: function (point) {
                 this.layer.events.triggerEvent('pointadded', {point: point});
             }
         });
-        
+
         OpenLayers.Control.DrawFeature.prototype.initialize.apply(this,
-            [layer, OpenLayers.Handler.Point, options]);
-        
+                [layer, OpenLayers.Handler.Point, options]);
+
         this.title = OpenLayers.i18n('oleDrawPoint');
     },
 
@@ -41,12 +42,16 @@ OpenLayers.Editor.Control.DrawPoint = OpenLayers.Class(OpenLayers.Control.DrawFe
      */
     drawFeature: function (geometry) {
         var feature = new OpenLayers.Feature.Vector(geometry),
-            proceed = this.layer.events.triggerEvent('sketchcomplete', {feature: feature});
+                proceed = this.layer.events.triggerEvent('sketchcomplete', {feature: feature});
+
+        feature.featureType = this.featureType;
+
         if (proceed !== false) {
+            this.events.triggerEvent('beforefeatureadded', {feature: feature});
             feature.state = OpenLayers.State.INSERT;
             this.layer.addFeatures([feature]);
             this.featureAdded(feature);
-            this.events.triggerEvent('featureadded', {feature : feature});
+            this.events.triggerEvent('featureadded', {feature: feature});
         }
     },
 
