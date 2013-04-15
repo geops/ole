@@ -68,11 +68,11 @@ js-ole: js-dir
 		$(OLE_SOURCE)/Editor/Control/DrawPolygon.js \
 		$(OLE_SOURCE)/Editor/Control/DrawPath.js \
 		$(OLE_SOURCE)/Editor/Control/DrawPoint.js \
+		$(OLE_SOURCE)/Editor/Control/DrawRegular.js \
 		$(OLE_SOURCE)/Editor/Control/EditorPanel.js \
 		$(OLE_SOURCE)/Editor/Control/ImportFeature.js \
 		$(OLE_SOURCE)/Editor/Control/LayerSettings.js \
 		$(OLE_SOURCE)/Editor/Control/MergeFeature.js \
-		$(OLE_SOURCE)/Editor/Control/SaveFeature.js \
 		$(OLE_SOURCE)/Editor/Control/FixedAngleDrawing.js \
 		$(OLE_SOURCE)/Editor/Layer.js \
 		$(OLE_SOURCE)/Editor/Layer/Snapping.js \

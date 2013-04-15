@@ -29,7 +29,7 @@ $(function() {
 
     editor = new OpenLayers.Editor(map, {
         activeControls: ['Navigation', 'SnappingSettings', 'CADTools', 'Separator', 'SplitFeature', 'MergeFeature', 'CleanFeature', 'DeleteFeature', 'SelectFeature', 'Separator', 'DragFeature', 'DrawHole', 'ModifyFeature', 'Separator'],
-        featureTypes: ['polygon', 'path', 'point'],
+        featureTypes: ['regular', 'polygon', 'path', 'point'],
         showStatus: function(type, message) {
             alert(message);
         }

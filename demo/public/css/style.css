@@ -111,7 +111,7 @@ div.content {
     top:8px;
     right:8px;
     /** Use a fixed width to support IE7, IE9. Other browsers are correctly calculating the width anyway. */
-    width:456px;
+    width:486px;
 }
 
 a img {
@@ -142,4 +142,8 @@ a.share-button {
 }
 a.share-button:hover {
     background-color: #6E90A6;
+}
+
+.oleDrawRegularIrregular label {
+    vertical-align: text-bottom;
 }
