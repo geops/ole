@@ -47,7 +47,7 @@ minified:
 
 pack_distribution: minified
 	rm -f $(DISTRIBUTION_NAME).zip
-	zip --recurse-paths $(DISTRIBUTION_NAME).zip examples/ lib/ tests/ theme/ documentation.md features.md license.txt Makefile README.md
+	zip --recurse-paths $(DISTRIBUTION_NAME).zip examples/ lib/ tests/ theme/ documentation.md features.md license.txt Makefile README.md ole.min.js
 	
 	rm -f $(DISTRIBUTION_NAME).tar.gz
-	tar -pczf $(DISTRIBUTION_NAME).tar.gz  examples/ lib/ tests/ theme/ documentation.md features.md license.txt Makefile README.md
+	tar -pczf $(DISTRIBUTION_NAME).tar.gz  examples/ lib/ tests/ theme/ documentation.md features.md license.txt Makefile README.md ole.min.js
