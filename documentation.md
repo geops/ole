@@ -21,6 +21,11 @@ See [`client/example`](https://github.com/geops/ole/tree/master/client/example) 
 ### Server-side processing
 
 Some controls like merge, split and clean depend on server-side processing.
-A Drupal module and a Zend Framework module is provided  (see [`server`](https://github.com/geops/ole/tree/master/server)). 
-Also [SharpMap](http://sharpmap.codeplex.com/) supports server-side processing.
+
+Examples for server-side processing and CRUD operations are available for several backends:
+* [Drupal module](https://drupal.org/project/ole)
+* [Zend Framework module](https://github.com/geops/ole-zend)
+* [MapFish app](https://github.com/geops/ole-mapfish)
+* [SharpMap](http://sharpmap.codeplex.com/)
+
 Set `editor.oleUrl` according to your server configuration.
