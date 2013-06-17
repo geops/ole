@@ -1,17 +1,17 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html>
 <head>
     <title>OpenLayers.Editor</title>
+    <meta charset="utf-8">
 
     <script src="http://openlayers.org/api/2.12/OpenLayers.js"></script>
-    <script type="text/javascript" src="../lib/Editor/Lang/en.js"></script>
     <script type="text/javascript" src="../lib/loader.js"></script>
     <script type="text/javascript">
 
         function init() {
 
             var map, editor;
-            OpenLayers.Lang.setCode('en');
+            OpenLayers.Lang.setCode(language);
 
             map = new OpenLayers.Map('map');
             map.addLayer(new OpenLayers.Layer.OSM());
