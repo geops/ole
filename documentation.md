@@ -12,7 +12,7 @@
     });
     editor.startEditMode();
 
-See [`/example`](https://github.com/geops/ole/tree/master/example/) for some inspiration.
+See [`/examples`](https://github.com/geops/ole/tree/master/examples/) for some inspiration.
 
 ### Requirements
 
