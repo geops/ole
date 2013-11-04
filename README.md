@@ -25,7 +25,7 @@ See [features](https://github.com/geops/ole/blob/master/features.md) for details
 Usage
 -----
 
-See [documentation](https://github.com/geops/ole/blob/master/documentation.md) for details and `examples/` for some inspiration.
+See [documentation](https://github.com/geops/ole/blob/master/documentation.md) for details and [`/examples`](https://github.com/geops/ole/tree/master/examples/) for some inspiration.
 
 
 Requirements
