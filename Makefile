@@ -38,6 +38,7 @@ minified:
 	--js 'lib/Editor/Control/UndoRedo.js' \
 	--js 'lib/Editor/Control/CADTools.js' \
 	--js 'lib/Editor/Control/ParallelDrawing.js' \
+	--js 'lib/Editor/Control/ContextMenu.js' \
 	--js 'lib/Editor/Lang/ca.js' \
 	--js 'lib/Editor/Lang/de.js' \
 	--js 'lib/Editor/Lang/en.js' \
