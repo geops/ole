@@ -42,6 +42,7 @@ minified:
 	--js 'lib/Editor/Lang/ca.js' \
 	--js 'lib/Editor/Lang/de.js' \
 	--js 'lib/Editor/Lang/en.js' \
+	--js 'lib/Editor/Lang/hr.js' \
 	--js 'lib/Editor/Lang/hu.js' \
 	--js 'lib/Editor/Lang/nl.js' \
 	--js_output_file ole.min.js
