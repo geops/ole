@@ -134,7 +134,7 @@
  */
 .olEditorControlEditorPanel .olControlNavigationItemActive,
 .olEditorControlEditorPanel .olControlNavigationItemInactive {
-    background-image: url("../../../gxp/src/theme/img/geosilk/pan.png");
+    background-image: url("img/dragFeature.png");
 }
 
 /**
