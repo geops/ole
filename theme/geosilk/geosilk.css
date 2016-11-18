@@ -134,7 +134,7 @@
  */
 .olEditorControlEditorPanel .olControlNavigationItemActive,
 .olEditorControlEditorPanel .olControlNavigationItemInactive {
-    background-image: url("img/navigation.png");
+    background-image: url("img/dragFeature.png");
 }
 
 /**
@@ -252,7 +252,7 @@
  */
 .olEditorControlEditorPanel .olEditorControlDragFeatureItemActive,
 .olEditorControlEditorPanel .olEditorControlDragFeatureItemInactive {
-    background-image: url("img/dragFeature.png");
+    background-image: url("img/arrastrar.png");
 }
 
 .olEditorControlDragFeatureActive {
