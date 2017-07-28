@@ -1,3 +1,6 @@
+# DEPRECATED
+# PLEASE SEE [OLE2](https://github.com/geops/ole2)
+
 [Downloads](http://dl.geops.de/ole)
 
 About
